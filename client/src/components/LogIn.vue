@@ -1,0 +1,91 @@
+<template>
+  <div>
+    <h1>Login</h1>
+    <form @submit.prevent="login">
+      <label for="username">Username:</label>
+      <input
+        id="username"
+        v-model="username"
+        type="text"
+        required
+        class="name-input"
+      />
+
+      <label for="password">Password:</label>
+      <input
+        id="password"
+        v-model="password"
+        type="password"
+        required
+        class="name-input"
+      />
+
+      <button type="submit">Login</button>
+    </form>
+  </div>
+</template>
+
+<script setup>
+import { ref, inject } from "vue";
+import router from "../router";
+import axios from "axios";
+
+const username = ref("");
+const password = ref("");
+const API_URL = "http://localhost:3000/";
+const user = inject("user");
+
+const login = async () => {
+  const res = await fetch(`${API_URL}/login`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      username: username.value,
+      password: password.value,
+    }),
+  });
+
+  if (res.ok) {
+    const data = await res.json();
+    user.data = data.id;
+    //console.log("userId", data.user.id);
+
+    localStorage.setItem("sessionToken", data.token);
+    localStorage.setItem("userId", data.user.id);
+    router.push("/");
+  } else {
+    console.error("Login failed");
+  }
+
+  username.value = "";
+  password.value = "";
+};
+</script>
+
+<style>
+.name-input {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  background-color: #f8f8f8;
+  color: #111;
+  border-radius: 4px;
+  resize: vertical;
+}
+
+.body-input {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  background-color: #f8f8f8;
+  color: #111;
+  border-radius: 4px;
+  resize: vertical;
+}
+</style>
