@@ -21,6 +21,9 @@
       />
 
       <button type="submit">Login</button>
+      <button type="button">
+        <router-link to="/">Go Back</router-link>
+      </button>
     </form>
   </div>
 </template>

@@ -13,8 +13,19 @@
         required
         class="name-input"
       />
+      <label for="password">Password Confimation:</label>
+      <input
+        id="password_confirmation"
+        v-model="password_confirmation"
+        type="password"
+        required
+        class="name-input"
+      />
 
       <button type="submit">Sign Up</button>
+      <button type="button">
+        <router-link to="/">Go Back</router-link>
+      </button>
     </form>
   </div>
 </template>
@@ -25,9 +36,17 @@ import router from "../router";
 
 const name = ref("");
 const password = ref("");
+const password_confirmation = ref("");
 const API_URL = "http://localhost:3000";
 
 const signUp = async () => {
+  if (password.value !== password_confirmation.value) {
+    password.value = "";
+    password_confirmation.value = "";
+    alert("Passwords do not match!");
+    return;
+  }
+
   const res = await fetch(`${API_URL}/users`, {
     method: "POST",
     headers: {
@@ -40,11 +59,13 @@ const signUp = async () => {
   });
 
   if (!res.ok) {
-    console.log("signup failed", res);
+    const data = await res.json();
+    console.log("error data:", data);
   }
 
   name.value = "";
   password.value = "";
+  password_confirmation.value = "";
   router.push("/");
 };
 </script>

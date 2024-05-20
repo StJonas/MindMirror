@@ -5,13 +5,13 @@
       <button type="button">
         <router-link to="/AddHabit">Add Habit</router-link>
       </button>
-      <router-link to="/login" v-if="!$root.user">
+      <router-link to="/login" v-if="!userId">
         <button>Login</button>
       </router-link>
-      <router-link to="/signup">
+      <router-link to="/signup" v-if="!userId">
         <button>Signup</button>
       </router-link>
-      <button @click="logout">Logout</button>
+      <button @click="logout" v-if="userId">Logout</button>
     </div>
 
     <!-- List of Habits -->
@@ -39,9 +39,11 @@ const sessionToken = ref("");
 onMounted(async () => {
   sessionToken.value = localStorage.getItem("sessionToken");
   userId.value = localStorage.getItem("userId");
-  //const res = await fetch(`${API_URL}/habits`);
-  const res = await fetch(`${API_URL}/users/${userId.value}/habits`);
-  habits.value = await res.json();
+  if (userId.value != null) {
+    const res = await fetch(`${API_URL}/users/${userId.value}/habits`);
+    habits.value = await res.json();
+  }
+
   //   console.log("session token", sessionToken.value);
   //   console.log("userId.value", userId.value);
 
