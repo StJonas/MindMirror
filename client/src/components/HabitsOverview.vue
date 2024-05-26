@@ -14,13 +14,24 @@
       <button @click="logout" v-if="userId">Logout</button>
     </div>
 
+    <!-- Calendar Week and Dates Heading -->
+    <div class="header" v-if="userId">
+      <h2>{{ calendarHeading }}</h2>
+    </div>
+
     <!-- List of Habits -->
     <div v-for="habit in habits" :key="habit.id" class="header">
       <h2>{{ habit.name }}</h2>
       <button type="button" v-if="habits.length">
         <router-link :to="`/edit/${habit.id}`">Edit</router-link>
       </button>
-      <Checkboxes v-if="habits.length" />
+      <Checkboxes
+        v-if="habits.length"
+        :habit="habit"
+        :userId="userId"
+        @save-success="handleSaveSuccess"
+        @save-failure="handleSaveFailure"
+      />
     </div>
   </div>
 </template>
@@ -35,6 +46,7 @@ const greeting = ref("");
 const userId = ref("");
 const username = ref("");
 const sessionToken = ref("");
+const calendarHeading = ref("");
 
 onMounted(async () => {
   sessionToken.value = localStorage.getItem("sessionToken");
@@ -63,7 +75,40 @@ onMounted(async () => {
   } else {
     greeting.value = "Good Evening " + username.value;
   }
+
+  const today = new Date();
+  const firstDayOfWeek = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate() - today.getDay() + 1
+  );
+  const lastDayOfWeek = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate() - today.getDay() + 7
+  );
+
+  // Format the dates
+  const formatDate = (date) =>
+    `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
+
+  // Generate the calendar heading text
+  calendarHeading.value = `Calender week ${getCalendarWeek(
+    firstDayOfWeek
+  )} - ${formatDate(firstDayOfWeek)} - ${formatDate(lastDayOfWeek)}`;
 });
+
+// Function to calculate the calendar week
+const getCalendarWeek = (date) => {
+  const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
+  const millisecondsPerDay = 24 * 60 * 60 * 1000;
+  return Math.ceil(
+    ((date - firstDayOfYear) / millisecondsPerDay +
+      firstDayOfYear.getDay() +
+      1) /
+      7
+  );
+};
 
 const logout = () => {
   userId.value = "";
@@ -74,6 +119,14 @@ const logout = () => {
   localStorage.removeItem("userId");
   localStorage.removeItem("sessionToken");
   location.reload();
+};
+
+const handleSaveSuccess = (habitId) => {
+  console.log(`Save successful for habit ${habitId}`);
+};
+
+const handleSaveFailure = (error) => {
+  console.error(`Save failed: ${error}`);
 };
 </script>
 
