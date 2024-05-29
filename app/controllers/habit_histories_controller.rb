@@ -15,18 +15,20 @@ class HabitHistoriesController < ApplicationController
 
   # POST /habit_histories
   def create
-    @habit_history = HabitHistory.new(habit_history_params)
+    @habit_histories = habit_history_params.map do |history_params|
+      HabitHistory.new(history_params)
+    end
 
-    if @habit_history.save
-      render json: @habit_history, status: :created, location: @habit_history
+    if @habit_histories.all?(&:save)
+      render json: @habit_histories, status: :created
     else
-      render json: @habit_history.errors, status: :unprocessable_entity
+      render json: @habit_histories.map(&:errors), status: :unprocessable_entity
     end
   end
 
   # PATCH/PUT /habit_histories/1
   def update
-    if @habit_history.update(habit_history_params)
+    if @habit_history.update(habit_history_params.first)
       render json: @habit_history
     else
       render json: @habit_history.errors, status: :unprocessable_entity
@@ -39,6 +41,7 @@ class HabitHistoriesController < ApplicationController
   end
 
   private
+
     # Use callbacks to share common setup or constraints between actions.
     def set_habit_history
       @habit_history = HabitHistory.find(params[:id])
@@ -46,6 +49,8 @@ class HabitHistoriesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def habit_history_params
-      params.require(:habit_history).permit(:habit_id, :user_id, :date, :completed)
+      params.require(:_json).map do |history|
+        history.permit(:habit_id, :user_id, :date, :completed)
+      end
     end
 end

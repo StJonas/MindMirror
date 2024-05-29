@@ -2,24 +2,28 @@
   <div class="checkbox-group">
     <label v-for="(day, index) in daysOfWeek" :key="index">
       {{ day }}
-      <input type="checkbox" v-model="checkedDays[day]" />
+      <input
+        type="checkbox"
+        :checked="isChecked(day)"
+        @change="updateCheckedStatus(day, $event)"
+      />
     </label>
-    <button @click="saveHabits">Save</button>
   </div>
 </template>
 
 <script>
-import { reactive, watch, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 
 const API_URL = "http://localhost:3000/";
 
 export default {
   name: "Checkboxes",
   props: {
-    habit: Object,
+    habitId: [String, Number], //String,
     userId: String,
   },
   setup(props) {
+    //console.log("props: ", props);
     const daysOfWeek = [
       "Monday",
       "Tuesday",
@@ -30,82 +34,126 @@ export default {
       "Sunday",
     ];
 
-    const checkedDays = reactive({
-      Monday: false,
-      Tuesday: false,
-      Wednesday: false,
-      Thursday: false,
-      Friday: false,
-      Saturday: false,
-      Sunday: false,
+    const isChecked = computed(() => {
+      return (day) => {
+        return checkedDays.value[props.habitId] &&
+          checkedDays.value[props.habitId][day]
+          ? checkedDays.value[props.habitId][day].completed
+          : false;
+      };
     });
 
-    const resetCheckedDays = () => {
-      Object.keys(checkedDays).forEach((day) => {
-        checkedDays[day] = false;
-      });
-    };
-
-    const fetchHabitHistory = async () => {
-      try {
-        const response = await fetch(
-          `${API_URL}/habit_histories?habit_id=${props.habit.id}&user_id=${props.userId}`
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch habit history");
-        }
-        const data = await response.json();
-        setCheckedDays(data);
-      } catch (error) {
-        console.error("Error fetching habit history:", error);
+    const updateCheckedStatus = (day, event) => {
+      if (!checkedDays.value[props.habitId]) {
+        checkedDays.value[props.habitId] = {};
       }
+
+      if (!checkedDays.value[props.habitId][day]) {
+        checkedDays.value[props.habitId][day] = { completed: false };
+      }
+
+      checkedDays.value[props.habitId][day].completed = event.target.checked;
+
+      saveHabit(day);
     };
 
-    const setCheckedDays = (habitHistories) => {
+    const checkedDays = ref({});
+
+    onMounted(async () => {
+      if (props.habitId) {
+        await fetchHabitHistory();
+      }
+    });
+
+    async function fetchHabitHistory() {
+      if (props.habitId) {
+        // Check if habit prop is defined
+        try {
+          const response = await fetch(
+            `${API_URL}/habit_histories?habit_id=${props.habitId}&user_id=${props.userId}`
+          );
+          if (!response.ok) {
+            throw new Error("Failed to fetch habit history");
+          }
+          const data = await response.json();
+          setCheckedDays(data);
+        } catch (error) {
+          console.error("Error fetching habit history:", error);
+        }
+      }
+    }
+
+    function setCheckedDays(habitHistories) {
       habitHistories.forEach((history) => {
+        const habitId = history.habit_id;
         const day = getDayFromDate(new Date(history.date));
         if (day) {
-          checkedDays[day] = history.completed;
+          if (!checkedDays.value[habitId]) {
+            checkedDays.value[habitId] = {};
+          }
+          checkedDays.value[habitId][day] = history;
         }
       });
-    };
+    }
 
-    const saveHabits = async () => {
-      const habitHistory = [];
-      const habitId = props.habit.id;
+    async function saveHabit(day) {
+      const habitId = props.habitId;
       const userId = props.userId;
+      const date = getDateForDay(day);
+      const completed = checkedDays.value[props.habitId][day].completed;
 
-      Object.keys(checkedDays).forEach((day) => {
-        const date = getDateForDay(day);
-        habitHistory.push({
+      if (completed) {
+        // Save the checked habit
+        const habitHistory = {
           habit_id: habitId,
           user_id: userId,
           date: date,
-          completed: checkedDays[day],
-        });
-      });
+          completed: completed,
+        };
 
-      try {
-        const response = await fetch(`${API_URL}/habit_histories`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(habitHistory),
-        });
+        try {
+          const response = await fetch(`${API_URL}/habit_histories`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify([habitHistory]),
+          });
 
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+
+          const data = await response.json();
+          checkedDays.value[day] = data[0];
+          console.log("Save successful", data);
+        } catch (error) {
+          console.error("There was a problem with the save operation:", error);
         }
+      } else if (checkedDays.value[day].id) {
+        // Delete the unchecked habit
+        try {
+          const response = await fetch(
+            `${API_URL}/habit_histories/${checkedDays.value[day].id}`,
+            { method: "DELETE" }
+          );
 
-        const data = await response.json();
-        console.log("Save successful", data);
-      } catch (error) {
-        console.error("There was a problem with the save operation:", error);
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+
+          console.log("Delete successful");
+          checkedDays.value[day] = { completed: false };
+        } catch (error) {
+          console.error(
+            "There was a problem with the delete operation:",
+            error
+          );
+        }
       }
-    };
+    }
 
-    const getDateForDay = (day) => {
+    function getDateForDay(day) {
       const today = new Date();
       const currentDay = today.getDay(); // 0 (Sunday) to 6 (Saturday)
       const dayMap = {
@@ -120,10 +168,10 @@ export default {
       const diff = (dayMap[day] + 7 - currentDay) % 7;
       const resultDate = new Date(today);
       resultDate.setDate(today.getDate() + diff);
-      return resultDate.toISOString().split("T")[0];
-    };
+      return resultDate.toISOString().split("T")[0]; // format as YYYY-MM-DD
+    }
 
-    const getDayFromDate = (date) => {
+    function getDayFromDate(date) {
       const dayMap = [
         "Sunday",
         "Monday",
@@ -134,29 +182,14 @@ export default {
         "Saturday",
       ];
       return dayMap[date.getDay()];
-    };
-
-    watch(
-      () => props.habit,
-      async () => {
-        resetCheckedDays();
-        await fetchHabitHistory();
-      },
-      { immediate: true }
-    );
-
-    onMounted(async () => {
-      await fetchHabitHistory();
-    });
+    }
 
     return {
       daysOfWeek,
       checkedDays,
-      saveHabits,
-      fetchHabitHistory,
-      setCheckedDays,
-      getDateForDay,
-      getDayFromDate,
+      saveHabit,
+      updateCheckedStatus,
+      isChecked,
     };
   },
 };
@@ -176,9 +209,5 @@ export default {
 
 .checkbox-group input[type="checkbox"] {
   margin-right: 5px;
-}
-
-button {
-  margin-top: 10px;
 }
 </style>

@@ -27,7 +27,7 @@
       </button>
       <Checkboxes
         v-if="habits.length"
-        :habit="habit"
+        :habitId="habit.id"
         :userId="userId"
         @save-success="handleSaveSuccess"
         @save-failure="handleSaveFailure"
