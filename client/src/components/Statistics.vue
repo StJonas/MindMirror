@@ -19,17 +19,18 @@ import {
 
 Chart.register(LinearScale, BarController, CategoryScale, BarElement);
 
-import habitChartData from "../habit-data.js";
+import { getHabitChartData } from "../habit-data.js";
 
 export default {
   name: "HabitChart",
   data() {
     return {
-      habitChartData: habitChartData,
+      habitChartData: null,
     };
   },
-  mounted() {
+  async mounted() {
     const ctx = document.getElementById("habit-chart");
+    this.habitChartData = await getHabitChartData();
     new Chart(ctx, this.habitChartData);
   },
 };
