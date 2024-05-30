@@ -11,6 +11,9 @@
       <router-link to="/signup" v-if="!userId">
         <button>Signup</button>
       </router-link>
+      <router-link to="/stats" v-if="userId">
+        <button>Statistics</button>
+      </router-link>
       <button @click="logout" v-if="userId">Logout</button>
     </div>
 
