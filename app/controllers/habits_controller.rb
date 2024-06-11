@@ -3,7 +3,11 @@ class HabitsController < ApplicationController
 
   # GET /habits
   def index
-    @habits = Habit.all
+    if params[:user_id]
+      @habits = Habit.where(user_id: params[:user_id])
+    else
+      @habits = Habit.all
+    end
 
     render json: @habits
   end

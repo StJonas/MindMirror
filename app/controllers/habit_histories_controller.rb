@@ -3,7 +3,11 @@ class HabitHistoriesController < ApplicationController
 
   # GET /habit_histories
   def index
-    @habit_histories = HabitHistory.all
+    if params[:user_id]
+      @habit_histories = HabitHistory.where(user_id: params[:user_id])
+    else
+      @habit_histories = HabitHistory.all
+    end
 
     render json: @habit_histories
   end

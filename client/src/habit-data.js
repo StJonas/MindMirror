@@ -1,11 +1,18 @@
 export async function getHabitChartData() {
+  const userId = localStorage.getItem("userId");
+  const API_URL = "http://localhost:3000/";
+
   const [historiesResponse, habitsResponse] = await Promise.all([
-    fetch("http://localhost:3000/habit_histories"),
-    fetch("http://localhost:3000/habits"),
+    fetch(`${API_URL}/habit_histories?user_id=${userId}`),
+    fetch(`${API_URL}/habits?user_id=${userId}`),
   ]);
 
   const historiesData = await historiesResponse.json();
   const habitsData = await habitsResponse.json();
+
+  //console.log("user: ", userId);
+  //console.log("historiesData: ", historiesData);
+  //console.log("habitsData", habitsData);
 
   // mapping of habit IDs to names
   const habitNames = habitsData.reduce((names, habit) => {
@@ -29,7 +36,7 @@ export async function getHabitChartData() {
         {
           label: "Frequency",
           data: datasetData,
-          backgroundColor: ["#ffd1dc", "#d1fffc", "#daffc1"],
+          backgroundColor: ["#d1fffc", "#daffc1"],
           borderWidth: 3,
         },
       ],

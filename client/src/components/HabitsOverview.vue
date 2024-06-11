@@ -2,7 +2,7 @@
   <div>
     <div class="header">
       <h1>{{ greeting }}</h1>
-      <button type="button">
+      <button type="button" v-if="userId">
         <router-link to="/AddHabit">Add Habit</router-link>
       </button>
       <router-link to="/login" v-if="!userId">
