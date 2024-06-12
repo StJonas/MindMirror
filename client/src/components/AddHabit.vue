@@ -3,7 +3,7 @@
     <h1>Add Habit</h1>
 
     <!-- Create or Habit -->
-    <input type="text" v-model="name" placeholder="name" class="name-input" />
+    <input type="text" v-model="name" placeholder="Name" class="name-input" />
     <input
       type="number"
       v-model="frequency"

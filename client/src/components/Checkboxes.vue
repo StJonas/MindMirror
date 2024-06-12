@@ -100,7 +100,7 @@ export default {
       const habitId = props.habitId;
       const userId = props.userId;
       const date = getDateForDay(day);
-      const completed = checkedDays.value[props.habitId][day].completed;
+      const completed = checkedDays.value[habitId][day].completed;
 
       if (completed) {
         // Save the checked habit
@@ -125,16 +125,19 @@ export default {
           }
 
           const data = await response.json();
-          checkedDays.value[day] = data[0];
+          checkedDays.value[habitId][day] = data[0];
           console.log("Save successful", data);
         } catch (error) {
           console.error("There was a problem with the save operation:", error);
         }
-      } else if (checkedDays.value[day].id) {
+      } else if (
+        checkedDays.value[habitId][day] &&
+        checkedDays.value[habitId][day].id
+      ) {
         // Delete the unchecked habit
         try {
           const response = await fetch(
-            `${API_URL}/habit_histories/${checkedDays.value[day].id}`,
+            `${API_URL}/habit_histories/${checkedDays.value[habitId][day].id}`,
             { method: "DELETE" }
           );
 
@@ -143,7 +146,7 @@ export default {
           }
 
           console.log("Delete successful");
-          checkedDays.value[day] = { completed: false };
+          checkedDays.value[habitId][day] = { completed: false };
         } catch (error) {
           console.error(
             "There was a problem with the delete operation:",

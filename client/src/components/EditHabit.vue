@@ -30,7 +30,7 @@ const oldName = ref("");
 const frequency = ref("");
 const habit_id = ref(0);
 const isEditing = ref(false);
-const API_URL = "http://localhost:3000/habits";
+const API_URL = "http://localhost:3000";
 
 const route = useRoute();
 
@@ -38,7 +38,7 @@ onMounted(async () => {
   const habitId = parseInt(route.params.habitId);
 
   if (habitId) {
-    const res = await fetch(`${API_URL}/${habitId}`);
+    const res = await fetch(`${API_URL}/habits/${habitId}`);
     const fetchedHabit = await res.json();
     if (fetchedHabit) {
       // Check if habit exists
@@ -51,7 +51,7 @@ onMounted(async () => {
 });
 
 const updateHabit = async () => {
-  const res = await fetch(`${API_URL}/${habit_id.value}`, {
+  const res = await fetch(`${API_URL}/habits/${habit_id.value}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -78,9 +78,16 @@ const updateHabit = async () => {
 
 const deleteHabit = async (id) => {
   if (confirm("Are you sure you want to delete this habit?")) {
-    await fetch(`${API_URL}/${id}`, {
+    //deleting all habit histories associated with the habit
+    await fetch(`${API_URL}/habit_histories/habit/${id}`, {
       method: "DELETE",
     });
+
+    //deleting habit itself
+    await fetch(`${API_URL}/habits/${id}`, {
+      method: "DELETE",
+    });
+
     habits.value = habits.value.filter((habit) => habit.id !== id);
   }
   router.push("/");

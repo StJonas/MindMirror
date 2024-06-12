@@ -44,6 +44,14 @@ class HabitHistoriesController < ApplicationController
     @habit_history.destroy!
   end
 
+  # DELETE /habit_histories/:habit_id
+  def destroy_by_habit
+    @habit_histories = HabitHistory.where(habit_id: params[:habit_id])
+    @habit_histories.destroy_all
+
+    head :no_content
+  end
+
   private
 
     # Use callbacks to share common setup or constraints between actions.
