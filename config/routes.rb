@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
-  resources :habit_histories
+  resources :habit_histories do
+    delete 'habit/:habit_id', to: 'habit_histories#destroy_by_habit', on: :collection
+  end
   resources :users
   resources :habits
   #resources :habits, only: [:index]
