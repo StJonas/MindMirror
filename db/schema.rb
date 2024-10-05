@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_06_191813) do
+ActiveRecord::Schema[7.1].define(version: 2024_10_05_090135) do
   create_table "habit_histories", force: :cascade do |t|
     t.integer "habit_id"
     t.integer "user_id"
@@ -27,6 +27,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_06_191813) do
     t.integer "category_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "is_timed"
+    t.decimal "duration", precision: 5, scale: 2, default: "0.0"
   end
 
   create_table "users", force: :cascade do |t|

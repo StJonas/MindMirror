@@ -1,5 +1,5 @@
 class HabitsController < ApplicationController
-  before_action :set_habit, only: %i[ show update destroy ]
+  before_action :set_habit, only: %i[ show update destroy update_duration ]
 
   # GET /habits
   def index
@@ -12,6 +12,7 @@ class HabitsController < ApplicationController
     render json: @habits
   end
 
+  # GET /habits/user_id
   def index_by_user
     @user = User.find(params[:user_id])
     @habits = @user.habits
@@ -48,6 +49,15 @@ class HabitsController < ApplicationController
     @habit.destroy!
   end
 
+  # POST /habits/:id/update_duration
+  def update_duration
+    if @habit.update(duration_params)
+      render json: @habit
+    else
+      render json: @habit.errors, status: :unprocessable_entity
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_habit
@@ -56,6 +66,10 @@ class HabitsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def habit_params
-      params.require(:habit).permit(:id, :name, :frequency, :user_id, :category_id)
+      params.require(:habit).permit(:id, :name, :frequency, :user_id, :category_id, :is_timed)
+    end
+
+    def duration_params
+      params.require(:habit).permit(:duration)
     end
 end

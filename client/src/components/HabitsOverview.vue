@@ -29,11 +29,17 @@
         <router-link :to="`/edit/${habit.id}`">Edit</router-link>
       </button>
       <Checkboxes
-        v-if="habits.length"
+        v-if="habits.length && !habit.is_timed"
         :habitId="habit.id"
         :userId="userId"
         @save-success="handleSaveSuccess"
         @save-failure="handleSaveFailure"
+      />
+      <HabitDurationTracker
+        v-else
+        :habitId="habit.id"
+        :initialDuration="habit.duration"
+        @save-duration="handleSaveDuration"
       />
     </div>
   </div>
@@ -41,6 +47,7 @@
 
 <script setup>
 import Checkboxes from "../components/Checkboxes.vue";
+import HabitDurationTracker from "./HabitDurationTracker.vue";
 import { ref, onMounted, inject } from "vue"; //habit
 
 const habits = ref([]);
