@@ -1,46 +1,39 @@
 <template>
-  <div>
-    <div class="header">
-      <h1>{{ greeting }}</h1>
-      <button type="button" v-if="userId">
-        <router-link to="/AddHabit">Add Habit</router-link>
-      </button>
-      <router-link to="/login" v-if="!userId">
-        <button>Login</button>
-      </router-link>
-      <router-link to="/signup" v-if="!userId">
-        <button>Signup</button>
+  <div class="page-styling">
+    <!-- Calendar Week and Dates Heading -->
+    <div class="habit-header" v-if="userId">
+      <h2>{{ calendarHeading }}</h2>
+      <router-link to="/AddHabit" v-if="userId">
+        <button type="button">Add Habit</button>
       </router-link>
       <router-link to="/stats" v-if="userId">
-        <button>Statistics</button>
+        <button type="button">Statistics</button>
       </router-link>
-      <button @click="logout" v-if="userId">Logout</button>
-    </div>
-
-    <!-- Calendar Week and Dates Heading -->
-    <div class="header" v-if="userId">
-      <h2>{{ calendarHeading }}</h2>
     </div>
 
     <!-- List of Habits -->
-    <div v-for="habit in habits" :key="habit.id" class="header">
+    <div v-for="habit in habits" :key="habit.id" class="habit-container">
       <h2>{{ habit.name }}</h2>
-      <button type="button" v-if="habits.length">
-        <router-link :to="`/edit/${habit.id}`">Edit</router-link>
-      </button>
-      <Checkboxes
-        v-if="habits.length && !habit.is_timed"
-        :habitId="habit.id"
-        :userId="userId"
-        @save-success="handleSaveSuccess"
-        @save-failure="handleSaveFailure"
-      />
-      <HabitDurationTracker
-        v-else
-        :habitId="habit.id"
-        :initialDuration="habit.duration"
-        @save-duration="handleSaveDuration"
-      />
+      <router-link :to="`/edit/${habit.id}`">
+        <button type="button">Edit</button>
+      </router-link>
+      <div class="checkboxes">
+        <Checkboxes
+          v-if="habits.length && !habit.is_timed"
+          :habitId="habit.id"
+          :userId="userId"
+          @save-success="handleSaveSuccess"
+          @save-failure="handleSaveFailure"
+        />
+
+        <HabitDurationTracker
+          v-else
+          :habitId="habit.id"
+          :initialDuration="habit.duration"
+          @save-duration="handleSaveDuration"
+          class="habit-duration-tracker"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -75,15 +68,6 @@ onMounted(async () => {
     username.value = userData.username;
   } else {
     username.value = "";
-  }
-
-  const currentHour = new Date().getHours();
-  if (currentHour < 12) {
-    greeting.value = "Good Morning " + username.value;
-  } else if (currentHour < 18) {
-    greeting.value = "Good Afternoon " + username.value;
-  } else {
-    greeting.value = "Good Evening " + username.value;
   }
 
   const today = new Date();
@@ -141,10 +125,63 @@ const handleSaveFailure = (error) => {
 </script>
 
 <style scoped>
+.page-styling {
+  margin-left: 40px;
+}
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 20px;
+  width: 200%;
+}
+
+.logout {
+  margin-left: 1500px;
+  margin-bottom: 500px;
+  position: absolute;
+}
+
+.page-styling button {
+  flex-shrink: 0;
+  margin-left: 10px;
+  border-color: black;
+  text-emphasis-color: black;
+  text-decoration-color: black;
+}
+
+.habit-header button router-link {
+  flex-shrink: 0;
+  margin-left: 10px;
+  border-color: black;
+  text-emphasis-color: black;
+  text-decoration-color: black;
+}
+
+.habit-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.habit-container {
+  position: relative;
+}
+
+.habit-container button {
+  margin-left: 200px;
+  position: absolute;
+}
+.checkboxes {
+  margin-left: 320px;
+  margin-top: 10px;
+  position: relative;
+}
+.habit-container h2 {
+  margin-bottom: -35px;
+  position: relative;
+}
+.habit-duration-tracker {
+  margin-bottom: 50px;
 }
 </style>

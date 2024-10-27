@@ -6,8 +6,9 @@
       v-model.number="duration"
       placeholder="Minutes"
       min="1"
+      class="styled-input"
     />
-    <button @click="saveDuration">Save</button>
+    <button @click="saveDuration" class="button">Save</button>
   </div>
 </template>
 
@@ -72,3 +73,19 @@ const fetchHabitDetails = async () => {
 
 onMounted(fetchHabitDetails);
 </script>
+<style scoped>
+.styled-input {
+  width: 100px;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  color: #333;
+  margin-left: 20px;
+}
+
+.button {
+  border-color: black;
+  margin-left: 20px;
+}
+</style>

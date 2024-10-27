@@ -5,8 +5,18 @@ const router = createRouter({
   routes: [
     {
       path: "/",
+      name: "Overview",
+      component: () => import("../components/Overview.vue"),
+    },
+    {
+      path: "/habits",
       name: "HabitsOverview",
       component: () => import("../components/HabitsOverview.vue"),
+    },
+    {
+      path: "/journaling",
+      name: "JournalingOverview",
+      component: () => import("../components/JournalingOverview.vue"),
     },
     {
       path: "/AddHabit",
