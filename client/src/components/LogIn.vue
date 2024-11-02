@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="input">
     <h1>Login</h1>
     <form @submit.prevent="login">
       <label for="username">Username:</label>
@@ -21,9 +21,9 @@
       />
 
       <button type="submit">Login</button>
-      <button type="button">
-        <router-link to="/">Go Back</router-link>
-      </button>
+      <router-link to="/">
+        <button type="button">Go Back</button>
+      </router-link>
     </form>
   </div>
 </template>
@@ -60,6 +60,8 @@ const login = async () => {
     router.push("/");
   } else {
     console.error("Login failed");
+    console.log("name ", username.value);
+    console.log("pw ", password.value);
   }
 
   username.value = "";
@@ -68,6 +70,10 @@ const login = async () => {
 </script>
 
 <style>
+.input {
+  resize: vertical;
+}
+
 .name-input {
   width: 100%;
   padding: 12px 20px;
@@ -80,7 +86,7 @@ const login = async () => {
   resize: vertical;
 }
 
-.body-input {
+.input body-input {
   width: 100%;
   padding: 12px 20px;
   margin: 8px 0;
@@ -90,5 +96,11 @@ const login = async () => {
   color: #111;
   border-radius: 4px;
   resize: vertical;
+}
+.input button {
+  border-color: black;
+  text-emphasis-color: black;
+  text-decoration-color: black;
+  margin-left: 10px;
 }
 </style>

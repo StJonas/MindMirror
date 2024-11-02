@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="page-styling">
     <span>Current Duration: {{ userDuration }}</span>
     <input
       type="number"
@@ -74,6 +74,8 @@ const fetchHabitDetails = async () => {
 onMounted(fetchHabitDetails);
 </script>
 <style scoped>
+.page-styling {
+}
 .styled-input {
   width: 100px;
   box-sizing: border-box;

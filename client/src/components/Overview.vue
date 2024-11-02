@@ -1,36 +1,10 @@
 <template>
   <div class="page-styling">
-    <div class="header">
-      <h1>{{ greeting }}</h1>
-
-      <router-link to="/login" v-if="!userId">
-        <button type="button">Login</button>
-      </router-link>
-      <router-link to="/signup" v-if="!userId">
-        <button type="button">Signup</button>
-      </router-link>
-      <div class="logout">
-        <button @click="logout" v-if="userId">Logout</button>
-      </div>
-    </div>
-
-    <div class="navigation-buttons">
-      <button
-        type="button"
-        @click="currentPage = 'habits'"
-        :class="{ active: currentPage === 'habits' }"
-      >
-        Habits
-      </button>
-      <button
-        type="button"
-        @click="currentPage = 'journaling'"
-        :class="{ active: currentPage === 'journaling' }"
-      >
-        Journal
-      </button>
-      <button>+</button>
-    </div>
+    <HeaderComponent :userId="userId" :username="username" @logout="logout" />
+    <JournalNavigationButtons
+      :currentPage="currentPage"
+      @update:currentPage="currentPage = $event"
+    />
 
     <div class="content">
       <div v-if="currentPage === 'habits'">
@@ -46,11 +20,12 @@
 <script setup>
 import HabitsOverview from "./HabitsOverview.vue";
 import JournalingOverview from "./JournalingOverview.vue";
-import { ref, onMounted, inject } from "vue"; //habit
+import HeaderComponent from "./HeaderComponent.vue";
+import JournalNavigationButtons from "./JournalNavigationButtons.vue";
+import { ref, onMounted } from "vue";
 
 const habits = ref([]);
 const API_URL = "http://localhost:3000/";
-const greeting = ref("");
 const userId = ref("");
 const username = ref("");
 const sessionToken = ref("");
@@ -74,15 +49,6 @@ onMounted(async () => {
   } else {
     username.value = "";
   }
-
-  const currentHour = new Date().getHours();
-  if (currentHour < 12) {
-    greeting.value = "Good Morning " + username.value;
-  } else if (currentHour < 18) {
-    greeting.value = "Good Afternoon " + username.value;
-  } else {
-    greeting.value = "Good Evening " + username.value;
-  }
 });
 
 const logout = () => {
@@ -102,40 +68,7 @@ const logout = () => {
   margin-left: 140px;
   min-width: 100vh;
 }
-.header button router-link {
-  flex-shrink: 0;
-  margin-left: 10px;
-  border-color: black;
-  text-emphasis-color: black;
-  text-decoration-color: black;
-}
-.logout button {
-  margin-left: 1500px;
-  position: absolute;
-  border-color: black;
-  top: 80px;
-}
-.navigation-buttons {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-}
 
-.navigation-buttons button {
-  background-color: lightblue;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  cursor: pointer;
-  border-radius: 4px;
-}
-.navigation-buttons button.active {
-  background-color: #45a049;
-}
 .content {
   flex: 1;
   display: flex;

@@ -2,6 +2,11 @@
   <div class="page-styling">
     <div class="header">
       <h2>Journaling</h2>
+      <router-link to="/AddHabit" v-if="userId">
+        <button type="button">Add Prompt</button>
+      </router-link>
+      <span>{{ weeklyPrompt }}</span>
+      <input type="text" placeholder="input" min="1" class="styled-input" />
     </div>
   </div>
 </template>
@@ -14,6 +19,7 @@ const API_URL = "http://localhost:3000/";
 const userId = ref("");
 const username = ref("");
 const sessionToken = ref("");
+const weeklyPrompt = ref("weekly prompt");
 
 onMounted(async () => {
   sessionToken.value = localStorage.getItem("sessionToken");
@@ -39,5 +45,17 @@ onMounted(async () => {
 <style scoped>
 .page-styling {
   margin-left: 0px;
+}
+.header {
+  align-content: center;
+}
+.styled-input {
+  width: 100px;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  color: #333;
+  margin-left: 20px;
 }
 </style>

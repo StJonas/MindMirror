@@ -182,6 +182,6 @@ const handleSaveFailure = (error) => {
   position: relative;
 }
 .habit-duration-tracker {
-  margin-bottom: 50px;
+  bottom: 10px;
 }
 </style>
