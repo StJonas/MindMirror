@@ -16,25 +16,25 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch, inject } from "vue";
 
-const props = defineProps(["userId", "username"]);
 const emit = defineEmits(["logout"]);
-
+const username = inject("username", "");
+const userId = inject("userId");
 const greeting = ref("");
 
 const updateGreeting = () => {
   const currentHour = new Date().getHours();
   if (currentHour < 12) {
-    greeting.value = "Good Morning " + props.username;
+    greeting.value = "Good Morning " + username.value;
   } else if (currentHour < 18) {
-    greeting.value = "Good Afternoon " + props.username;
+    greeting.value = "Good Afternoon " + username.value;
   } else {
-    greeting.value = "Good Evening " + props.username;
+    greeting.value = "Good Evening " + username.value;
   }
 };
 
-watch(() => props.username, updateGreeting, { immediate: true });
+watch(username, updateGreeting, { immediate: true });
 
 const logout = () => {
   emit("logout");

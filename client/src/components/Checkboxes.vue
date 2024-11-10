@@ -201,7 +201,7 @@ export default {
 <style scoped>
 .checkbox-group {
   display: flex;
-  flex-wrap: wrap;
+
   margin: 0;
   padding: 0;
 }

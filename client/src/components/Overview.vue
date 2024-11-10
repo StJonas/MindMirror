@@ -1,7 +1,7 @@
 <template>
   <div class="page-styling">
-    <HeaderComponent :userId="userId" :username="username" @logout="logout" />
-    <JournalNavigationButtons
+    <OverviewHeader @logout="logout" />
+    <OverviewNavigationButtons
       :currentPage="currentPage"
       @update:currentPage="currentPage = $event"
     />
@@ -20,9 +20,9 @@
 <script setup>
 import HabitsOverview from "./HabitsOverview.vue";
 import JournalingOverview from "./JournalingOverview.vue";
-import HeaderComponent from "./HeaderComponent.vue";
-import JournalNavigationButtons from "./JournalNavigationButtons.vue";
-import { ref, onMounted } from "vue";
+import OverviewHeader from "./OverviewHeader.vue";
+import OverviewNavigationButtons from "./OverviewNavigationButtons.vue";
+import { ref, onMounted, provide } from "vue";
 
 const habits = ref([]);
 const API_URL = "http://localhost:3000/";
@@ -31,24 +31,38 @@ const username = ref("");
 const sessionToken = ref("");
 const currentPage = ref("habits");
 
-onMounted(async () => {
-  sessionToken.value = localStorage.getItem("sessionToken");
-  userId.value = localStorage.getItem("userId");
+provide("userId", userId);
+provide("username", username);
+provide("habits", habits);
+
+const fetchUserData = async () => {
+  try {
+    const response = await fetch(`${API_URL}/users/${userId.value}`);
+    if (response.ok) {
+      const data = await response.json();
+      userId.value = data.id;
+      username.value = data.username;
+      sessionToken.value = localStorage.getItem("sessionToken");
+      fetchHabits();
+    } else {
+      console.error("Failed to fetch user data");
+    }
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+  }
+};
+
+const fetchHabits = async () => {
   if (userId.value != null) {
     const res = await fetch(`${API_URL}/users/${userId.value}/habits`);
     habits.value = await res.json();
   }
+};
 
-  //   console.log("session token", sessionToken.value);
-  //   console.log("userId.value", userId.value);
-
-  if (userId.value) {
-    const userRes = await fetch(`${API_URL}/users/${userId.value}`);
-    const userData = await userRes.json();
-    username.value = userData.username;
-  } else {
-    username.value = "";
-  }
+onMounted(() => {
+  userId.value = localStorage.getItem("userId");
+  fetchUserData();
+  fetchHabits();
 });
 
 const logout = () => {
