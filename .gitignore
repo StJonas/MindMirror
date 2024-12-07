@@ -50,3 +50,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+#some addtitional files I want to ignore
+.dockerignore
+docker-compose.yaml
+Dockerfile
+todo
+journal example.png
