@@ -46,7 +46,6 @@ const logout = () => {
   justify-content: space-between;
   align-items: center;
   padding: 10px;
-  background-color: #f8f9fa;
 }
 .auth-buttons {
   display: flex;

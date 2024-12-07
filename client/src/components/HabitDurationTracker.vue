@@ -16,7 +16,7 @@
 import { ref, defineProps, onMounted } from "vue";
 
 const props = defineProps({
-  habitId: String,
+  habitId: Number,
 });
 
 const userDuration = ref(0);
@@ -57,17 +57,19 @@ const saveDuration = async () => {
 };
 
 const fetchHabitDetails = async () => {
-  try {
-    const response = await fetch(
-      `http://localhost:3000/habits/${props.habitId}`
-    );
-    if (!response.ok) {
-      throw new Error("Failed to fetch habit details");
+  if (props.habitId) {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/habits/${props.habitId}`
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch habit details");
+      }
+      const habit = await response.json();
+      userDuration.value = parseFloat(habit.duration);
+    } catch (error) {
+      console.error("Error fetching habit details:", error);
     }
-    const habit = await response.json();
-    userDuration.value = parseFloat(habit.duration);
-  } catch (error) {
-    console.error("Error fetching habit details:", error);
   }
 };
 

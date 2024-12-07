@@ -1,6 +1,9 @@
 <template>
   <div class="habit-header" v-if="userId">
+    <button @click="changeWeek('prev')">&lt;</button>
     <h2>{{ calendarHeading }}</h2>
+    <button v-if="!isCurrentWeek" @click="changeWeek('next')">&gt;</button>
+
     <router-link to="/AddHabit">
       <button type="button">Add Habit</button>
     </router-link>
@@ -10,52 +13,47 @@
   </div>
 </template>
 <script setup>
-import { ref, watch, inject } from "vue";
+import { ref, watch, inject, defineProps, computed } from "vue";
 
 const userId = inject("userId");
-const calendarHeading = ref("");
+//const calendarHeading = ref("");
+//const currentDay = ref(new Date());
 
-const updateCalendarHeading = () => {
+const props = defineProps({
+  currentDay: Date,
+});
+
+const isCurrentWeek = computed(() => {
   const today = new Date();
-  const firstDayOfWeek = new Date(
-    today.getFullYear(),
-    today.getMonth(),
-    today.getDate() - today.getDay() + 1
+  const startOfWeek = new Date(
+    today.setDate(today.getDate() - today.getDay() + 1)
   );
+
+  return props.currentDay >= startOfWeek;
+});
+
+const calendarHeading = computed(() => {
+  const firstDayOfWeek = new Date(props.currentDay);
+  firstDayOfWeek.setDate(
+    firstDayOfWeek.getDate() - firstDayOfWeek.getDay() + 1
+  );
+
   const lastDayOfWeek = new Date(
-    today.getFullYear(),
-    today.getMonth(),
-    today.getDate() - today.getDay() + 7
+    firstDayOfWeek.getFullYear(),
+    firstDayOfWeek.getMonth(),
+    firstDayOfWeek.getDate() + 6
   );
 
   const formatDate = (date) =>
     `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
 
-  calendarHeading.value = `Calender week ${getCalendarWeek(
-    firstDayOfWeek
-  )} - ${formatDate(firstDayOfWeek)} - ${formatDate(lastDayOfWeek)}`;
-};
+  return `Week of ${formatDate(firstDayOfWeek)} - ${formatDate(lastDayOfWeek)}`;
+});
 
-const getCalendarWeek = (date) => {
-  const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
-  const millisecondsPerDay = 24 * 60 * 60 * 1000;
-  return Math.ceil(
-    ((date - firstDayOfYear) / millisecondsPerDay +
-      firstDayOfYear.getDay() +
-      1) /
-      7
-  );
+const emit = defineEmits(["nextWeek", "prevWeek"]);
+const changeWeek = (direction) => {
+  emit(direction === "next" ? "nextWeek" : "prevWeek");
 };
-
-watch(
-  userId,
-  (newUserId) => {
-    if (newUserId) {
-      updateCalendarHeading();
-    }
-  },
-  { immediate: true }
-);
 </script>
 <style>
 .habit-header {

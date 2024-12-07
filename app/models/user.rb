@@ -1,5 +1,7 @@
 class User < ApplicationRecord
-    has_secure_password :password, validations: false
+  has_many :habits
+  has_many :habit_histories, through: :habits
 
-    has_many :habits
-  end
+  validates :username, presence: true, uniqueness: true
+  has_secure_password
+end
