@@ -15,8 +15,8 @@ const router = createRouter({
     },
     {
       path: "/journaling",
-      name: "JournalingOverview",
-      component: () => import("../components/JournalingOverview.vue"),
+      name: "JournalOverview",
+      component: () => import("../components/JournalOverview.vue"),
     },
     {
       path: "/AddHabit",
@@ -43,6 +43,11 @@ const router = createRouter({
       path: "/stats",
       name: "Statistics",
       component: () => import("../components/Statistics.vue"),
+    },
+    {
+      path: "/JournalLog",
+      name: "JournalLog",
+      component: () => import("../components/JournalLog.vue"),
     },
   ],
 });

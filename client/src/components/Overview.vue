@@ -11,7 +11,10 @@
         <HabitsOverview />
       </div>
       <div v-else-if="currentPage === 'journaling'">
-        <JournalingOverview />
+        <JournalOverview @navigateToJournalLog="navigateToJournalLog" />
+      </div>
+      <div v-else-if="currentPage === 'journalLog'">
+        <JournalLog />
       </div>
     </div>
   </div>
@@ -19,7 +22,8 @@
 
 <script setup>
 import HabitsOverview from "./HabitsOverview.vue";
-import JournalingOverview from "./JournalingOverview.vue";
+import JournalOverview from "./JournalOverview.vue";
+import JournalLog from "./JournalLog.vue";
 import OverviewHeader from "./OverviewHeader.vue";
 import OverviewNavigationButtons from "./OverviewNavigationButtons.vue";
 import { ref, onMounted, provide } from "vue";
@@ -57,6 +61,10 @@ const fetchHabits = async () => {
     const res = await fetch(`${API_URL}/users/${userId.value}/habits`);
     habits.value = await res.json();
   }
+};
+
+const navigateToJournalLog = () => {
+  currentPage.value = "journalLog";
 };
 
 onMounted(() => {

@@ -32,7 +32,10 @@
       <div style="margin-left: 30px; margin-bottom: 40px; margin-top: 30px">
         <h2>Timed Habits:</h2>
       </div>
-      <h2 style="margin-left: 40px; margin-right: 40px">{{ habit.name }}</h2>
+      <h2 style="margin-left: 40px">{{ habit.name }}</h2>
+      <router-link :to="`/edit/${habit.id}`">
+        <button type="button" style="margin-left: 180px">Edit</button>
+      </router-link>
       <div class="habit-container">
         <HabitDurationTracker
           :habitId="habit.id"
@@ -139,7 +142,7 @@ watchEffect(async () => {
 }
 
 .habit-duration-tracker {
-  bottom: 10px;
-  margin-left: 150px;
+  margin-left: 280px;
+  position: absolute;
 }
 </style>

@@ -10,7 +10,9 @@
     <button
       type="button"
       @click="changePage('journaling')"
-      :class="{ active: currentPage === 'journaling' }"
+      :class="{
+        active: currentPage === 'journaling' || currentPage === 'journalLog',
+      }"
     >
       Journal
     </button>
