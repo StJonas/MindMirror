@@ -8,7 +8,7 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import {
   Chart,
   LinearScale,
@@ -16,24 +16,23 @@ import {
   CategoryScale,
   BarElement,
 } from "chart.js";
+import { ref, onMounted } from "vue";
+import { getHabitChartData } from "../habit-data.js";
 
 Chart.register(LinearScale, BarController, CategoryScale, BarElement);
 
-import { getHabitChartData } from "../habit-data.js";
+const emit = defineEmits(["navigateBackToHabit"]);
+const habitChartData = ref(null);
 
-export default {
-  name: "HabitChart",
-  data() {
-    return {
-      habitChartData: null,
-    };
-  },
-  async mounted() {
-    const ctx = document.getElementById("habit-chart");
-    this.habitChartData = await getHabitChartData();
-    new Chart(ctx, this.habitChartData);
-  },
+const goBack = () => {
+  emit("navigateBackToHabit");
 };
+
+onMounted(async () => {
+  const ctx = document.getElementById("habit-chart");
+  habitChartData.value = await getHabitChartData();
+  new Chart(ctx, habitChartData.value);
+});
 </script>
 <style scoped>
 .header-row {
