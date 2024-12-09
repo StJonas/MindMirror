@@ -38,6 +38,14 @@ class HabitHistoriesController < ApplicationController
     render json: @habit_history
   end
 
+  # GET /users/:user_id/habit_histories
+  def user_histories
+    user = User.find(params[:user_id])
+    habit_histories = user.habit_histories
+
+    render json: habit_histories
+  end
+
   # POST /habit_histories
   def create
     @habit_histories = habit_history_params.map do |history_params|

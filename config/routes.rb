@@ -13,15 +13,12 @@ Rails.application.routes.draw do
       post 'update_duration'
     end
   end
+  
   resources :users do
     resources :habits do
       get 'habit_histories/week', to: 'habit_histories#week'
     end
-  end
-  resources :users do
-    resources :habits do
-      get 'habit_histories/week', to: 'habit_histories#week'
-    end
+    get 'habit_histories', to: 'habit_histories#user_histories'
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

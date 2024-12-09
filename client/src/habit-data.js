@@ -3,7 +3,7 @@ export async function getHabitChartData() {
   const API_URL = "http://localhost:3000/";
 
   const [historiesResponse, habitsResponse] = await Promise.all([
-    fetch(`${API_URL}/habit_histories?user_id=${userId}`),
+    fetch(`${API_URL}/users/${userId}/habit_histories`),
     fetch(`${API_URL}/habits?user_id=${userId}`),
   ]);
 
