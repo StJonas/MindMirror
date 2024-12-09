@@ -2,14 +2,11 @@
   <div class="form-container">
     <div class="header-row">
       <button @click="goBack">&lt;</button>
-      <h2>Add Habit</h2>
+      <h2>Add Prompt</h2>
     </div>
 
-    <!-- Create or Habit -->
-    <input type="text" v-model="name" placeholder="Name" class="name-input" />
-
     <div class="toggle-container">
-      <span class="text-label">Timed Habit</span>
+      <span class="text-label">Weekly Prompt</span>
       <!-- Textual label -->
       <div class="switch" @mousedown.prevent="">
         <input
@@ -18,28 +15,27 @@
           v-model="is_timed"
           class="checkbox"
         />
-        <label for="isTimed" class="label"></label>
-        <!-- Switch UI -->
-      </div>
-    </div>
-    <input
-      type="number"
-      v-model="frequency"
-      placeholder="Frequency"
-      class="body-input"
-      v-if="!is_timed"
-    />
-    <!-- <select v-model="category" class="name-input">
-      <option value="1">relationships</option>
-      <option value="7">work</option>
-      <option value="0">hobbies</option>
-    </select> -->
 
-    <!-- only render if editing habit -->
+        <label for="isTimed" class="label"></label>
+      </div>
+      <span class="text-label">Daily Prompt</span>
+    </div>
+    <select v-model="selectedPrompt" @change="updatePrompt" class="name-input">
+      <option value="" disabled>Select predefined prompt</option>
+      <option value="What am I grateful for?">What am I grateful for?</option>
+      <option value="What did I accomplish?">What did I accomplish?</option>
+      <option value="What did I learn?">What did I learn?</option>
+    </select>
+    <input
+      type="text"
+      v-model="prompt"
+      placeholder="prompt"
+      class="name-input"
+    />
+
     <button v-if="isEditing" @click="updateHabit">Update</button>
     <button v-if="isEditing" @click="cancelEdit">Cancel</button>
 
-    <!-- only render if not editing habit -->
     <button v-else @click="createHabit" class="create-button">Create</button>
   </div>
 </template>
@@ -50,17 +46,22 @@ import router from "../router";
 
 const name = ref("");
 const frequency = ref("");
-const habit_id = ref(0);
 const isEditing = ref(false);
 const is_timed = ref(false);
 const API_URL = "http://localhost:3000/habits";
 const userId = ref("");
-const emit = defineEmits(["navigateBackToHabit"]);
+const prompt = ref("");
+const selectedPrompt = ref("");
+const emit = defineEmits(["navigateBackToJournal"]);
 
 onMounted(async () => {
   const res = await fetch(API_URL);
   userId.value = localStorage.getItem("userId");
 });
+
+const updatePrompt = () => {
+  prompt.value = selectedPrompt.value;
+};
 
 const createHabit = async () => {
   if (is_timed.value) {
@@ -87,7 +88,7 @@ const createHabit = async () => {
 };
 
 const goBack = () => {
-  emit("navigateBackToHabit");
+  emit("navigateBackToJournal");
 };
 </script>
 
@@ -108,7 +109,7 @@ const goBack = () => {
   margin-bottom: 20px;
 }
 .name-input {
-  width: 300px;
+  width: 500px;
   padding: 12px 20px;
   margin: 8px 0;
   box-sizing: border-box;
@@ -117,6 +118,7 @@ const goBack = () => {
   color: #111;
   border-radius: 4px;
   resize: vertical;
+  font-size: 18px;
 }
 
 .body-input {

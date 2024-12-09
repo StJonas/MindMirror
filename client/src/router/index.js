@@ -14,7 +14,7 @@ const router = createRouter({
       component: () => import("../components/HabitsOverview.vue"),
     },
     {
-      path: "/journaling",
+      path: "/JournalOverview",
       name: "JournalOverview",
       component: () => import("../components/JournalOverview.vue"),
     },
@@ -42,12 +42,17 @@ const router = createRouter({
     {
       path: "/stats",
       name: "Statistics",
-      component: () => import("../components/Statistics.vue"),
+      component: () => import("../components/HabitStatistics.vue"),
     },
     {
       path: "/JournalLog",
       name: "JournalLog",
       component: () => import("../components/JournalLog.vue"),
+    },
+    {
+      path: "/AddPrompt",
+      name: "AddPrompt",
+      component: () => import("../components/AddPrompt.vue"),
     },
   ],
 });

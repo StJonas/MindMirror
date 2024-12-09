@@ -2,34 +2,36 @@
   <div class="habit-header" v-if="userId">
     <button @click="changeWeek('prev')">&lt;</button>
     <h2>{{ calendarHeading }}</h2>
-    <button v-if="!isCurrentWeek" @click="changeWeek('next')">&gt;</button>
+    <button v-if="!props.isCurrentWeek" @click="changeWeek('next')">
+      &gt;
+    </button>
 
-    <router-link to="/AddHabit">
-      <button type="button">Add Habit</button>
-    </router-link>
-    <router-link to="/stats">
+    <button v-if="userId" type="button" @click="navigateToAddHabit">
+      Add Habit
+    </button>
+    <button v-if="userId" type="button" @click="navigateToStatistics">
+      Statistics
+    </button>
+
+    <!-- <router-link to="/stats">
       <button type="button">Statistics</button>
-    </router-link>
+    </router-link> -->
   </div>
 </template>
 <script setup>
-import { ref, watch, inject, defineProps, computed } from "vue";
+import { ref, inject, defineProps, computed } from "vue";
 
 const userId = inject("userId");
-//const calendarHeading = ref("");
-//const currentDay = ref(new Date());
+const emit = defineEmits([
+  "nextWeek",
+  "prevWeek",
+  "navigateToStatistics",
+  "navigateToAddHabit",
+]);
 
 const props = defineProps({
   currentDay: Date,
-});
-
-const isCurrentWeek = computed(() => {
-  const today = new Date();
-  const startOfWeek = new Date(
-    today.setDate(today.getDate() - today.getDay() + 1)
-  );
-
-  return props.currentDay >= startOfWeek;
+  isCurrentWeek: Boolean,
 });
 
 const calendarHeading = computed(() => {
@@ -50,7 +52,14 @@ const calendarHeading = computed(() => {
   return `Week of ${formatDate(firstDayOfWeek)} - ${formatDate(lastDayOfWeek)}`;
 });
 
-const emit = defineEmits(["nextWeek", "prevWeek"]);
+const navigateToStatistics = () => {
+  emit("navigateToStatistics");
+};
+
+const navigateToAddHabit = () => {
+  emit("navigateToAddHabit");
+};
+
 const changeWeek = (direction) => {
   emit(direction === "next" ? "nextWeek" : "prevWeek");
 };

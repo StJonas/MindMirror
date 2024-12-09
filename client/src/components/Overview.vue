@@ -8,13 +8,35 @@
 
     <div class="content">
       <div v-if="currentPage === 'habits'">
-        <HabitsOverview />
+        <HabitsOverview
+          @navigateToAddHabit="navigateToAddHabit"
+          @navigateToStatistics="navigateToStatistics"
+          @navigateToEditHabit="navigateToEditHabit"
+        />
+      </div>
+      <div v-else-if="currentPage === 'editHabit'">
+        <EditHabit
+          :habitId="selectedHabitId"
+          @navigateBackToHabit="navigateBackToHabit"
+        />
+      </div>
+      <div v-else-if="currentPage === 'addHabit'">
+        <AddHabit @navigateBackToHabit="navigateBackToHabit" />
+      </div>
+      <div v-else-if="currentPage === 'statistics'">
+        <Statistics @navigateBackToHabit="navigateBackToHabit" />
       </div>
       <div v-else-if="currentPage === 'journaling'">
-        <JournalOverview @navigateToJournalLog="navigateToJournalLog" />
+        <JournalOverview
+          @navigateToJournalLog="navigateToJournalLog"
+          @navigateToAddPrompt="navigateToAddPrompt"
+        />
       </div>
       <div v-else-if="currentPage === 'journalLog'">
-        <JournalLog />
+        <JournalLog @navigateBackToJournal="navigateBackToJournal" />
+      </div>
+      <div v-else-if="currentPage === 'addPrompt'">
+        <AddPrompt @navigateBackToJournal="navigateBackToJournal" />
       </div>
     </div>
   </div>
@@ -24,6 +46,10 @@
 import HabitsOverview from "./HabitsOverview.vue";
 import JournalOverview from "./JournalOverview.vue";
 import JournalLog from "./JournalLog.vue";
+import AddPrompt from "./AddPrompt.vue";
+import AddHabit from "./AddHabit.vue";
+import Statistics from "./HabitStatistics.vue";
+import EditHabit from "./EditHabit.vue";
 import OverviewHeader from "./OverviewHeader.vue";
 import OverviewNavigationButtons from "./OverviewNavigationButtons.vue";
 import { ref, onMounted, provide } from "vue";
@@ -34,6 +60,7 @@ const userId = ref("");
 const username = ref("");
 const sessionToken = ref("");
 const currentPage = ref("habits");
+const selectedHabitId = ref(null);
 
 provide("userId", userId);
 provide("username", username);
@@ -65,6 +92,31 @@ const fetchHabits = async () => {
 
 const navigateToJournalLog = () => {
   currentPage.value = "journalLog";
+};
+
+const navigateToAddPrompt = () => {
+  currentPage.value = "addPrompt";
+};
+
+const navigateToStatistics = () => {
+  currentPage.value = "statistics";
+};
+
+const navigateToAddHabit = () => {
+  currentPage.value = "addHabit";
+};
+
+const navigateToEditHabit = (habitId) => {
+  selectedHabitId.value = habitId;
+  currentPage.value = "editHabit";
+};
+
+const navigateBackToJournal = () => {
+  currentPage.value = "journaling";
+};
+
+const navigateBackToHabit = () => {
+  currentPage.value = "habits";
 };
 
 onMounted(() => {

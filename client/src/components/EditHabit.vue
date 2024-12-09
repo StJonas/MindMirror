@@ -1,6 +1,9 @@
 <template>
-  <div>
-    <h1>Edit Habit: {{ oldName }}</h1>
+  <div class="form-container">
+    <div class="header-row">
+      <button @click="goBack">&lt;</button>
+      <h2>Edit Habit: {{ oldName }}</h2>
+    </div>
 
     <input type="text" v-model="name" placeholder="name" class="name-input" />
     <input
@@ -12,15 +15,11 @@
 
     <button @click="updateHabit(habit_id)">Save</button>
     <button @click="deleteHabit(habit_id)">Delete</button>
-
-    <button type="button">
-      <router-link to="/">Go Back</router-link>
-    </button>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue"; //habit
+import { ref, onMounted, defineProps } from "vue";
 import { useRoute } from "vue-router";
 import router from "../router";
 
@@ -31,17 +30,19 @@ const frequency = ref("");
 const habit_id = ref(0);
 const isEditing = ref(false);
 const API_URL = "http://localhost:3000";
+const emit = defineEmits(["navigateBackToHabit"]);
 
 const route = useRoute();
 
-onMounted(async () => {
-  const habitId = parseInt(route.params.habitId);
+const props = defineProps({
+  habitId: Number,
+});
 
-  if (habitId) {
-    const res = await fetch(`${API_URL}/habits/${habitId}`);
+onMounted(async () => {
+  if (props.habitId) {
+    const res = await fetch(`${API_URL}/habits/${props.habitId}`);
     const fetchedHabit = await res.json();
     if (fetchedHabit) {
-      // Check if habit exists
       name.value = fetchedHabit.name;
       frequency.value = fetchedHabit.frequency;
       habit_id.value = fetchedHabit.id;
@@ -92,9 +93,19 @@ const deleteHabit = async (id) => {
   }
   router.push("/");
 };
+
+const goBack = () => {
+  emit("navigateBackToHabit");
+};
 </script>
 
 <style scoped>
+.header-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
 .name-input {
   width: 100%;
   padding: 12px 20px;
@@ -117,5 +128,14 @@ const deleteHabit = async (id) => {
   color: #111;
   border-radius: 4px;
   resize: vertical;
+}
+
+.form-container button {
+  margin-left: 20px;
+  flex-shrink: 0;
+  margin-left: 10px;
+  border-color: black;
+  text-emphasis-color: black;
+  text-decoration-color: black;
 }
 </style>

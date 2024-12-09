@@ -3,22 +3,26 @@
     <!-- Calendar Week and Dates Heading -->
     <HabitHeader
       :currentDay="currentDay"
+      :isCurrentWeek="isCurrentWeek"
       @nextWeek="changeWeek('next')"
       @prevWeek="changeWeek('prev')"
+      @navigateToStatistics="emitNavigateToStatistics"
+      @navigateToAddHabit="navigateToAddHabit"
     />
 
     <!-- List of Habits -->
     <div v-for="habit in habits" :key="habit.id" class="habit-container">
       <div v-if="!habit.is_timed">
         <h2>{{ habit.name }}</h2>
-        <router-link :to="`/edit/${habit.id}`">
-          <button type="button">Edit</button>
-        </router-link>
+        <button type="button" @click="emitNavigateToEditHabit(habit.id)">
+          Edit
+        </button>
         <div class="checkboxes">
           <Checkboxes
             v-if="habits.length && !habit.is_timed"
             :habitId="habit.id"
             :currentDay="currentDay"
+            :isCurrentWeek="isCurrentWeek"
             @save-success="handleSaveSuccess"
             @save-failure="handleSaveFailure"
           />
@@ -52,12 +56,16 @@ import Checkboxes from "../components/Checkboxes.vue";
 import HabitDurationTracker from "./HabitDurationTracker.vue";
 import HabitHeader from "./HabitHeader.vue";
 
-import { inject, ref, watchEffect, onMounted } from "vue";
+import { inject, ref, watchEffect, onMounted, computed } from "vue";
 
 const habits = ref([]);
 const API_URL = "http://localhost:3000";
 const userId = inject("userId");
-
+const emit = defineEmits([
+  "navigateToStatistics",
+  "navigateToAddHabit",
+  "navigateToEditHabit",
+]);
 const currentDay = ref(new Date());
 
 const changeWeek = (direction) => {
@@ -69,6 +77,24 @@ const changeWeek = (direction) => {
     currentDay.value.setDate(currentDay.value.getDate() - 7);
   }
 };
+
+const isCurrentWeek = computed(() => {
+  const today = new Date();
+
+  const startOfWeek = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate() - today.getDay() + (today.getDay() === 0 ? -6 : 1)
+  );
+
+  const endOfWeek = new Date(
+    startOfWeek.getFullYear(),
+    startOfWeek.getMonth(),
+    startOfWeek.getDate() + 6
+  );
+
+  return currentDay.value >= startOfWeek && currentDay.value <= endOfWeek;
+});
 
 const fetchHabitsForWeek = async (currentDay) => {
   if (userId.value) {
@@ -96,6 +122,18 @@ const handleSaveFailure = (error) => {
 onMounted(async () => {
   fetchHabitsForWeek(new Date());
 });
+
+const emitNavigateToStatistics = () => {
+  emit("navigateToStatistics");
+};
+
+const navigateToAddHabit = () => {
+  emit("navigateToAddHabit");
+};
+
+const emitNavigateToEditHabit = (habitId) => {
+  emit("navigateToEditHabit", habitId);
+};
 
 watchEffect(async () => {
   if (userId.value) {

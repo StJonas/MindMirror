@@ -3,7 +3,13 @@
     <button
       type="button"
       @click="changePage('habits')"
-      :class="{ active: currentPage === 'habits' }"
+      :class="{
+        active:
+          currentPage === 'habits' ||
+          currentPage === 'editHabit' ||
+          currentPage === 'addHabit' ||
+          currentPage === 'statistics',
+      }"
     >
       Habits
     </button>
@@ -11,7 +17,10 @@
       type="button"
       @click="changePage('journaling')"
       :class="{
-        active: currentPage === 'journaling' || currentPage === 'journalLog',
+        active:
+          currentPage === 'journaling' ||
+          currentPage === 'journalLog' ||
+          currentPage === 'addPrompt',
       }"
     >
       Journal

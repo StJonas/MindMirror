@@ -1,16 +1,29 @@
 <template>
   <div class="page-styling">
     <div class="header">
-      <h2>Weekly Prompts</h2>
-      <router-link to="/AddHabit" v-if="userId">
-        <button type="button">Add Prompt</button>
-      </router-link>
-
+      <h2>{{ currentDate }}</h2>
+      <button v-if="userId" type="button" @click="navigateToAddPrompt">
+        Add Prompt
+      </button>
       <button v-if="userId" type="button" @click="navigateToJournalLog">
         Journal Log
       </button>
-
-      <h3>13. Dez 2024</h3>
+      <button
+        v-if="userId"
+        type="button"
+        @click="navigateToEditPrompts"
+        class="edit-button"
+      >
+        <img
+          src="/public/edit.svg"
+          alt="Edit"
+          class="icon"
+          style="width: 24px; height: 24px"
+        />
+      </button>
+    </div>
+    <div class="header">
+      <h2>Weekly Prompts</h2>
     </div>
     <div>
       <span>{{ weeklyPrompt }}</span>
@@ -18,12 +31,6 @@
     </div>
     <div class="header">
       <h2>Daily Prompts</h2>
-      <router-link to="/AddHabit" v-if="userId">
-        <button type="button">Add Prompt</button>
-      </router-link>
-      <button v-if="userId" type="button" @click="navigateToJournalLog">
-        Journal Log
-      </button>
     </div>
     <div>
       <span>{{ dailyPrompt }}</span>
@@ -33,17 +40,26 @@
 </template>
 
 <script setup>
-import { ref, onMounted, defineEmits, inject } from "vue";
+import { ref, onMounted, inject } from "vue";
 
 const habits = ref([]);
 const API_URL = "http://localhost:3000/";
 const userId = inject("userId");
 const weeklyPrompt = ref("weekly prompt");
 const dailyPrompt = ref("daily prompt");
-const emit = defineEmits(["navigateToJournalLog"]);
+const emit = defineEmits(["navigateToJournalLog", "navigateToAddPrompt"]);
+const currentDate = new Date().toLocaleDateString("de-DE", {
+  day: "2-digit",
+  month: "long",
+  year: "numeric",
+});
 
 const navigateToJournalLog = () => {
   emit("navigateToJournalLog");
+};
+
+const navigateToAddPrompt = () => {
+  emit("navigateToAddPrompt");
 };
 </script>
 
@@ -63,11 +79,6 @@ const navigateToJournalLog = () => {
   position: relative;
 }
 
-.header h3 {
-  margin-left: 1000px;
-  position: absolute;
-}
-
 .styled-input {
   width: 500px;
   height: 80px;
@@ -85,5 +96,13 @@ const navigateToJournalLog = () => {
   border-color: black;
   text-emphasis-color: black;
   text-decoration-color: black;
+}
+
+.edit-button {
+  width: 60px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

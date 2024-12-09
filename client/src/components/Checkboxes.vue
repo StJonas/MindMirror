@@ -6,6 +6,7 @@
         type="checkbox"
         :checked="isChecked(day)"
         @change="updateCheckedStatus(day, $event)"
+        :disabled="!props.isCurrentWeek"
       />
     </label>
   </div>
@@ -20,6 +21,7 @@ const userId = inject("userId");
 const props = defineProps({
   habitId: Number,
   currentDay: Date,
+  isCurrentWeek: Boolean,
 });
 
 const isChecked = computed(() => {
