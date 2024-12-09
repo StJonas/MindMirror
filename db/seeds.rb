@@ -1,9 +1,18 @@
-# This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Example:
-#
-#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
-#     MovieGenre.find_or_create_by!(name: genre_name)
-#   end
+# Clear existing prompts
+Prompt.where(predefined: true).destroy_all
+
+# Add predefined prompts
+predefined_prompts = [
+  { title: "What am I grateful for today?", weekly: false, predefined: true },
+  { title: "What did I accomplish today?", weekly: false, predefined: true },
+  { title: "What did I learn today?", weekly: false, predefined: true },
+  { title: "What was my biggest challange this week?", weekly: true, predefined: true },
+  { title: "What was my biggest learning this week?", weekly: true, predefined: true },
+  { title: "What was my favorite moment of this week?", weekly: true, predefined: true }
+]
+
+predefined_prompts.each do |prompt|
+  Prompt.create!(prompt)
+end
+
+puts "Predefined prompts added."

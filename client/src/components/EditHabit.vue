@@ -100,6 +100,13 @@ const goBack = () => {
 </script>
 
 <style scoped>
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-left: 30px;
+}
+
 .header-row {
   display: flex;
   align-items: center;
@@ -131,7 +138,6 @@ const goBack = () => {
 }
 
 .form-container button {
-  margin-left: 20px;
   flex-shrink: 0;
   margin-left: 10px;
   border-color: black;

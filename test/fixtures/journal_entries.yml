@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  content: MyText
+  entry_date: 2024-12-09
+  user: one
+  prompt: one
+
+two:
+  content: MyText
+  entry_date: 2024-12-09
+  user: two
+  prompt: two

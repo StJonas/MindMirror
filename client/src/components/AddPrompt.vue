@@ -6,25 +6,30 @@
     </div>
 
     <div class="toggle-container">
-      <span class="text-label">Weekly Prompt</span>
+      <span class="text-label">Daily Prompt</span>
       <!-- Textual label -->
       <div class="switch" @mousedown.prevent="">
         <input
           type="checkbox"
-          id="isTimed"
-          v-model="is_timed"
+          id="isWeekly"
+          v-model="is_weekly"
+          @change="fetchPredefinedPrompts"
           class="checkbox"
         />
 
-        <label for="isTimed" class="label"></label>
+        <label for="isWeekly" class="label"></label>
       </div>
-      <span class="text-label">Daily Prompt</span>
+      <span class="text-label">Weekly Prompt</span>
     </div>
     <select v-model="selectedPrompt" @change="updatePrompt" class="name-input">
       <option value="" disabled>Select predefined prompt</option>
-      <option value="What am I grateful for?">What am I grateful for?</option>
-      <option value="What did I accomplish?">What did I accomplish?</option>
-      <option value="What did I learn?">What did I learn?</option>
+      <option
+        v-for="prompt in predefinedPrompts"
+        :key="prompt.id"
+        :value="prompt.title"
+      >
+        {{ prompt.title }}
+      </option>
     </select>
     <input
       type="text"
@@ -47,45 +52,53 @@ import router from "../router";
 const name = ref("");
 const frequency = ref("");
 const isEditing = ref(false);
-const is_timed = ref(false);
-const API_URL = "http://localhost:3000/habits";
+const is_weekly = ref(false);
+const API_URL = "http://localhost:3000";
 const userId = ref("");
 const prompt = ref("");
 const selectedPrompt = ref("");
 const emit = defineEmits(["navigateBackToJournal"]);
+const predefinedPrompts = ref([]);
 
-onMounted(async () => {
-  const res = await fetch(API_URL);
-  userId.value = localStorage.getItem("userId");
+const fetchPredefinedPrompts = async () => {
+  const res = await fetch(
+    `${API_URL}/prompts?predefined=true&weekly=${is_weekly.value}`
+  );
+  predefinedPrompts.value = await res.json();
+  console.log("bool ", is_weekly.value);
+};
+
+onMounted(() => {
+  fetchPredefinedPrompts();
 });
 
 const updatePrompt = () => {
   prompt.value = selectedPrompt.value;
 };
 
-const createHabit = async () => {
-  if (is_timed.value) {
-    frequency.value = 0;
-  }
-  console.log("is_timed.value", is_timed.value);
-  const res = await fetch(API_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      name: name.value,
-      frequency: frequency.value,
-      user_id: userId.value,
-      is_timed: is_timed.value,
-    }),
-  });
+// const createHabit = async () => {
+//   if (is_timed.value) {
+//     frequency.value = 0;
+//   }
+//   console.log("is_timed.value", is_timed.value);
+//   const res = await fetch(API_URL, {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify({
+//       name: name.value,
+//       frequency: frequency.value,
+//       user_id: userId.value,
+//       is_timed: is_timed.value,
+//     }),
+//   });
 
-  name.value = "";
-  frequency.value = "";
-  is_timed.value = false;
-  router.push("/");
-};
+//   name.value = "";
+//   frequency.value = "";
+//   is_timed.value = false;
+//   router.push("/");
+// };
 
 const goBack = () => {
   emit("navigateBackToJournal");
@@ -102,7 +115,7 @@ const goBack = () => {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-left: 20px;
+  margin-left: 30px;
 }
 .create-button {
   margin-top: 20px;
