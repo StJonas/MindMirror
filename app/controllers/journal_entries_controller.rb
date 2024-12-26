@@ -54,6 +54,6 @@ class JournalEntriesController < ApplicationController
   
     # Only allow a list of trusted parameters through.
     def journal_entry_params
-      params.require(:journal_entry).permit(:content, :entry_date, :user_id, :prompt_id)
+      params.require(:journal_entry).permit(:content, :entry_date, :user_id, :prompt_id, :prompt_title)
     end
   end

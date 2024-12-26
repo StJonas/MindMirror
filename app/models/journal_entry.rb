@@ -4,4 +4,5 @@ class JournalEntry < ApplicationRecord
 
   validates :content, presence: true
   validates :entry_date, presence: true
+  validates :prompt_title, presence: true
 end

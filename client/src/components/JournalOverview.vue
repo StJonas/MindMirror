@@ -68,7 +68,7 @@
         <button
           v-if="userId"
           type="button"
-          @click="saveJournalEntry(prompt.id, prompt.content)"
+          @click="saveJournalEntry(prompt.id, prompt.content, prompt.title)"
           class="edit-button"
         >
           <img
@@ -97,7 +97,7 @@ const currentDate = new Date().toLocaleDateString("de-DE", {
   year: "numeric",
 });
 
-const saveJournalEntry = async (promptId, content) => {
+const saveJournalEntry = async (promptId, content, title) => {
   console.log("content ", content);
   const res = await fetch(`${API_URL}/journal_entries`, {
     method: "POST",
@@ -109,6 +109,7 @@ const saveJournalEntry = async (promptId, content) => {
       entry_date: new Date().toISOString().split("T")[0],
       user_id: userId.value,
       prompt_id: promptId,
+      prompt_title: title,
     }),
   });
 

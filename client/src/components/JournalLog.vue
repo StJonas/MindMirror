@@ -6,7 +6,7 @@
     </div>
 
     <div v-for="entry in entries" :key="entry.id" class="journal-entry">
-      <h2>{{ getPromptTitle(entry.prompt_id) }}</h2>
+      <h2>{{ entry.prompt_title }}</h2>
       <p>{{ entry.content }}</p>
       <p>
         <em>{{ entry.entry_date }}</em>
