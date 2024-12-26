@@ -37,9 +37,9 @@
         <h2>Timed Habits:</h2>
       </div>
       <h2 style="margin-left: 40px">{{ habit.name }}</h2>
-      <router-link :to="`/edit/${habit.id}`">
-        <button type="button" style="margin-left: 180px">Edit</button>
-      </router-link>
+      <button type="button" @click="emitNavigateToEditHabit(habit.id)">
+        Edit
+      </button>
       <div class="habit-container">
         <HabitDurationTracker
           :habitId="habit.id"

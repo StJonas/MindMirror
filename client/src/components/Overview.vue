@@ -53,18 +53,31 @@ import EditHabit from "./EditHabit.vue";
 import OverviewHeader from "./OverviewHeader.vue";
 import OverviewNavigationButtons from "./OverviewNavigationButtons.vue";
 import { ref, onMounted, provide } from "vue";
+import {
+  currentPage,
+  selectedHabitId,
+  navigateToJournalLog,
+  navigateToAddPrompt,
+  navigateToStatistics,
+  navigateToAddHabit,
+  navigateToEditHabit,
+  navigateBackToJournal,
+  navigateBackToHabit,
+} from "../utils/navigation";
 
 const habits = ref([]);
+const prompts = ref([]);
+const entries = ref([]);
 const API_URL = "http://localhost:3000/";
 const userId = ref("");
 const username = ref("");
 const sessionToken = ref("");
-const currentPage = ref("habits");
-const selectedHabitId = ref(null);
 
 provide("userId", userId);
 provide("username", username);
 provide("habits", habits);
+provide("prompts", prompts);
+provide("entries", entries);
 
 const fetchUserData = async () => {
   try {
@@ -75,6 +88,8 @@ const fetchUserData = async () => {
       username.value = data.username;
       sessionToken.value = localStorage.getItem("sessionToken");
       fetchHabits();
+      fetchPrompts();
+      fetchEntries();
     } else {
       console.error("Failed to fetch user data");
     }
@@ -90,33 +105,23 @@ const fetchHabits = async () => {
   }
 };
 
-const navigateToJournalLog = () => {
-  currentPage.value = "journalLog";
+const fetchPrompts = async () => {
+  if (userId.value) {
+    const url = `${API_URL}/users/${userId.value}/prompts`;
+    const res = await fetch(url);
+    prompts.value = await res.json();
+    prompts.value.forEach((prompt) => {
+      prompt.content = "";
+    });
+  }
 };
 
-const navigateToAddPrompt = () => {
-  currentPage.value = "addPrompt";
-};
-
-const navigateToStatistics = () => {
-  currentPage.value = "statistics";
-};
-
-const navigateToAddHabit = () => {
-  currentPage.value = "addHabit";
-};
-
-const navigateToEditHabit = (habitId) => {
-  selectedHabitId.value = habitId;
-  currentPage.value = "editHabit";
-};
-
-const navigateBackToJournal = () => {
-  currentPage.value = "journaling";
-};
-
-const navigateBackToHabit = () => {
-  currentPage.value = "habits";
+const fetchEntries = async () => {
+  if (userId.value) {
+    const url = `${API_URL}/users/${userId.value}/journal_entries`;
+    const res = await fetch(url);
+    entries.value = await res.json();
+  }
 };
 
 onMounted(() => {
