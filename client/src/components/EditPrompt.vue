@@ -15,6 +15,14 @@
           style="width: 24px; height: 24px"
         />
       </button>
+      <button @click="deletePrompt" class="delete-button">
+        <img
+          src="/public/delete.svg"
+          alt="Delete"
+          class="icon"
+          style="width: 24px; height: 24px"
+        />
+      </button>
     </div>
   </div>
 </template>
@@ -42,9 +50,27 @@ const savePrompt = async () => {
 
   if (res.ok) {
     console.log("Prompt updated successfully");
+    location.reload();
   } else {
     const errorData = await res.json();
     console.error("Error updating prompt:", errorData);
+  }
+};
+
+const deletePrompt = async () => {
+  if (confirm("Are you sure you want to delete this habit?")) {
+    const API_URL = "http://localhost:3000";
+    const res = await fetch(`${API_URL}/prompts/${props.prompt.id}`, {
+      method: "DELETE",
+    });
+
+    if (res.ok) {
+      console.log("Prompt deleted successfully");
+      location.reload();
+    } else {
+      const errorData = await res.json();
+      console.error("Error deleting prompt:", errorData);
+    }
   }
 };
 </script>
@@ -87,5 +113,8 @@ const savePrompt = async () => {
 
 .save-button:hover {
   background-color: #45a049;
+}
+.delete-button {
+  background-color: red;
 }
 </style>

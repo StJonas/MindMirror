@@ -43,7 +43,11 @@ class PromptsController < ApplicationController
   
     # DELETE /prompts/1
     def destroy
+      @prompt.journal_entries.update_all(prompt_id: nil)
       @prompt.destroy
+      head :no_content
+    rescue ActiveRecord::InvalidForeignKey => e
+      render json: { error: e.message }, status: :unprocessable_entity
     end
 
     # GET /users/:user_id/prompts
