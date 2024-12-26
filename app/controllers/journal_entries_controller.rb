@@ -36,6 +36,14 @@ class JournalEntriesController < ApplicationController
     def destroy
       @journal_entry.destroy
     end
+
+    # GET /users/:user_id/journal_entries
+    def user_journal_entries
+      user = User.find(params[:user_id])
+      journal_entries = user.journal_entries
+
+      render json: journal_entries
+    end
   
     private
   

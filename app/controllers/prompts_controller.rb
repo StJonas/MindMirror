@@ -45,6 +45,14 @@ class PromptsController < ApplicationController
     def destroy
       @prompt.destroy
     end
+
+    # GET /users/:user_id/prompts
+    def user_prompts
+      user = User.find(params[:user_id])
+      prompts = user.prompts
+
+      render json: prompts
+    end
   
     private
   

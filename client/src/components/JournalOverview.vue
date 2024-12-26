@@ -25,34 +25,126 @@
     <div class="header">
       <h2>Weekly Prompts</h2>
     </div>
-    <div>
-      <span>{{ weeklyPrompt }}</span>
-      <input type="text" placeholder="input" min="1" class="styled-input" />
+
+    <!-- List of Prompts -->
+    <div v-for="prompt in prompts" :key="prompt.id" class="">
+      <div v-if="prompt.weekly">
+        <h2>{{ prompt.title }}</h2>
+        <input
+          type="text"
+          v-model="prompt.content"
+          placeholder="content"
+          min="1"
+          class="styled-input"
+        />
+        <button
+          v-if="userId"
+          type="button"
+          @click="saveJournalEntry(prompt.id, prompt.content)"
+          class="edit-button"
+        >
+          <img
+            src="/public/save.svg"
+            alt="Edit"
+            class="icon"
+            style="width: 24px; height: 24px"
+          />
+        </button>
+      </div>
     </div>
     <div class="header">
       <h2>Daily Prompts</h2>
     </div>
-    <div>
-      <span>{{ dailyPrompt }}</span>
-      <input type="text" placeholder="input" min="1" class="styled-input" />
+    <div v-for="prompt in prompts" :key="prompt.id" class="">
+      <div v-if="!prompt.weekly">
+        <h2>{{ prompt.title }}</h2>
+        <input
+          type="text"
+          v-model="prompt.content"
+          placeholder="content"
+          min="1"
+          class="styled-input"
+        />
+        <button
+          v-if="userId"
+          type="button"
+          @click="saveJournalEntry(prompt.id, prompt.content)"
+          class="edit-button"
+        >
+          <img
+            src="/public/save.svg"
+            alt="Edit"
+            class="icon"
+            style="width: 24px; height: 24px"
+          />
+        </button>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, inject } from "vue";
+import { inject, watchEffect } from "vue";
 
-const habits = ref([]);
 const API_URL = "http://localhost:3000/";
 const userId = inject("userId");
-const weeklyPrompt = ref("weekly prompt");
-const dailyPrompt = ref("daily prompt");
+const prompts = inject("prompts");
+const entries = inject("entries");
 const emit = defineEmits(["navigateToJournalLog", "navigateToAddPrompt"]);
 const currentDate = new Date().toLocaleDateString("de-DE", {
   day: "2-digit",
   month: "long",
   year: "numeric",
 });
+
+const saveJournalEntry = async (promptId, content) => {
+  console.log("content ", content);
+  const res = await fetch(`${API_URL}/journal_entries`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      content: content,
+      entry_date: new Date().toISOString().split("T")[0],
+      user_id: userId.value,
+      prompt_id: promptId,
+    }),
+  });
+
+  if (res.ok) {
+    console.log("Journal entry saved successfully");
+  } else {
+    const errorData = await res.json();
+    console.error("Error saving journal entry:", errorData);
+  }
+};
+
+const matchEntriesWithPrompts = () => {
+  const today = new Date();
+  const startOfWeek = new Date(today);
+  startOfWeek.setDate(today.getDate() - today.getDay() + 1); // Monday
+  const endOfWeek = new Date(startOfWeek);
+  endOfWeek.setDate(startOfWeek.getDate() + 6); // Sunday
+
+  prompts.value.forEach((prompt) => {
+    const entry = entries.value.find((entry) => {
+      const entryDate = new Date(entry.entry_date);
+      if (prompt.id === entry.prompt_id) {
+        if (prompt.weekly) {
+          return entryDate >= startOfWeek && entryDate <= endOfWeek;
+        } else {
+          return entryDate.toDateString() === today.toDateString();
+        }
+      }
+      return false;
+    });
+
+    if (entry) {
+      prompt.content = entry.content;
+    }
+  });
+};
 
 const navigateToJournalLog = () => {
   emit("navigateToJournalLog");
@@ -61,6 +153,12 @@ const navigateToJournalLog = () => {
 const navigateToAddPrompt = () => {
   emit("navigateToAddPrompt");
 };
+
+watchEffect(async () => {
+  if (entries.value) {
+    matchEntriesWithPrompts();
+  }
+});
 </script>
 
 <style scoped>

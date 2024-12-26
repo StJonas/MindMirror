@@ -41,31 +41,28 @@
     <button v-if="isEditing" @click="updateHabit">Update</button>
     <button v-if="isEditing" @click="cancelEdit">Cancel</button>
 
-    <button v-else @click="createHabit" class="create-button">Create</button>
+    <button v-else @click="createPrompt" class="create-button">Create</button>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue"; //habit
-import router from "../router";
+import { ref, onMounted, inject } from "vue"; //habit
 
-const name = ref("");
-const frequency = ref("");
 const isEditing = ref(false);
 const is_weekly = ref(false);
-const API_URL = "http://localhost:3000";
-const userId = ref("");
+const API_URL = "http://localhost:3000/prompts";
+const userId = inject("userId");
 const prompt = ref("");
 const selectedPrompt = ref("");
 const emit = defineEmits(["navigateBackToJournal"]);
 const predefinedPrompts = ref([]);
+import router from "../router";
 
 const fetchPredefinedPrompts = async () => {
   const res = await fetch(
-    `${API_URL}/prompts?predefined=true&weekly=${is_weekly.value}`
+    `${API_URL}?predefined=true&weekly=${is_weekly.value}`
   );
   predefinedPrompts.value = await res.json();
-  console.log("bool ", is_weekly.value);
 };
 
 onMounted(() => {
@@ -76,29 +73,28 @@ const updatePrompt = () => {
   prompt.value = selectedPrompt.value;
 };
 
-// const createHabit = async () => {
-//   if (is_timed.value) {
-//     frequency.value = 0;
-//   }
-//   console.log("is_timed.value", is_timed.value);
-//   const res = await fetch(API_URL, {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify({
-//       name: name.value,
-//       frequency: frequency.value,
-//       user_id: userId.value,
-//       is_timed: is_timed.value,
-//     }),
-//   });
+const createPrompt = async () => {
+  const res = await fetch(API_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      title: prompt.value,
+      user_id: userId.value,
+      weekly: is_weekly.value,
+      predefined: false,
+    }),
+  });
 
-//   name.value = "";
-//   frequency.value = "";
-//   is_timed.value = false;
-//   router.push("/");
-// };
+  if (res.ok) {
+    prompt.value = "";
+    router.push("/");
+  } else {
+    const errorData = await res.json();
+    console.error("Error creating prompt:", errorData);
+  }
+};
 
 const goBack = () => {
   emit("navigateBackToJournal");

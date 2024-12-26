@@ -5,47 +5,27 @@
       <h2>Journal Log</h2>
     </div>
 
-    <!-- <div v-for="entry in journalEntries" :key="entry.id" class="journal-entry">
-        <h2>{{ entry.title }}</h2>
-        <p>{{ entry.content }}</p>
-        <p><em>{{ entry.date }}</em></p>
-      </div> -->
-    <div class="journal-entry">
-      <h3>Entry 1</h3>
-      <p>contents</p>
-      <p><em>01.12.2024</em></p>
-    </div>
-    <div class="journal-entry">
-      <h3>Entry 2</h3>
-      <p>contents</p>
-      <p><em>12.12.2024</em></p>
+    <div v-for="entry in entries" :key="entry.id" class="journal-entry">
+      <h2>{{ getPromptTitle(entry.prompt_id) }}</h2>
+      <p>{{ entry.content }}</p>
+      <p>
+        <em>{{ entry.entry_date }}</em>
+      </p>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, inject } from "vue";
+import { inject } from "vue";
 
-const journalEntries = ref([]);
-const userId = inject("userId");
-const API_URL = "http://localhost:3000";
-const currentDate = new Date().toLocaleDateString("de-DE", {
-  day: "2-digit",
-  month: "short",
-  year: "numeric",
-});
+const prompts = inject("prompts");
+const entries = inject("entries");
 const emit = defineEmits(["navigateBackToJournal"]);
 
-const fetchJournalEntries = async () => {
-  if (userId.value != null) {
-    const res = await fetch(`${API_URL}/users/${userId.value}/habits`);
-    journalEntries.value = await res.json();
-  }
+const getPromptTitle = (promptId) => {
+  const prompt = prompts.value.find((prompt) => prompt.id === promptId);
+  return prompt ? prompt.title : "Unknown Prompt";
 };
-
-onMounted(() => {
-  fetchJournalEntries();
-});
 
 const goBack = () => {
   emit("navigateBackToJournal");
