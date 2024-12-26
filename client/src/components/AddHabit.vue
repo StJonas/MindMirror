@@ -50,7 +50,6 @@ import router from "../router";
 
 const name = ref("");
 const frequency = ref("");
-const habit_id = ref(0);
 const isEditing = ref(false);
 const is_timed = ref(false);
 const API_URL = "http://localhost:3000/habits";
@@ -58,7 +57,6 @@ const userId = ref("");
 const emit = defineEmits(["navigateBackToHabit"]);
 
 onMounted(async () => {
-  const res = await fetch(API_URL);
   userId.value = localStorage.getItem("userId");
 });
 

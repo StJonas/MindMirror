@@ -60,6 +60,6 @@ export default {
   border-radius: 4px;
 }
 .navigation-buttons button.active {
-  background-color: #45a049;
+  background-color: orange;
 }
 </style>
