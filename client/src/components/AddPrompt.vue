@@ -13,7 +13,7 @@
           type="checkbox"
           id="isWeekly"
           v-model="is_weekly"
-          @change="fetchPredefinedPrompts"
+          @change="updatePredefinedPrompts"
           class="checkbox"
         />
 
@@ -24,7 +24,7 @@
     <select v-model="selectedPrompt" @change="updatePrompt" class="name-input">
       <option value="" disabled>Select predefined prompt</option>
       <option
-        v-for="prompt in predefinedPrompts"
+        v-for="prompt in filteredPredefinedPrompts"
         :key="prompt.id"
         :value="prompt.title"
       >
@@ -46,7 +46,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, inject } from "vue"; //habit
+import { ref, onMounted, inject, computed } from "vue";
 
 const isEditing = ref(false);
 const is_weekly = ref(false);
@@ -54,19 +54,14 @@ const userId = inject("userId");
 const prompt = ref("");
 const selectedPrompt = ref("");
 const emit = defineEmits(["navigateBackToJournal"]);
-const predefinedPrompts = ref([]);
 const API_URL = inject("API_URL");
+const predefinedPrompts = inject("predefinedPrompts");
 import router from "../router";
 
-const fetchPredefinedPrompts = async () => {
-  const res = await fetch(
-    `${API_URL}/prompts?predefined=true&weekly=${is_weekly.value}`
+const filteredPredefinedPrompts = computed(() => {
+  return predefinedPrompts.value.filter(
+    (prompt) => prompt.weekly === is_weekly.value
   );
-  predefinedPrompts.value = await res.json();
-};
-
-onMounted(() => {
-  fetchPredefinedPrompts();
 });
 
 const updatePrompt = () => {

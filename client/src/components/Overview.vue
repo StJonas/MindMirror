@@ -67,6 +67,7 @@ import {
 
 const habits = ref([]);
 const prompts = ref([]);
+const predefinedPrompts = ref([]);
 const entries = ref([]);
 const API_URL = "http://localhost:3000/";
 const userId = ref("");
@@ -78,6 +79,7 @@ provide("username", username);
 provide("habits", habits);
 provide("prompts", prompts);
 provide("entries", entries);
+provide("predefinedPrompts", predefinedPrompts);
 provide("API_URL", API_URL);
 
 const fetchUserData = async () => {
@@ -91,6 +93,7 @@ const fetchUserData = async () => {
       fetchHabits();
       fetchPrompts();
       fetchEntries();
+      fetchPredefinedPrompts();
     } else {
       console.error("Failed to fetch user data");
     }
@@ -123,6 +126,11 @@ const fetchEntries = async () => {
     const res = await fetch(url);
     entries.value = await res.json();
   }
+};
+
+const fetchPredefinedPrompts = async () => {
+  const res = await fetch(`${API_URL}/prompts?predefined=true`);
+  predefinedPrompts.value = await res.json();
 };
 
 onMounted(() => {
