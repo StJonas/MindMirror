@@ -21,7 +21,7 @@
 <script setup>
 import { ref, onMounted, inject } from "vue";
 import { useRoute } from "vue-router";
-import router from "../router";
+import router from "../../router";
 
 const habits = ref([]);
 const name = ref("");

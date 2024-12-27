@@ -43,13 +43,13 @@
 </template>
 
 <script setup>
-import HabitsOverview from "./HabitsOverview.vue";
-import JournalOverview from "./JournalOverview.vue";
-import JournalLog from "./JournalLog.vue";
-import AddPrompt from "./AddPrompt.vue";
-import AddHabit from "./AddHabit.vue";
-import Statistics from "./HabitStatistics.vue";
-import EditHabit from "./EditHabit.vue";
+import HabitsOverview from "./Habits/HabitsOverview.vue";
+import JournalOverview from "./Journal/JournalOverview.vue";
+import JournalLog from "./Journal/JournalLog.vue";
+import AddPrompt from "./Journal/AddPrompt.vue";
+import AddHabit from "./Habits/AddHabit.vue";
+import Statistics from "./Habits/HabitStatistics.vue";
+import EditHabit from "./Habits/EditHabit.vue";
 import OverviewHeader from "./OverviewHeader.vue";
 import OverviewNavigationButtons from "./OverviewNavigationButtons.vue";
 import { ref, onMounted, provide } from "vue";

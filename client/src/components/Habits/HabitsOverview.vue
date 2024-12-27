@@ -52,7 +52,7 @@
 </template>
 
 <script setup>
-import Checkboxes from "../components/Checkboxes.vue";
+import Checkboxes from "./Checkboxes.vue";
 import HabitDurationTracker from "./HabitDurationTracker.vue";
 import HabitHeader from "./HabitHeader.vue";
 

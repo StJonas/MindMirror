@@ -11,22 +11,22 @@ const router = createRouter({
     {
       path: "/habits",
       name: "HabitsOverview",
-      component: () => import("../components/HabitsOverview.vue"),
+      component: () => import("../components/Habits/HabitsOverview.vue"),
     },
     {
       path: "/JournalOverview",
       name: "JournalOverview",
-      component: () => import("../components/JournalOverview.vue"),
+      component: () => import("../components/Journal/JournalOverview.vue"),
     },
     {
       path: "/AddHabit",
       name: "AddHabit",
-      component: () => import("../components/AddHabit.vue"),
+      component: () => import("../components/Habits/AddHabit.vue"),
     },
     {
       path: "/edit/:habitId",
       name: "EditHabit",
-      component: () => import("../components/EditHabit.vue"),
+      component: () => import("../components/Habits/EditHabit.vue"),
       props: true,
     },
     {
@@ -42,17 +42,17 @@ const router = createRouter({
     {
       path: "/stats",
       name: "Statistics",
-      component: () => import("../components/HabitStatistics.vue"),
+      component: () => import("../components/Habits/HabitStatistics.vue"),
     },
     {
       path: "/JournalLog",
       name: "JournalLog",
-      component: () => import("../components/JournalLog.vue"),
+      component: () => import("../components/Journal/JournalLog.vue"),
     },
     {
       path: "/AddPrompt",
       name: "AddPrompt",
-      component: () => import("../components/AddPrompt.vue"),
+      component: () => import("../components/Journal/AddPrompt.vue"),
     },
   ],
 });

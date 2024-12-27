@@ -17,7 +17,7 @@ import {
   BarElement,
 } from "chart.js";
 import { ref, onMounted } from "vue";
-import { getHabitChartData } from "../habit-data.js";
+import { getHabitChartData } from "../../utils/habit-data.js";
 
 Chart.register(LinearScale, BarController, CategoryScale, BarElement);
 

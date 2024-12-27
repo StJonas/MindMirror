@@ -2,98 +2,90 @@
   <div class="form-container">
     <div class="header-row">
       <button @click="goBack">&lt;</button>
-      <h2>Add Prompt</h2>
+      <h2>Add Habit</h2>
     </div>
 
+    <!-- Create or Habit -->
+    <input type="text" v-model="name" placeholder="Name" class="name-input" />
+
     <div class="toggle-container">
-      <span class="text-label">Daily Prompt</span>
+      <span class="text-label">Timed Habit</span>
       <!-- Textual label -->
       <div class="switch" @mousedown.prevent="">
         <input
           type="checkbox"
-          id="isWeekly"
-          v-model="is_weekly"
-          @change="updatePredefinedPrompts"
+          id="isTimed"
+          v-model="is_timed"
           class="checkbox"
         />
-
-        <label for="isWeekly" class="label"></label>
+        <label for="isTimed" class="label"></label>
+        <!-- Switch UI -->
       </div>
-      <span class="text-label">Weekly Prompt</span>
     </div>
-    <select v-model="selectedPrompt" @change="updatePrompt" class="name-input">
-      <option value="" disabled>Select predefined prompt</option>
-      <option
-        v-for="prompt in filteredPredefinedPrompts"
-        :key="prompt.id"
-        :value="prompt.title"
-      >
-        {{ prompt.title }}
-      </option>
-    </select>
     <input
-      type="text"
-      v-model="prompt"
-      placeholder="prompt"
-      class="name-input"
+      type="number"
+      v-model="frequency"
+      placeholder="Frequency"
+      class="body-input"
+      v-if="!is_timed"
     />
+    <!-- <select v-model="category" class="name-input">
+      <option value="1">relationships</option>
+      <option value="7">work</option>
+      <option value="0">hobbies</option>
+    </select> -->
 
+    <!-- only render if editing habit -->
     <button v-if="isEditing" @click="updateHabit">Update</button>
     <button v-if="isEditing" @click="cancelEdit">Cancel</button>
 
-    <button v-else @click="createPrompt" class="create-button">Create</button>
+    <!-- only render if not editing habit -->
+    <button v-else @click="createHabit" class="create-button">Create</button>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, inject, computed } from "vue";
+import { ref, onMounted, inject } from "vue"; //habit
+import router from "../../router";
 
+const name = ref("");
+const frequency = ref("");
 const isEditing = ref(false);
-const is_weekly = ref(false);
-const userId = inject("userId");
-const prompt = ref("");
-const selectedPrompt = ref("");
-const emit = defineEmits(["navigateBackToJournal"]);
+const is_timed = ref(false);
+const userId = ref("");
+const emit = defineEmits(["navigateBackToHabit"]);
 const API_URL = inject("API_URL");
-const predefinedPrompts = inject("predefinedPrompts");
-import router from "../router";
 
-const filteredPredefinedPrompts = computed(() => {
-  return predefinedPrompts.value.filter(
-    (prompt) => prompt.weekly === is_weekly.value
-  );
+onMounted(async () => {
+  userId.value = localStorage.getItem("userId");
 });
 
-const updatePrompt = () => {
-  prompt.value = selectedPrompt.value;
-};
-
-const createPrompt = async () => {
-  const res = await fetch(`${API_URL}/prompts`, {
+const createHabit = async () => {
+  if (is_timed.value) {
+    frequency.value = 0;
+  }
+  console.log("is_timed.value", is_timed.value);
+  const res = await fetch(`${API_URL}/habits`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      title: prompt.value,
+      name: name.value,
+      frequency: frequency.value,
       user_id: userId.value,
-      weekly: is_weekly.value,
-      predefined: false,
+      is_timed: is_timed.value,
     }),
   });
 
-  if (res.ok) {
-    prompt.value = "";
-    //location.reload();
-    emit("navigateBackToJournal");
-  } else {
-    const errorData = await res.json();
-    console.error("Error creating prompt:", errorData);
-  }
+  name.value = "";
+  frequency.value = "";
+  is_timed.value = false;
+  router.push("/");
 };
 
 const goBack = () => {
-  emit("navigateBackToJournal");
+  emit("navigateBackToHabit");
 };
 </script>
 
@@ -107,14 +99,14 @@ const goBack = () => {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-left: 30px;
+  margin-left: 20px;
 }
 .create-button {
   margin-top: 20px;
   margin-bottom: 20px;
 }
 .name-input {
-  width: 500px;
+  width: 300px;
   padding: 12px 20px;
   margin: 8px 0;
   box-sizing: border-box;
@@ -123,7 +115,6 @@ const goBack = () => {
   color: #111;
   border-radius: 4px;
   resize: vertical;
-  font-size: 18px;
 }
 
 .body-input {

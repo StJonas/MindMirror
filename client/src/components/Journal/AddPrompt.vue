@@ -2,90 +2,98 @@
   <div class="form-container">
     <div class="header-row">
       <button @click="goBack">&lt;</button>
-      <h2>Add Habit</h2>
+      <h2>Add Prompt</h2>
     </div>
 
-    <!-- Create or Habit -->
-    <input type="text" v-model="name" placeholder="Name" class="name-input" />
-
     <div class="toggle-container">
-      <span class="text-label">Timed Habit</span>
+      <span class="text-label">Daily Prompt</span>
       <!-- Textual label -->
       <div class="switch" @mousedown.prevent="">
         <input
           type="checkbox"
-          id="isTimed"
-          v-model="is_timed"
+          id="isWeekly"
+          v-model="is_weekly"
+          @change="updatePredefinedPrompts"
           class="checkbox"
         />
-        <label for="isTimed" class="label"></label>
-        <!-- Switch UI -->
-      </div>
-    </div>
-    <input
-      type="number"
-      v-model="frequency"
-      placeholder="Frequency"
-      class="body-input"
-      v-if="!is_timed"
-    />
-    <!-- <select v-model="category" class="name-input">
-      <option value="1">relationships</option>
-      <option value="7">work</option>
-      <option value="0">hobbies</option>
-    </select> -->
 
-    <!-- only render if editing habit -->
+        <label for="isWeekly" class="label"></label>
+      </div>
+      <span class="text-label">Weekly Prompt</span>
+    </div>
+    <select v-model="selectedPrompt" @change="updatePrompt" class="name-input">
+      <option value="" disabled>Select predefined prompt</option>
+      <option
+        v-for="prompt in filteredPredefinedPrompts"
+        :key="prompt.id"
+        :value="prompt.title"
+      >
+        {{ prompt.title }}
+      </option>
+    </select>
+    <input
+      type="text"
+      v-model="prompt"
+      placeholder="prompt"
+      class="name-input"
+    />
+
     <button v-if="isEditing" @click="updateHabit">Update</button>
     <button v-if="isEditing" @click="cancelEdit">Cancel</button>
 
-    <!-- only render if not editing habit -->
-    <button v-else @click="createHabit" class="create-button">Create</button>
+    <button v-else @click="createPrompt" class="create-button">Create</button>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, inject } from "vue"; //habit
-import router from "../router";
+import { ref, onMounted, inject, computed } from "vue";
 
-const name = ref("");
-const frequency = ref("");
 const isEditing = ref(false);
-const is_timed = ref(false);
-const userId = ref("");
-const emit = defineEmits(["navigateBackToHabit"]);
+const is_weekly = ref(false);
+const userId = inject("userId");
+const prompt = ref("");
+const selectedPrompt = ref("");
+const emit = defineEmits(["navigateBackToJournal"]);
 const API_URL = inject("API_URL");
+const predefinedPrompts = inject("predefinedPrompts");
+import router from "../../router";
 
-onMounted(async () => {
-  userId.value = localStorage.getItem("userId");
+const filteredPredefinedPrompts = computed(() => {
+  return predefinedPrompts.value.filter(
+    (prompt) => prompt.weekly === is_weekly.value
+  );
 });
 
-const createHabit = async () => {
-  if (is_timed.value) {
-    frequency.value = 0;
-  }
-  console.log("is_timed.value", is_timed.value);
-  const res = await fetch(`${API_URL}/habits`, {
+const updatePrompt = () => {
+  prompt.value = selectedPrompt.value;
+};
+
+const createPrompt = async () => {
+  const res = await fetch(`${API_URL}/prompts`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      name: name.value,
-      frequency: frequency.value,
+      title: prompt.value,
       user_id: userId.value,
-      is_timed: is_timed.value,
+      weekly: is_weekly.value,
+      predefined: false,
     }),
   });
 
-  name.value = "";
-  frequency.value = "";
-  is_timed.value = false;
-  router.push("/");
+  if (res.ok) {
+    prompt.value = "";
+    //location.reload();
+    emit("navigateBackToJournal");
+  } else {
+    const errorData = await res.json();
+    console.error("Error creating prompt:", errorData);
+  }
 };
 
 const goBack = () => {
-  emit("navigateBackToHabit");
+  emit("navigateBackToJournal");
 };
 </script>
 
@@ -99,14 +107,14 @@ const goBack = () => {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-left: 20px;
+  margin-left: 30px;
 }
 .create-button {
   margin-top: 20px;
   margin-bottom: 20px;
 }
 .name-input {
-  width: 300px;
+  width: 500px;
   padding: 12px 20px;
   margin: 8px 0;
   box-sizing: border-box;
@@ -115,6 +123,7 @@ const goBack = () => {
   color: #111;
   border-radius: 4px;
   resize: vertical;
+  font-size: 18px;
 }
 
 .body-input {
