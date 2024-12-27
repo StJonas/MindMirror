@@ -78,6 +78,7 @@ provide("username", username);
 provide("habits", habits);
 provide("prompts", prompts);
 provide("entries", entries);
+provide("API_URL", API_URL);
 
 const fetchUserData = async () => {
   try {

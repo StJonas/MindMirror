@@ -59,7 +59,7 @@ import HabitHeader from "./HabitHeader.vue";
 import { inject, ref, watchEffect, onMounted, computed } from "vue";
 
 const habits = ref([]);
-const API_URL = "http://localhost:3000";
+const API_URL = inject("API_URL");
 const userId = inject("userId");
 const emit = defineEmits([
   "navigateToStatistics",

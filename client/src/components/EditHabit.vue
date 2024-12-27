@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, inject } from "vue";
 import { useRoute } from "vue-router";
 import router from "../router";
 
@@ -29,7 +29,7 @@ const oldName = ref("");
 const frequency = ref("");
 const habit_id = ref(0);
 const isEditing = ref(false);
-const API_URL = "http://localhost:3000";
+const API_URL = inject("API_URL");
 const emit = defineEmits(["navigateBackToHabit"]);
 
 const route = useRoute();

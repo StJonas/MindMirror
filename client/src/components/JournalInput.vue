@@ -30,7 +30,7 @@ import { defineProps, inject } from "vue";
 const props = defineProps({
   prompt: Object,
 });
-const API_URL = "http://localhost:3000";
+const API_URL = inject("API_URL");
 
 const userId = inject("userId");
 const entries = inject("entries");

@@ -15,7 +15,7 @@
 <script setup>
 import { ref, onMounted, computed, watch, inject } from "vue";
 
-const API_URL = "http://localhost:3000";
+const API_URL = inject("API_URL");
 const userId = inject("userId");
 
 const props = defineProps({

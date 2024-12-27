@@ -76,7 +76,6 @@ import { inject, watchEffect, ref } from "vue";
 import JournalInput from "./JournalInput.vue";
 import EditPrompt from "./EditPrompt.vue";
 
-const API_URL = "http://localhost:3000/";
 const userId = inject("userId");
 const prompts = inject("prompts");
 const entries = inject("entries");

@@ -45,16 +45,16 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue"; //habit
+import { ref, onMounted, inject } from "vue"; //habit
 import router from "../router";
 
 const name = ref("");
 const frequency = ref("");
 const isEditing = ref(false);
 const is_timed = ref(false);
-const API_URL = "http://localhost:3000/habits";
 const userId = ref("");
 const emit = defineEmits(["navigateBackToHabit"]);
+const API_URL = inject("API_URL");
 
 onMounted(async () => {
   userId.value = localStorage.getItem("userId");
@@ -65,7 +65,7 @@ const createHabit = async () => {
     frequency.value = 0;
   }
   console.log("is_timed.value", is_timed.value);
-  const res = await fetch(API_URL, {
+  const res = await fetch(`${API_URL}/habits`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

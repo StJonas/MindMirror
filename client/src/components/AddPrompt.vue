@@ -50,17 +50,17 @@ import { ref, onMounted, inject } from "vue"; //habit
 
 const isEditing = ref(false);
 const is_weekly = ref(false);
-const API_URL = "http://localhost:3000/prompts";
 const userId = inject("userId");
 const prompt = ref("");
 const selectedPrompt = ref("");
 const emit = defineEmits(["navigateBackToJournal"]);
 const predefinedPrompts = ref([]);
+const API_URL = inject("API_URL");
 import router from "../router";
 
 const fetchPredefinedPrompts = async () => {
   const res = await fetch(
-    `${API_URL}?predefined=true&weekly=${is_weekly.value}`
+    `${API_URL}/prompts?predefined=true&weekly=${is_weekly.value}`
   );
   predefinedPrompts.value = await res.json();
 };
@@ -74,7 +74,7 @@ const updatePrompt = () => {
 };
 
 const createPrompt = async () => {
-  const res = await fetch(API_URL, {
+  const res = await fetch(`${API_URL}/prompts`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -89,7 +89,8 @@ const createPrompt = async () => {
 
   if (res.ok) {
     prompt.value = "";
-    router.push("/");
+    //location.reload();
+    emit("navigateBackToJournal");
   } else {
     const errorData = await res.json();
     console.error("Error creating prompt:", errorData);

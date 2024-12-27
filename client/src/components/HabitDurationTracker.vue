@@ -13,11 +13,12 @@
 </template>
 
 <script setup>
-import { ref, defineProps, onMounted } from "vue";
+import { ref, defineProps, onMounted, inject } from "vue";
 
 const props = defineProps({
   habitId: Number,
 });
+const API_URL = inject("API_URL");
 
 const userDuration = ref(0);
 const duration = ref(0);
@@ -28,7 +29,7 @@ const saveDuration = async () => {
 
   try {
     const response = await fetch(
-      `http://localhost:3000/habits/${props.habitId}/update_duration`,
+      `${API_URL}/habits/${props.habitId}/update_duration`,
       {
         method: "POST",
         headers: {
@@ -59,9 +60,7 @@ const saveDuration = async () => {
 const fetchHabitDetails = async () => {
   if (props.habitId) {
     try {
-      const response = await fetch(
-        `http://localhost:3000/habits/${props.habitId}`
-      );
+      const response = await fetch(`${API_URL}/habits/${props.habitId}`);
       if (!response.ok) {
         throw new Error("Failed to fetch habit details");
       }

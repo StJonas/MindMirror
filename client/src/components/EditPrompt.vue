@@ -28,16 +28,16 @@
 </template>
 
 <script setup>
-import { ref, defineProps } from "vue";
+import { ref, defineProps, inject } from "vue";
 
 const props = defineProps({
   prompt: Object,
 });
 
 const promptTitle = ref(props.prompt.title);
+const API_URL = inject("API_URL");
 
 const savePrompt = async () => {
-  const API_URL = "http://localhost:3000";
   const res = await fetch(`${API_URL}/prompts/${props.prompt.id}`, {
     method: "PUT",
     headers: {
@@ -59,7 +59,6 @@ const savePrompt = async () => {
 
 const deletePrompt = async () => {
   if (confirm("Are you sure you want to delete this habit?")) {
-    const API_URL = "http://localhost:3000";
     const res = await fetch(`${API_URL}/prompts/${props.prompt.id}`, {
       method: "DELETE",
     });
