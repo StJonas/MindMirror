@@ -19,7 +19,7 @@
   </div>
 </template>
 <script setup>
-import { ref, inject, defineProps, computed } from "vue";
+import { ref, inject, computed } from "vue";
 
 const userId = inject("userId");
 const emit = defineEmits([

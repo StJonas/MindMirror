@@ -37,7 +37,8 @@ import router from "../router";
 const name = ref("");
 const password = ref("");
 const password_confirmation = ref("");
-const API_URL = inject("API_URL");
+//const API_URL = inject("API_URL");
+const API_URL = "http://localhost:3000/";
 
 const signUp = async () => {
   if (password.value !== password_confirmation.value) {

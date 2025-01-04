@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-import { ref, defineProps, onMounted, inject } from "vue";
+import { ref, onMounted, inject } from "vue";
 
 const props = defineProps({
   habitId: Number,

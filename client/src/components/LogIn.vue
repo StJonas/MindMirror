@@ -35,7 +35,8 @@ import axios from "axios";
 
 const username = ref("");
 const password = ref("");
-const API_URL = inject("API_URL");
+//const API_URL = inject("API_URL");
+const API_URL = "http://localhost:3000/";
 const user = inject("user");
 
 const login = async () => {

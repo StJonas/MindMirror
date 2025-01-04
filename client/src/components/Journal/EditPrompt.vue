@@ -28,7 +28,7 @@
 </template>
 
 <script setup>
-import { ref, defineProps, inject } from "vue";
+import { ref, inject } from "vue";
 
 const props = defineProps({
   prompt: Object,
