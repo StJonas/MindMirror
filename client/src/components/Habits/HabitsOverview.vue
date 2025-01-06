@@ -14,8 +14,17 @@
     <div v-for="habit in habits" :key="habit.id" class="habit-container">
       <div v-if="!habit.is_timed">
         <h2>{{ habit.name }}</h2>
-        <button type="button" @click="emitNavigateToEditHabit(habit.id)">
-          Edit
+        <button
+          type="button"
+          class="button"
+          @click="emitNavigateToEditHabit(habit.id)"
+        >
+          <img
+            src="/public/edit.svg"
+            alt="Edit"
+            class="icon"
+            style="width: 24px; height: 24px"
+          />
         </button>
         <div class="checkboxes">
           <Checkboxes
@@ -37,8 +46,12 @@
         <h2>Timed Habits:</h2>
       </div>
       <h2 style="margin-left: 40px">{{ habit.name }}</h2>
-      <button type="button" @click="emitNavigateToEditHabit(habit.id)">
-        Edit
+      <button
+        type="button"
+        class="button"
+        @click="emitNavigateToEditHabit(habit.id)"
+      >
+        <img src="/public/edit.svg" alt="Edit" class="icon" />
       </button>
       <div class="habit-container">
         <HabitDurationTracker
@@ -80,7 +93,6 @@ const changeWeek = (direction) => {
 
 const isCurrentWeek = computed(() => {
   const today = new Date();
-
   const startOfWeek = new Date(
     today.getFullYear(),
     today.getMonth(),
@@ -92,7 +104,7 @@ const isCurrentWeek = computed(() => {
     startOfWeek.getMonth(),
     startOfWeek.getDate() + 6
   );
-
+  //console.log(currentDay.value >= startOfWeek && currentDay.value <= endOfWeek);
   return currentDay.value >= startOfWeek && currentDay.value <= endOfWeek;
 });
 
@@ -145,12 +157,6 @@ watchEffect(async () => {
 <style scoped>
 .page-styling {
   margin-left: 40px;
-}
-
-.logout {
-  margin-left: 1500px;
-  margin-bottom: 500px;
-  position: absolute;
 }
 
 .page-styling button {

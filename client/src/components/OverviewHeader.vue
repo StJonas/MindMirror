@@ -1,15 +1,36 @@
 <template>
   <div class="header">
     <h1>{{ greeting }}</h1>
-    <div class="auth-buttons">
+    <div>
       <router-link to="/login" v-if="!userId">
-        <button type="button">Login</button>
+        <button>
+          <img
+            src="/public/login.svg"
+            alt="Login"
+            class="button"
+            style="width: 24px; height: 24px"
+          />
+        </button>
       </router-link>
       <router-link to="/signup" v-if="!userId">
-        <button type="button">Signup</button>
+        <button>
+          <img
+            src="/public/signup.svg"
+            alt="Login"
+            class="button"
+            style="width: 24px; height: 24px"
+          />
+        </button>
       </router-link>
-      <div class="logout">
-        <button @click="logout" v-if="userId">Logout</button>
+      <div class="logout" v-if="userId">
+        <button @click="logout">
+          <img
+            src="/public/logout.svg"
+            alt="Logout"
+            class="button"
+            style="width: 24px; height: 24px"
+          />
+        </button>
       </div>
     </div>
   </div>

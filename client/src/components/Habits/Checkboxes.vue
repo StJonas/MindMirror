@@ -1,6 +1,11 @@
 <template>
   <div class="checkbox-group">
-    <label v-for="(day, index) in daysOfWeek" :key="index">
+    <label
+      v-for="(day, index) in daysOfWeek"
+      :key="index"
+      class="custom-checkbox"
+      :class="{ checked: isChecked(day), disabled: !props.isCurrentWeek }"
+    >
       {{ day }}
       <input
         type="checkbox"
@@ -231,5 +236,54 @@ watch(
 
 .checkbox-group input[type="checkbox"] {
   margin-right: 5px;
+}
+
+.custom-checkbox {
+  position: relative;
+  display: inline-block;
+  padding: 10px 20px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  cursor: pointer;
+  user-select: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.custom-checkbox input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.custom-checkbox.checked {
+  background-color: green;
+  color: white;
+}
+
+.custom-checkbox.disabled {
+  background-color: #e0e0e0;
+  cursor: not-allowed;
+}
+
+.custom-checkbox.disabled.checked {
+  background-color: #2e7d32;
+  cursor: not-allowed;
+}
+
+.custom-checkbox.disabled.checked:hover {
+  background-color: #2e7d32;
+}
+
+.custom-checkbox:hover {
+  background-color: #e0e0e0;
+}
+
+.custom-checkbox.checked:hover {
+  background-color: #45a049;
 }
 </style>

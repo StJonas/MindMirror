@@ -6,10 +6,10 @@
       &gt;
     </button>
 
-    <button v-if="userId" type="button" @click="navigateToAddHabit">
+    <button v-if="userId" class="button" @click="navigateToAddHabit">
       Add Habit
     </button>
-    <button v-if="userId" type="button" @click="navigateToStatistics">
+    <button v-if="userId" class="button" @click="navigateToStatistics">
       Statistics
     </button>
 
@@ -69,12 +69,5 @@ const changeWeek = (direction) => {
   display: flex;
   align-items: center;
   gap: 30px;
-}
-
-.habit-header button {
-  flex-shrink: 0;
-  border-color: black;
-  text-emphasis-color: black;
-  text-decoration-color: black;
 }
 </style>

@@ -38,17 +38,13 @@
       class="name-input"
     />
 
-    <button v-if="isEditing" @click="updateHabit">Update</button>
-    <button v-if="isEditing" @click="cancelEdit">Cancel</button>
-
-    <button v-else @click="createPrompt" class="create-button">Create</button>
+    <button @click="createPrompt" class="save-button">Create</button>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, inject, computed } from "vue";
 
-const isEditing = ref(false);
 const is_weekly = ref(false);
 const userId = inject("userId");
 const prompt = ref("");
@@ -182,13 +178,5 @@ const goBack = () => {
 .text-label {
   position: relative;
   top: -3px; /* move label higher or lower */
-}
-
-.form-container button {
-  flex-shrink: 0;
-  margin-left: 10px;
-  border-color: black;
-  text-emphasis-color: black;
-  text-decoration-color: black;
 }
 </style>

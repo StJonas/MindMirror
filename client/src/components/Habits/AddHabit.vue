@@ -35,12 +35,10 @@
       <option value="0">hobbies</option>
     </select> -->
 
-    <!-- only render if editing habit -->
     <button v-if="isEditing" @click="updateHabit">Update</button>
     <button v-if="isEditing" @click="cancelEdit">Cancel</button>
 
-    <!-- only render if not editing habit -->
-    <button v-else @click="createHabit" class="create-button">Create</button>
+    <button v-else @click="createHabit" class="save-button">Create</button>
   </div>
 </template>
 
@@ -100,10 +98,6 @@ const goBack = () => {
   flex-direction: column;
   align-items: flex-start;
   margin-left: 20px;
-}
-.create-button {
-  margin-top: 20px;
-  margin-bottom: 20px;
 }
 .name-input {
   width: 300px;
@@ -173,13 +167,5 @@ const goBack = () => {
 .text-label {
   position: relative;
   top: -3px; /* move label higher or lower */
-}
-
-.form-container button {
-  flex-shrink: 0;
-  margin-left: 10px;
-  border-color: black;
-  text-emphasis-color: black;
-  text-decoration-color: black;
 }
 </style>

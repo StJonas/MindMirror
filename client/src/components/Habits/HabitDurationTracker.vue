@@ -8,7 +8,9 @@
       min="1"
       class="styled-input"
     />
-    <button @click="saveDuration" class="button">Save</button>
+    <button @click="saveDuration" class="save-button">
+      <img src="/public/save.svg" alt="Save" class="white-icon" />
+    </button>
   </div>
 </template>
 

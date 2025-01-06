@@ -46,12 +46,4 @@ const goBack = () => {
 .journal-entry {
   margin-bottom: 20px;
 }
-
-.journal-log button {
-  flex-shrink: 0;
-  margin-left: 10px;
-  border-color: black;
-  text-emphasis-color: black;
-  text-decoration-color: black;
-}
 </style>

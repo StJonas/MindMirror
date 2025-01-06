@@ -12,14 +12,9 @@
       v-if="userId"
       type="button"
       @click="saveJournalEntry(prompt.content)"
-      class="edit-button"
+      class="save-button"
     >
-      <img
-        src="/public/save.svg"
-        alt="Save"
-        class="icon"
-        style="width: 24px; height: 24px"
-      />
+      <img src="/public/save.svg" alt="Save" class="white-icon" />
     </button>
   </div>
 </template>
@@ -119,10 +114,5 @@ const saveJournalEntry = async (content) => {
   border: 2px solid #ccc;
   border-radius: 4px;
   font-size: 14px;
-}
-
-.icon {
-  width: 24px;
-  height: 24px;
 }
 </style>

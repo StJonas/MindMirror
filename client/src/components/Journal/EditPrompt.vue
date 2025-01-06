@@ -101,19 +101,4 @@ const deletePrompt = async () => {
   border-radius: 4px;
   font-size: 14px;
 }
-
-.save-button {
-  padding: 10px 20px;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.save-button:hover {
-  background-color: #45a049;
-}
-.delete-button {
-  background-color: red;
-}
 </style>

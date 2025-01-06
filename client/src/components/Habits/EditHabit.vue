@@ -13,8 +13,17 @@
       class="body-input"
     />
 
-    <button @click="updateHabit(habit_id)">Save</button>
-    <button @click="deleteHabit(habit_id)">Delete</button>
+    <button @click="updateHabit(habit_id)" class="save-button">
+      <img src="/public/save.svg" alt="Save" class="white-icon" />
+    </button>
+    <button @click="deleteHabit(habit_id)" class="delete-button">
+      <img
+        src="/public/delete.svg"
+        alt="Delete"
+        class="white-icon"
+        style="width: 24px; height: 24px"
+      />
+    </button>
   </div>
 </template>
 
@@ -135,13 +144,5 @@ const goBack = () => {
   color: #111;
   border-radius: 4px;
   resize: vertical;
-}
-
-.form-container button {
-  flex-shrink: 0;
-  margin-left: 10px;
-  border-color: black;
-  text-emphasis-color: black;
-  text-decoration-color: black;
 }
 </style>

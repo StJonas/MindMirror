@@ -58,8 +58,12 @@ export default {
   font-size: 16px;
   cursor: pointer;
   border-radius: 4px;
+  outline: none;
 }
 .navigation-buttons button.active {
+  background-color: orange;
+}
+.navigation-buttons button:hover:not(.active) {
   background-color: orange;
 }
 </style>
