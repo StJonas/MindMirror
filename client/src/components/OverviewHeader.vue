@@ -5,7 +5,7 @@
       <router-link to="/login" v-if="!userId">
         <button>
           <img
-            src="/public/login.svg"
+            src="/login.svg"
             alt="Login"
             class="button"
             style="width: 24px; height: 24px"
@@ -15,7 +15,7 @@
       <router-link to="/signup" v-if="!userId">
         <button>
           <img
-            src="/public/signup.svg"
+            src="/signup.svg"
             alt="Login"
             class="button"
             style="width: 24px; height: 24px"
@@ -25,7 +25,7 @@
       <div class="logout" v-if="userId">
         <button @click="logout">
           <img
-            src="/public/logout.svg"
+            src="/logout.svg"
             alt="Logout"
             class="button"
             style="width: 24px; height: 24px"

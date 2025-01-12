@@ -27,7 +27,7 @@
         :class="['edit-button', { 'enabled-button': isEditMode }]"
       >
         <img
-          src="/public/edit.svg"
+          src="/edit.svg"
           alt="Edit"
           class="icon"
           style="width: 24px; height: 24px"

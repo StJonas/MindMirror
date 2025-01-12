@@ -15,7 +15,7 @@
         @click="saveJournalEntry(prompt.content)"
         class="save-button"
       >
-        <img src="/public/save.svg" alt="Save" class="white-icon" />
+        <img src="/save.svg" alt="Save" class="white-icon" />
       </button>
     </div>
   </div>

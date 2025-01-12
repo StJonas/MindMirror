@@ -242,7 +242,7 @@ watch(
   position: relative;
   display: inline-block;
   padding: 10px 20px;
-  border: 2px solid #ccc;
+  border: 0px solid #ccc;
   border-radius: 4px;
   background-color: #c9c8c8;
   cursor: pointer;

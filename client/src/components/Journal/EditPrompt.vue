@@ -9,7 +9,7 @@
       />
       <button @click="savePrompt" class="save-button">
         <img
-          src="/public/save.svg"
+          src="/save.svg"
           alt="Save"
           class="white-icon"
           style="width: 24px; height: 24px"

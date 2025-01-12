@@ -14,7 +14,7 @@
     />
 
     <button @click="updateHabit(habit_id)" class="save-button">
-      <img src="/public/save.svg" alt="Save" class="white-icon" />
+      <img src="/save.svg" alt="Save" class="white-icon" />
     </button>
     <div class="button-wrapper">
       <button @click="deleteHabit(habit_id)" class="delete-button">
