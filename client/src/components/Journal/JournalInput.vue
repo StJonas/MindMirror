@@ -8,14 +8,16 @@
       min="1"
       class="styled-input"
     />
-    <button
-      v-if="userId"
-      type="button"
-      @click="saveJournalEntry(prompt.content)"
-      class="save-button"
-    >
-      <img src="/public/save.svg" alt="Save" class="white-icon" />
-    </button>
+    <div class="button-wrapper">
+      <button
+        v-if="userId"
+        type="button"
+        @click="saveJournalEntry(prompt.content)"
+        class="save-button"
+      >
+        <img src="/public/save.svg" alt="Save" class="white-icon" />
+      </button>
+    </div>
   </div>
 </template>
 
@@ -107,12 +109,16 @@ const saveJournalEntry = async (content) => {
 }
 
 .styled-input {
-  width: 300px;
+  width: 500px;
   padding: 12px 20px;
   margin: 8px 0;
   box-sizing: border-box;
   border: 2px solid #ccc;
   border-radius: 4px;
   font-size: 14px;
+}
+.button-wrapper {
+  margin-top: -55px;
+  margin-left: 520px;
 }
 </style>

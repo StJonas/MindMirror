@@ -16,14 +16,16 @@
     <button @click="updateHabit(habit_id)" class="save-button">
       <img src="/public/save.svg" alt="Save" class="white-icon" />
     </button>
-    <button @click="deleteHabit(habit_id)" class="delete-button">
-      <img
-        src="/public/delete.svg"
-        alt="Delete"
-        class="white-icon"
-        style="width: 24px; height: 24px"
-      />
-    </button>
+    <div class="button-wrapper">
+      <button @click="deleteHabit(habit_id)" class="delete-button">
+        <img
+          src="/delete.svg"
+          alt="Delete"
+          class="white-icon"
+          style="width: 24px; height: 24px"
+        />
+      </button>
+    </div>
   </div>
 </template>
 
@@ -144,5 +146,11 @@ const goBack = () => {
   color: #111;
   border-radius: 4px;
   resize: vertical;
+}
+
+.button-wrapper {
+  margin-top: -225px;
+  margin-left: 920px;
+  margin-bottom: 50px;
 }
 </style>

@@ -83,4 +83,9 @@ const logout = () => {
   text-emphasis-color: black;
   text-decoration-color: black;
 }
+.logout {
+  position: absolute;
+  top: 80px;
+  right: 500px;
+}
 </style>

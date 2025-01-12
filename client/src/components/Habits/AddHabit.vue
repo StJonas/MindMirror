@@ -38,7 +38,9 @@
     <button v-if="isEditing" @click="updateHabit">Update</button>
     <button v-if="isEditing" @click="cancelEdit">Cancel</button>
 
-    <button v-else @click="createHabit" class="save-button">Create</button>
+    <button @click="createHabit" class="save-button">
+      <img src="/public/save.svg" alt="Save" class="white-icon" />
+    </button>
   </div>
 </template>
 
@@ -167,5 +169,9 @@ const goBack = () => {
 .text-label {
   position: relative;
   top: -3px; /* move label higher or lower */
+}
+.save-button {
+  margin-top: 10px;
+  margin-left: 0px;
 }
 </style>

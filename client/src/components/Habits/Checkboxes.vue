@@ -244,12 +244,13 @@ watch(
   padding: 10px 20px;
   border: 2px solid #ccc;
   border-radius: 4px;
-  background-color: #f9f9f9;
+  background-color: #c9c8c8;
   cursor: pointer;
   user-select: none;
   font-size: 14px;
   font-weight: 500;
   transition: background-color 0.3s, border-color 0.3s;
+  color: black;
 }
 
 .custom-checkbox input {
@@ -261,8 +262,9 @@ watch(
 }
 
 .custom-checkbox.checked {
-  background-color: green;
+  background-color: darkgreen;
   color: white;
+  border: 0px solid #ccc;
 }
 
 .custom-checkbox.disabled {

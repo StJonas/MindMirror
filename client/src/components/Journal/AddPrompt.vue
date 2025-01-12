@@ -38,7 +38,9 @@
       class="name-input"
     />
 
-    <button @click="createPrompt" class="save-button">Create</button>
+    <button @click="createPrompt" class="save-button">
+      <img src="/public/save.svg" alt="Save" class="white-icon" />
+    </button>
   </div>
 </template>
 
@@ -178,5 +180,9 @@ const goBack = () => {
 .text-label {
   position: relative;
   top: -3px; /* move label higher or lower */
+}
+.save-button {
+  margin-top: 10px;
+  margin-left: 0px;
 }
 </style>

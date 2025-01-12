@@ -59,6 +59,7 @@ export default {
   cursor: pointer;
   border-radius: 4px;
   outline: none;
+  color: black;
 }
 .navigation-buttons button.active {
   background-color: orange;

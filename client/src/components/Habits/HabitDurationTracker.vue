@@ -1,6 +1,8 @@
 <template>
   <div class="page-styling">
-    <span>Current Duration: {{ userDuration }}</span>
+    <span style="font-size: 18px"
+      >Current Duration: {{ userDuration }} Minutes</span
+    >
     <input
       type="number"
       v-model.number="duration"
@@ -8,9 +10,11 @@
       min="1"
       class="styled-input"
     />
-    <button @click="saveDuration" class="save-button">
-      <img src="/public/save.svg" alt="Save" class="white-icon" />
-    </button>
+    <div class="button-wrapper">
+      <button @click="saveDuration" class="save-button">
+        <img src="/public/save.svg" alt="Save" class="white-icon" />
+      </button>
+    </div>
   </div>
 </template>
 
@@ -78,19 +82,22 @@ onMounted(fetchHabitDetails);
 </script>
 <style scoped>
 .page-styling {
+  margin-top: 5px;
 }
 .styled-input {
-  width: 100px;
+  width: 150px;
+  padding: 10px;
   box-sizing: border-box;
   border: 2px solid #ccc;
   border-radius: 4px;
   font-size: 16px;
-  color: #333;
+  color: white;
   margin-left: 20px;
+  transition: border-color 0.3s, box-shadow 0.3s; /* Add transition for better UX */
 }
 
-.button {
-  border-color: black;
-  margin-left: 20px;
+.button-wrapper {
+  margin-top: -45px;
+  margin-left: 410px;
 }
 </style>

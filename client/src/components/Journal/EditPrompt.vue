@@ -11,18 +11,20 @@
         <img
           src="/public/save.svg"
           alt="Save"
-          class="icon"
+          class="white-icon"
           style="width: 24px; height: 24px"
         />
       </button>
-      <button @click="deletePrompt" class="delete-button">
-        <img
-          src="/public/delete.svg"
-          alt="Delete"
-          class="icon"
-          style="width: 24px; height: 24px"
-        />
-      </button>
+      <div class="button-wrapper">
+        <button @click="deletePrompt" class="delete-button">
+          <img
+            src="/delete.svg"
+            alt="Delete"
+            class="white-icon"
+            style="width: 24px; height: 24px"
+          />
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -75,10 +77,6 @@ const deletePrompt = async () => {
 </script>
 
 <style scoped>
-.edit-prompt {
-  padding: 20px;
-}
-
 .header-row {
   display: flex;
   align-items: center;
@@ -100,5 +98,10 @@ const deletePrompt = async () => {
   border: 2px solid #ccc;
   border-radius: 4px;
   font-size: 14px;
+}
+.button-wrapper {
+  margin-top: -100px;
+  margin-left: 520px;
+  margin-bottom: 50px;
 }
 </style>

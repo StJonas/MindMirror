@@ -1,5 +1,6 @@
 <template>
   <div class="page-styling">
+    <Toast ref="toast" message="Habit saved successfully!" />
     <!-- Calendar Week and Dates Heading -->
     <HabitHeader
       :currentDay="currentDay"
@@ -13,7 +14,7 @@
     <!-- List of Habits -->
     <div v-for="habit in habits" :key="habit.id" class="habit-container">
       <div v-if="!habit.is_timed">
-        <h2>{{ habit.name }}</h2>
+        <h2 class="habit-name">{{ habit.name }}</h2>
         <button
           type="button"
           class="button"
@@ -32,8 +33,8 @@
             :habitId="habit.id"
             :currentDay="currentDay"
             :isCurrentWeek="isCurrentWeek"
-            @save-success="handleSaveSuccess"
-            @save-failure="handleSaveFailure"
+            @save-success="handleSaveSuccess(habit.id)"
+            @save-failure="handleSaveFailure(habit.id)"
           />
         </div>
       </div>
@@ -45,7 +46,9 @@
       <div style="margin-left: 30px; margin-bottom: 40px; margin-top: 30px">
         <h2>Timed Habits:</h2>
       </div>
-      <h2 style="margin-left: 40px">{{ habit.name }}</h2>
+      <h2 style="margin-left: 40px; transform: translateY(15px)">
+        {{ habit.name }}
+      </h2>
       <button
         type="button"
         class="button"
@@ -68,6 +71,7 @@
 import Checkboxes from "./Checkboxes.vue";
 import HabitDurationTracker from "./HabitDurationTracker.vue";
 import HabitHeader from "./HabitHeader.vue";
+import Toast from "../Toast.vue";
 
 import { inject, ref, watchEffect, onMounted, computed } from "vue";
 
@@ -79,7 +83,23 @@ const emit = defineEmits([
   "navigateToAddHabit",
   "navigateToEditHabit",
 ]);
+//const currentDay = ref(new Date(2025, 12, 9)); //for testing
 const currentDay = ref(new Date());
+const toastRef = ref(null);
+
+const handleSaveSuccess = (habitId) => {
+  console.log(`Save successful for habit ${habitId}`);
+  console.log("toast value", toastRef.value);
+  if (toastRef.value && typeof toastRef.value.show === "function") {
+    toastRef.value.show();
+  } else {
+    console.error("Toast component's show method is not defined.");
+  }
+};
+
+const handleSaveFailure = (error) => {
+  console.error(`Save failed: ${error}`);
+};
 
 const changeWeek = (direction) => {
   if (direction === "next") {
@@ -121,14 +141,6 @@ const fetchHabitsForWeek = async (currentDay) => {
     );
     habits.value = await res.json();
   }
-};
-
-const handleSaveSuccess = (habitId) => {
-  console.log(`Save successful for habit ${habitId}`);
-};
-
-const handleSaveFailure = (error) => {
-  console.error(`Save failed: ${error}`);
 };
 
 onMounted(async () => {
@@ -177,14 +189,16 @@ watchEffect(async () => {
 }
 .checkboxes {
   margin-left: 320px;
-  margin-top: 10px;
+  margin-top: 0px;
   position: relative;
 }
 .habit-container h2 {
-  margin-bottom: -35px;
-  position: relative;
+  margin-bottom: -25px;
 }
 
+.habit-name {
+  transform: translateY(15px);
+}
 .habit-duration-tracker {
   margin-left: 280px;
   position: absolute;
