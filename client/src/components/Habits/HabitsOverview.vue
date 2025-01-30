@@ -21,7 +21,7 @@
           @click="emitNavigateToEditHabit(habit.id)"
         >
           <img
-            src="/public/edit.svg"
+            src="/edit.svg"
             alt="Edit"
             class="icon"
             style="width: 24px; height: 24px"
@@ -54,7 +54,7 @@
         class="button"
         @click="emitNavigateToEditHabit(habit.id)"
       >
-        <img src="/public/edit.svg" alt="Edit" class="icon" />
+        <img src="/edit.svg" alt="Edit" class="icon" />
       </button>
       <div class="habit-container">
         <HabitDurationTracker
@@ -113,19 +113,31 @@ const changeWeek = (direction) => {
 
 const isCurrentWeek = computed(() => {
   const today = new Date();
+  const currentDayStart = new Date(
+    currentDay.value.getFullYear(),
+    currentDay.value.getMonth(),
+    currentDay.value.getDate()
+  );
+
+  // Adjust for Monday as the start of the week
+  const dayOfWeek = today.getDay(); // 0 (Sunday) to 6 (Saturday)
   const startOfWeek = new Date(
     today.getFullYear(),
     today.getMonth(),
-    today.getDate() - today.getDay() + (today.getDay() === 0 ? -6 : 1)
+    today.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1) // Monday as start
   );
 
   const endOfWeek = new Date(
     startOfWeek.getFullYear(),
     startOfWeek.getMonth(),
-    startOfWeek.getDate() + 6
+    startOfWeek.getDate() + 6,
+    23,
+    59,
+    59,
+    999 // Entire last day of the week
   );
-  //console.log(currentDay.value >= startOfWeek && currentDay.value <= endOfWeek);
-  return currentDay.value >= startOfWeek && currentDay.value <= endOfWeek;
+
+  return currentDayStart >= startOfWeek && currentDayStart <= endOfWeek;
 });
 
 const fetchHabitsForWeek = async (currentDay) => {

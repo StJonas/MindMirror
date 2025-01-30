@@ -2,11 +2,11 @@
   <div class="form-container">
     <div class="header-row">
       <button @click="goBack">&lt;</button>
-      <h2>Add Prompt</h2>
+      <h2>Add Question</h2>
     </div>
 
     <div class="toggle-container">
-      <span class="text-label">Daily Prompt</span>
+      <span class="text-label">Daily Question</span>
       <!-- Textual label -->
       <div class="switch" @mousedown.prevent="">
         <input
@@ -19,10 +19,10 @@
 
         <label for="isWeekly" class="label"></label>
       </div>
-      <span class="text-label">Weekly Prompt</span>
+      <span class="text-label">Weekly Question</span>
     </div>
     <select v-model="selectedPrompt" @change="updatePrompt" class="name-input">
-      <option value="" disabled>Select predefined prompt</option>
+      <option value="" disabled>Select predefined question</option>
       <option
         v-for="prompt in filteredPredefinedPrompts"
         :key="prompt.id"

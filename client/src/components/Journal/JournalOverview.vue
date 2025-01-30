@@ -9,7 +9,7 @@
         :class="{ 'disabled-button': isEditMode }"
         :disabled="isEditMode"
       >
-        Add Prompt
+        Add Question
       </button>
       <button
         v-if="userId"
@@ -35,7 +35,7 @@
       </button>
     </div>
     <div class="header">
-      <h2>Weekly Prompts</h2>
+      <h2>Weekly Questions</h2>
     </div>
     <div v-if="!isEditMode">
       <div v-for="prompt in prompts" :key="prompt.id" class="">
@@ -52,7 +52,7 @@
       </div>
     </div>
     <div class="header">
-      <h2>Daily Prompts</h2>
+      <h2>Daily Questions</h2>
     </div>
     <div v-if="!isEditMode">
       <div v-for="prompt in prompts" :key="prompt.id" class="">

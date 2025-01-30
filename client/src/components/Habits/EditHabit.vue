@@ -125,7 +125,7 @@ const goBack = () => {
 }
 
 .name-input {
-  width: 100%;
+  width: 300px;
   padding: 12px 20px;
   margin: 8px 0;
   box-sizing: border-box;
@@ -137,7 +137,7 @@ const goBack = () => {
 }
 
 .body-input {
-  width: 100%;
+  width: 300px;
   padding: 12px 20px;
   margin: 8px 0;
   box-sizing: border-box;
@@ -150,7 +150,12 @@ const goBack = () => {
 
 .button-wrapper {
   margin-top: -225px;
-  margin-left: 920px;
+  margin-left: 400px;
   margin-bottom: 50px;
+}
+
+.save-button {
+  margin-top: 10px;
+  margin-left: -1px;
 }
 </style>
