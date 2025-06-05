@@ -1,31 +1,28 @@
 <template>
-  <div class="navigation-buttons">
-    <button
-      type="button"
-      @click="changePage('habits')"
+  <div class="button">
+    <router-link
+      to="/habits"
+      class="nav-link"
       :class="{
         active:
-          currentPage === 'habits' ||
-          currentPage === 'editHabit' ||
-          currentPage === 'addHabit' ||
-          currentPage === 'statistics',
+          $route.path.startsWith('/habits') || $route.path === '/statistics',
       }"
     >
       Habits
-    </button>
-    <button
-      type="button"
-      @click="changePage('journaling')"
+    </router-link>
+    <router-link
+      to="/JournalOverview"
+      class="nav-link"
       :class="{
         active:
-          currentPage === 'journaling' ||
-          currentPage === 'journalLog' ||
-          currentPage === 'addPrompt',
+          $route.path.startsWith('/JournalOverview') ||
+          $route.path === '/journalLog' ||
+          $route.path === '/addPrompt',
       }"
     >
       Journal
-    </button>
-    <button>+</button>
+    </router-link>
+    <router-link to="/" class="nav-link">+</router-link>
   </div>
 </template>
 

@@ -1,6 +1,6 @@
 <template>
   <div class="input">
-    <h1>Login</h1>
+    <h2>Login</h2>
     <form @submit.prevent="login">
       <label for="username">Username:</label>
       <input
@@ -58,8 +58,14 @@ const login = async () => {
 
     localStorage.setItem("sessionToken", data.token);
     localStorage.setItem("userId", data.user.id);
-    router.push("/");
+
+    alert("Login successful!");
+
+    router.push("/habits").then(() => {
+      window.location.reload();
+    });
   } else {
+    alert("Login failed!");
     console.error("Login failed");
     console.log("name ", username.value);
     console.log("pw ", password.value);

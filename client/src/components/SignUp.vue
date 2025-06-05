@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Sign Up</h1>
+    <h2>Sign Up</h2>
     <form @submit.prevent="signUp">
       <label for="name">Username:</label>
       <input id="name" v-model="name" type="text" required class="name-input" />
@@ -23,9 +23,9 @@
       />
 
       <button type="submit">Sign Up</button>
-      <button type="button">
-        <router-link to="/">Go Back</router-link>
-      </button>
+      <router-link to="/">
+        <button type="button">Go Back</button>
+      </router-link>
     </form>
   </div>
 </template>
@@ -37,8 +37,7 @@ import router from "../router";
 const name = ref("");
 const password = ref("");
 const password_confirmation = ref("");
-//const API_URL = inject("API_URL");
-const API_URL = "http://localhost:3000/";
+const API_URL = inject("API_URL");
 
 const signUp = async () => {
   if (password.value !== password_confirmation.value) {
@@ -54,20 +53,27 @@ const signUp = async () => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      username: name.value,
-      password: password.value,
+      user: {
+        username: name.value,
+        password: password.value,
+      },
     }),
   });
 
   if (!res.ok) {
     const data = await res.json();
-    console.log("error data:", data);
+    console.log("data: ", name.value, " ", password.value);
+    console.log("error data:", data, res);
+    alert("Signup failed!");
+  } else {
+    alert("Signup successful!");
+    name.value = "";
+    password.value = "";
+    password_confirmation.value = "";
+    router.push("/login").then(() => {
+      window.location.reload();
+    });
   }
-
-  name.value = "";
-  password.value = "";
-  password_confirmation.value = "";
-  router.push("/");
 };
 </script>
 

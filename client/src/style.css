@@ -116,3 +116,31 @@ button:focus-visible {
   filter: invert(1) brightness(1000%);
 }
 
+.navigation-buttons {
+  margin-left: 20px;
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.nav-link {
+  background-color: lightblue;
+  color: black;
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 4px;
+  outline: none;
+  transition: background-color 0.3s;
+}
+.nav-link.active {
+  background-color: orange;
+  color: white;
+}
+.nav-link:hover:not(.active) {
+  background-color: orange;
+  color: white;
+}

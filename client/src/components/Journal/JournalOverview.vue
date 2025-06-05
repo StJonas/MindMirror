@@ -1,7 +1,7 @@
 <template>
   <div class="page-styling">
     <div class="header">
-      <h2>{{ currentDate }}</h2>
+      <h2 v-if="userId">{{ currentDate }}</h2>
       <button
         v-if="userId"
         type="button"
@@ -34,7 +34,7 @@
         />
       </button>
     </div>
-    <div class="header">
+    <div class="header" v-if="userId">
       <h2>Weekly Questions</h2>
     </div>
     <div v-if="!isEditMode">
@@ -51,7 +51,7 @@
         </div>
       </div>
     </div>
-    <div class="header">
+    <div class="header" v-if="userId">
       <h2>Daily Questions</h2>
     </div>
     <div v-if="!isEditMode">
@@ -140,7 +140,7 @@ watchEffect(async () => {
   display: flex;
   align-items: center;
   gap: 30px;
-  margin-left: -90px;
+  margin-left: 20px;
 }
 
 .header button {

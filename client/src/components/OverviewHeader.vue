@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <h1>{{ greeting }}</h1>
-    <div>
+    <div class="auth-buttons">
       <router-link to="/login" v-if="!userId">
         <button>
           <img
@@ -22,7 +22,7 @@
           />
         </button>
       </router-link>
-      <div class="logout" v-if="userId">
+      <div v-if="userId">
         <button @click="logout">
           <img
             src="/logout.svg"
@@ -64,28 +64,17 @@ const logout = () => {
 <style scoped>
 .header {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   padding: 10px;
 }
+
 .auth-buttons {
+  position: absolute;
+  top: 75px;
+  right: 50px;
   display: flex;
+  gap: 16px;
   align-items: center;
-  position: absolute;
-  top: 85px;
-  right: 250px;
-}
-.auth-buttons button {
-  margin-left: 10px;
-  font-size: 16px;
-  cursor: pointer;
-  border-color: black;
-  text-emphasis-color: black;
-  text-decoration-color: black;
-}
-.logout {
-  position: absolute;
-  top: 80px;
-  right: 500px;
 }
 </style>
