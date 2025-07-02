@@ -61,7 +61,7 @@ const login = async () => {
 
     alert("Login successful!");
 
-    router.push("/habits").then(() => {
+    router.push("/").then(() => {
       window.location.reload();
     });
   } else {

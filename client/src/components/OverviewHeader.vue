@@ -1,8 +1,17 @@
 <template>
   <div class="header">
-    <h1>{{ greeting }}</h1>
+    <router-link to="/">
+      <button class="circle-btn">
+        <img src="/circle.svg" alt="Home" class="circle-icon" />
+        <span class="home-text">MindMirror</span>
+      </button>
+    </router-link>
+    <!-- <h1>{{ greeting }}</h1> -->
     <div class="auth-buttons">
-      <router-link to="/login" v-if="!userId">
+      <router-link
+        to="/login"
+        v-if="!userId && route.path !== '/login' && route.path !== '/signup'"
+      >
         <button>
           <img
             src="/login.svg"
@@ -12,7 +21,10 @@
           />
         </button>
       </router-link>
-      <router-link to="/signup" v-if="!userId">
+      <router-link
+        to="/signup"
+        v-if="!userId && route.path !== '/login' && route.path !== '/signup'"
+      >
         <button>
           <img
             src="/signup.svg"
@@ -22,27 +34,29 @@
           />
         </button>
       </router-link>
-      <div v-if="userId">
-        <button @click="logout">
-          <img
-            src="/logout.svg"
-            alt="Logout"
-            class="button"
-            style="width: 24px; height: 24px"
-          />
-        </button>
-      </div>
+    </div>
+    <div v-if="userId" class="auth-logout">
+      <button @click="logout">
+        <img
+          src="/logout.svg"
+          alt="Logout"
+          class="button"
+          style="width: 24px; height: 24px"
+        />
+      </button>
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref, watch, inject } from "vue";
+import { useRoute } from "vue-router";
 
 const emit = defineEmits(["logout"]);
 const username = inject("username", "");
 const userId = inject("userId");
 const greeting = ref("");
+const route = useRoute();
 
 const updateGreeting = () => {
   const currentHour = new Date().getHours();
@@ -64,9 +78,8 @@ const logout = () => {
 <style scoped>
 .header {
   display: flex;
-  justify-content: flex-start;
   align-items: center;
-  padding: 10px;
+  margin-left: 36px;
 }
 
 .auth-buttons {
@@ -76,5 +89,65 @@ const logout = () => {
   display: flex;
   gap: 16px;
   align-items: center;
+}
+
+.circle-btn {
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 60px;
+}
+
+.circle-icon {
+  margin-right: 8px;
+  filter: invert(1) brightness(1000%);
+  width: 3rem;
+  height: 3rem;
+}
+
+.home-text {
+  font-size: 2.5rem;
+  color: white;
+  font-weight: 500;
+}
+
+.auth-logout {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+}
+
+@media (max-width: 700px) {
+  .header {
+    display: flex;
+    align-items: center;
+    margin-left: 0px;
+  }
+  .circle-icon {
+    width: 2rem;
+    height: 2rem;
+  }
+  .home-text {
+    font-size: 2rem;
+    color: white;
+    font-weight: 500;
+  }
+  .auth-buttons {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    flex-direction: row;
+    gap: 24px;
+    z-index: 100;
+    background: none;
+  }
+  .auth-logout {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+  }
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="page-styling">
     <OverviewHeader @logout="logout" />
-    <OverviewNavigationButtons v-if="!hideNavigation" />
+    <!-- <OverviewNavigationButtons v-if="!hideNavigation" /> -->
 
     <div class="content">
       <router-view />
