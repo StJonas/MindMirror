@@ -7,15 +7,15 @@
         placeholder="Prompt Title"
         class="name-input"
       />
-      <button @click="savePrompt" class="save-button">
-        <img
-          src="/save.svg"
-          alt="Save"
-          class="white-icon"
-          style="width: 24px; height: 24px"
-        />
-      </button>
       <div class="button-wrapper">
+        <button @click="savePrompt" class="save-button">
+          <img
+            src="/save.svg"
+            alt="Save"
+            class="white-icon"
+            style="width: 24px; height: 24px"
+          />
+        </button>
         <button @click="deletePrompt" class="delete-button">
           <img
             src="/delete.svg"
@@ -100,8 +100,22 @@ const deletePrompt = async () => {
   font-size: 14px;
 }
 .button-wrapper {
-  margin-top: -100px;
-  margin-left: 520px;
-  margin-bottom: 50px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+}
+@media (max-width: 600px) {
+  .name-input {
+    width: 90%;
+    margin-bottom: 20px;
+  }
+  .button-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 150px;
+    margin: 0px;
+  }
 }
 </style>

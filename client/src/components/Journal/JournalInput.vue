@@ -121,4 +121,15 @@ const saveJournalEntry = async (content) => {
   margin-top: -55px;
   margin-left: 520px;
 }
+@media (max-width: 600px) {
+  .styled-input {
+    width: 90%;
+  }
+  .button-wrapper {
+    margin-top: 8px;
+    margin-left: 0;
+    display: flex;
+    justify-content: flex-start;
+  }
+}
 </style>

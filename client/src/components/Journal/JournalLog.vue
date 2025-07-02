@@ -1,7 +1,10 @@
 <template>
   <div class="journal-log">
     <div class="header-row">
-      <button @click="goBack">&lt;</button>
+      <router-link to="/JournalOverview">
+        <button type="button">&lt;</button>
+      </router-link>
+
       <h2>Journal Log</h2>
     </div>
 
@@ -45,5 +48,28 @@ const goBack = () => {
 
 .journal-entry {
   margin-bottom: 20px;
+}
+@media (max-width: 600px) {
+  .header-row {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    gap: 20px;
+  }
+
+  .journal-log {
+    margin-left: 0px;
+    margin-top: 30px;
+    font-size: 0.8rem;
+  }
+
+  .journal-entry {
+    margin-bottom: 20px;
+    background-color: rgb(70, 69, 69);
+    border-radius: 12px;
+    margin-top: 10px;
+    padding: 2px;
+    padding-left: 20px;
+  }
 }
 </style>

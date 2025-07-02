@@ -1,7 +1,9 @@
 <template>
   <div class="form-container">
     <div class="header-row">
-      <button @click="goBack">&lt;</button>
+      <router-link to="/JournalOverview">
+        <button type="button">&lt;</button>
+      </router-link>
       <h2>Add Question</h2>
     </div>
 
@@ -184,5 +186,50 @@ const goBack = () => {
 .save-button {
   margin-top: 10px;
   margin-left: 0px;
+}
+
+@media (max-width: 600px) {
+  .header-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-size: 0.8rem;
+    margin-top: 30px;
+  }
+  .form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 0px;
+  }
+  .button {
+    width: 24px;
+    height: 24px;
+  }
+  .name-input {
+    width: 85vw;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    background-color: #f8f8f8;
+    color: #111;
+    border-radius: 4px;
+    resize: vertical;
+    font-size: 0.9rem;
+    height: 50px;
+  }
+
+  .body-input {
+    width: 110%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    background-color: #f8f8f8;
+    color: #111;
+    border-radius: 4px;
+    resize: vertical;
+  }
 }
 </style>
