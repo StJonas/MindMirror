@@ -1,30 +1,29 @@
 <template>
-  <div class="edit-prompt">
-    <div class="form-container">
-      <input
-        type="text"
-        v-model="promptTitle"
-        placeholder="Prompt Title"
-        class="name-input"
-      />
-      <div class="button-wrapper">
-        <button @click="savePrompt" class="save-button">
-          <img
-            src="/save.svg"
-            alt="Save"
-            class="white-icon"
-            style="width: 24px; height: 24px"
-          />
-        </button>
-        <button @click="deletePrompt" class="delete-button">
-          <img
-            src="/delete.svg"
-            alt="Delete"
-            class="white-icon"
-            style="width: 24px; height: 24px"
-          />
-        </button>
-      </div>
+  <div class="section-box">
+    <h2>Edit: {{ prompt.title }}</h2>
+    <input
+      type="text"
+      v-model="promptTitle"
+      placeholder="Prompt Title"
+      class="general-input"
+    />
+    <div class="button-wrapper">
+      <button @click="savePrompt" class="save-button">
+        <img
+          src="/save.svg"
+          alt="Save"
+          class="white-icon"
+          style="width: 24px; height: 24px"
+        />
+      </button>
+      <button @click="deletePrompt" class="delete-button">
+        <img
+          src="/delete.svg"
+          alt="Delete"
+          class="white-icon"
+          style="width: 24px; height: 24px"
+        />
+      </button>
     </div>
   </div>
 </template>
@@ -77,28 +76,6 @@ const deletePrompt = async () => {
 </script>
 
 <style scoped>
-.header-row {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-
-.form-container {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-top: 20px;
-}
-
-.name-input {
-  width: 500px;
-  padding: 12px 20px;
-  margin: 8px 0;
-  box-sizing: border-box;
-  border: 2px solid #ccc;
-  border-radius: 4px;
-  font-size: 14px;
-}
 .button-wrapper {
   display: flex;
   flex-direction: row;
@@ -106,15 +83,11 @@ const deletePrompt = async () => {
   gap: 16px;
 }
 @media (max-width: 600px) {
-  .name-input {
-    width: 90%;
-    margin-bottom: 20px;
-  }
   .button-wrapper {
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 150px;
+    gap: 145px;
     margin: 0px;
   }
 }

@@ -6,43 +6,48 @@
       </router-link>
       <h2>Add Question</h2>
     </div>
+    <div class="general-input">
+      <div class="toggle-container">
+        <span class="text-label">Daily Question</span>
+        <!-- Textual label -->
+        <div class="switch" @mousedown.prevent="">
+          <input
+            type="checkbox"
+            id="isWeekly"
+            v-model="is_weekly"
+            @change="updatePredefinedPrompts"
+            class="checkbox"
+          />
 
-    <div class="toggle-container">
-      <span class="text-label">Daily Question</span>
-      <!-- Textual label -->
-      <div class="switch" @mousedown.prevent="">
-        <input
-          type="checkbox"
-          id="isWeekly"
-          v-model="is_weekly"
-          @change="updatePredefinedPrompts"
-          class="checkbox"
-        />
-
-        <label for="isWeekly" class="label"></label>
+          <label for="isWeekly" class="label"></label>
+        </div>
+        <span class="text-label">Weekly Question</span>
       </div>
-      <span class="text-label">Weekly Question</span>
-    </div>
-    <select v-model="selectedPrompt" @change="updatePrompt" class="name-input">
-      <option value="" disabled>Select predefined question</option>
-      <option
-        v-for="prompt in filteredPredefinedPrompts"
-        :key="prompt.id"
-        :value="prompt.title"
+      <select
+        v-model="selectedPrompt"
+        @change="updatePrompt"
+        class="general-input"
       >
-        {{ prompt.title }}
-      </option>
-    </select>
-    <input
-      type="text"
-      v-model="prompt"
-      placeholder="prompt"
-      class="name-input"
-    />
+        <option value="" disabled>Select predefined question</option>
+        <option
+          v-for="prompt in filteredPredefinedPrompts"
+          :key="prompt.id"
+          :value="prompt.title"
+        >
+          {{ prompt.title }}
+        </option>
+      </select>
+      <input
+        type="text"
+        v-model="prompt"
+        placeholder="write your own question"
+        class="general-input"
+      />
 
-    <button @click="createPrompt" class="save-button">
-      <img src="/save.svg" alt="Save" class="white-icon" />
-    </button>
+      <button @click="createPrompt" class="save-button">
+        <img src="/save.svg" alt="Save" class="white-icon" />
+      </button>
+    </div>
   </div>
 </template>
 
@@ -91,53 +96,9 @@ const createPrompt = async () => {
     console.error("Error creating prompt:", errorData);
   }
 };
-
-const goBack = () => {
-  emit("navigateBackToJournal");
-};
 </script>
 
 <style scoped>
-.header-row {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-.form-container {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-left: 30px;
-}
-.create-button {
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-.name-input {
-  width: 500px;
-  padding: 12px 20px;
-  margin: 8px 0;
-  box-sizing: border-box;
-  border: 2px solid #ccc;
-  background-color: #f8f8f8;
-  color: #111;
-  border-radius: 4px;
-  resize: vertical;
-  font-size: 18px;
-}
-
-.body-input {
-  width: 300px;
-  padding: 12px 20px;
-  margin: 8px 0;
-  box-sizing: border-box;
-  border: 2px solid #ccc;
-  background-color: #f8f8f8;
-  color: #111;
-  border-radius: 4px;
-  resize: vertical;
-}
-
 .toggle-switch {
   margin: 20px 0;
 }
@@ -177,59 +138,13 @@ const goBack = () => {
 .toggle-container {
   display: flex;
   align-items: center;
-  gap: 10px; /* gap between elements */
+  gap: 10px;
 }
 .text-label {
   position: relative;
-  top: -3px; /* move label higher or lower */
-}
-.save-button {
-  margin-top: 10px;
-  margin-left: 0px;
+  top: -3px;
 }
 
 @media (max-width: 600px) {
-  .header-row {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    font-size: 0.8rem;
-    margin-top: 30px;
-  }
-  .form-container {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    margin-left: 0px;
-  }
-  .button {
-    width: 24px;
-    height: 24px;
-  }
-  .name-input {
-    width: 85vw;
-    padding: 12px 20px;
-    margin: 8px 0;
-    box-sizing: border-box;
-    border: 2px solid #ccc;
-    background-color: #f8f8f8;
-    color: #111;
-    border-radius: 4px;
-    resize: vertical;
-    font-size: 0.9rem;
-    height: 50px;
-  }
-
-  .body-input {
-    width: 110%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    box-sizing: border-box;
-    border: 2px solid #ccc;
-    background-color: #f8f8f8;
-    color: #111;
-    border-radius: 4px;
-    resize: vertical;
-  }
 }
 </style>

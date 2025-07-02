@@ -76,12 +76,6 @@ const logout = () => {
 };
 </script>
 <style scoped>
-.header {
-  display: flex;
-  align-items: center;
-  margin-left: 36px;
-}
-
 .auth-buttons {
   position: absolute;
   top: 75px;
@@ -120,11 +114,6 @@ const logout = () => {
 }
 
 @media (max-width: 700px) {
-  .header {
-    display: flex;
-    align-items: center;
-    margin-left: 0px;
-  }
   .circle-icon {
     width: 2rem;
     height: 2rem;

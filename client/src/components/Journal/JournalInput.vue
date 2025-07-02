@@ -1,12 +1,12 @@
 <template>
-  <div class="prompt-input">
+  <div class="section-box">
     <h2>{{ prompt.title }}</h2>
     <input
       type="text"
       v-model="prompt.content"
-      placeholder="content"
+      placeholder="Your answer"
       min="1"
-      class="styled-input"
+      class="general-input"
     />
     <div class="button-wrapper">
       <button
@@ -104,32 +104,6 @@ const saveJournalEntry = async (content) => {
 </script>
 
 <style scoped>
-.prompt-input {
-  margin-bottom: 20px;
-}
-
-.styled-input {
-  width: 500px;
-  padding: 12px 20px;
-  margin: 8px 0;
-  box-sizing: border-box;
-  border: 2px solid #ccc;
-  border-radius: 4px;
-  font-size: 14px;
-}
-.button-wrapper {
-  margin-top: -55px;
-  margin-left: 520px;
-}
 @media (max-width: 600px) {
-  .styled-input {
-    width: 90%;
-  }
-  .button-wrapper {
-    margin-top: 8px;
-    margin-left: 0;
-    display: flex;
-    justify-content: flex-start;
-  }
 }
 </style>

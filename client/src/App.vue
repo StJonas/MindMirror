@@ -1,5 +1,5 @@
 <template>
-  <div class="page-styling">
+  <div class="">
     <OverviewHeader @logout="logout" />
     <!-- <OverviewNavigationButtons v-if="!hideNavigation" /> -->
 

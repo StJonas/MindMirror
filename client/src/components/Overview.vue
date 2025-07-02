@@ -1,5 +1,5 @@
 <template>
-  <div class="page-styling">
+  <div class="">
     <div class="content">
       <div v-if="currentPage === 'habits'">
         <HabitsOverview
