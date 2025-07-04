@@ -1,20 +1,11 @@
-# Praktikum 1
+# MindMirror
 
-A habit-tracking web application was developed as part of the university course Praktikum 1. The primary objective of this project was to deliver a user-friendly and efficient tool for managing habits and goals.
+A web application was developed as part of my Masters thesis. A personal informatics tool which helps users reflect on different areas of their lives.
 The Frontend was developed using Vue.js, the Backend with Ruby on Rails.
 
 ## Requirements implemented
 
-User management
-- login
-- signup
-
-Habit management
-- CRUD
-
-Habit tracking and statistics
-- habits can be marked as done
-- a graph visualizes how many times a habit has been marked completed
+todo
 
 ## Starting the project
 
