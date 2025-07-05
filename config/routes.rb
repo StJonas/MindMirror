@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  resources :gratitude_entries
+  resources :tags
+  resources :gratitude_prompts
   resources :habit_histories do
     delete 'habit/:habit_id', to: 'habit_histories#destroy_by_habit', on: :collection
   end
@@ -18,6 +21,12 @@ Rails.application.routes.draw do
   end
   resources :prompts
   resources :journal_entries
+  resources :users do
+    resources :gratitude_entries, only: [:index, :create, :show, :update, :destroy]
+  end
+  resources :users do
+    get 'gratitude_prompts', to: 'gratitude_prompts#user_gratitude_prompts'
+  end
 
   get "up" => "rails/health#show", as: :rails_health_check
 

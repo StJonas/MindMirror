@@ -57,3 +57,6 @@ docker-compose.yaml
 Dockerfile
 todo
 journal example.png
+
+#rails stuff
+test/

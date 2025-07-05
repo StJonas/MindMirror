@@ -10,7 +10,38 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_12_26_211109) do
+ActiveRecord::Schema[7.1].define(version: 2025_07_02_143543) do
+  create_table "gratitude_entries", force: :cascade do |t|
+    t.text "content"
+    t.date "entry_date"
+    t.integer "user_id", null: false
+    t.integer "gratitude_prompt_id", null: false
+    t.string "prompt_title"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["gratitude_prompt_id"], name: "index_gratitude_entries_on_gratitude_prompt_id"
+    t.index ["user_id"], name: "index_gratitude_entries_on_user_id"
+  end
+
+  create_table "gratitude_entry_tags", force: :cascade do |t|
+    t.integer "gratitude_entry_id", null: false
+    t.integer "tag_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["gratitude_entry_id"], name: "index_gratitude_entry_tags_on_gratitude_entry_id"
+    t.index ["tag_id"], name: "index_gratitude_entry_tags_on_tag_id"
+  end
+
+  create_table "gratitude_prompts", force: :cascade do |t|
+    t.string "title"
+    t.boolean "predefined"
+    t.boolean "weekly"
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_gratitude_prompts_on_user_id"
+  end
+
   create_table "habit_histories", force: :cascade do |t|
     t.integer "habit_id"
     t.integer "user_id"
@@ -43,6 +74,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_26_211109) do
     t.index ["user_id"], name: "index_journal_entries_on_user_id"
   end
 
+  create_table "journal_entry_tags", force: :cascade do |t|
+    t.integer "journal_entry_id", null: false
+    t.integer "tag_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["journal_entry_id"], name: "index_journal_entry_tags_on_journal_entry_id"
+    t.index ["tag_id"], name: "index_journal_entry_tags_on_tag_id"
+  end
+
   create_table "prompts", force: :cascade do |t|
     t.string "title", null: false
     t.boolean "weekly", null: false
@@ -53,6 +93,13 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_26_211109) do
     t.index ["user_id"], name: "index_prompts_on_user_id"
   end
 
+  create_table "tags", force: :cascade do |t|
+    t.string "name"
+    t.string "category"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "username"
     t.string "password_digest"
@@ -60,7 +107,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_26_211109) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "gratitude_entries", "gratitude_prompts"
+  add_foreign_key "gratitude_entries", "users"
+  add_foreign_key "gratitude_entry_tags", "gratitude_entries"
+  add_foreign_key "gratitude_entry_tags", "tags"
+  add_foreign_key "gratitude_prompts", "users"
   add_foreign_key "journal_entries", "prompts"
   add_foreign_key "journal_entries", "users"
+  add_foreign_key "journal_entry_tags", "journal_entries"
+  add_foreign_key "journal_entry_tags", "tags"
   add_foreign_key "prompts", "users"
 end
