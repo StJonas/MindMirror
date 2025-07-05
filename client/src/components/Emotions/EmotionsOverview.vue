@@ -51,7 +51,7 @@
       </button>
     </div>
     <div class="section-box" v-if="userId">
-      <h2 class="section-title">Weekly Journaling Questions</h2>
+      <h2 class="section-title">Weekly Questions</h2>
 
       <template v-if="!isEditMode">
         <JournalInput
@@ -72,7 +72,7 @@
       </template>
     </div>
     <div class="section-box" v-if="userId">
-      <h2 class="section-title">Daily Journaling Questions</h2>
+      <h2 class="section-title">Daily Questions</h2>
 
       <template v-if="!isEditMode">
         <JournalInput

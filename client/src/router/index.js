@@ -54,6 +54,16 @@ const router = createRouter({
       name: "AddPrompt",
       component: () => import("../components/Journal/AddPrompt.vue"),
     },
+    {
+      path: "/GratitudeOverview",
+      name: "GratitudeOverview",
+      component: () => import("../components/Gratitude/GratitudeOverview.vue"),
+    },
+    {
+      path: "/GratitudeLog",
+      name: "GratitudeLog",
+      component: () => import("../components/Gratitude/GratitudeLog.vue"),
+    },
   ],
 });
 

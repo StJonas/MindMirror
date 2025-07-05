@@ -74,6 +74,7 @@ const saveJournalEntry = async (content) => {
 
     if (updateRes.ok) {
       console.log("Journal entry updated successfully");
+      window.location.reload();
     } else {
       const errorData = await updateRes.json();
       console.error("Error updating journal entry:", errorData);
@@ -95,6 +96,7 @@ const saveJournalEntry = async (content) => {
 
     if (createRes.ok) {
       console.log("Journal entry saved successfully");
+      window.location.reload();
     } else {
       const errorData = await createRes.json();
       console.error("Error saving journal entry:", errorData);

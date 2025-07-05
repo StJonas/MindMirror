@@ -4,30 +4,13 @@
       <h2 v-if="userId">{{ currentDate }}</h2>
       <router-link
         v-if="userId"
-        to="/addPrompt"
+        to="/GratitudeLog"
         :class="{ 'disabled-button': isEditMode }"
         :tabindex="isEditMode ? -1 : 0"
         aria-disabled="isEditMode"
         style="pointer-events: auto"
       >
-        <button type="button" :disabled="isEditMode">
-          <img
-            src="/add.svg"
-            alt="Add"
-            class="icon"
-            style="width: 24px; height: 24px"
-          />
-        </button>
-      </router-link>
-      <router-link
-        v-if="userId"
-        to="/journalLog"
-        :class="{ 'disabled-button': isEditMode }"
-        :tabindex="isEditMode ? -1 : 0"
-        aria-disabled="isEditMode"
-        style="pointer-events: auto"
-      >
-        <button type="button" :disabled="isEditMode">
+        <button type="button" class="log-button" :disabled="isEditMode">
           <img
             src="/log.svg"
             alt="Log"
@@ -36,56 +19,12 @@
           />
         </button>
       </router-link>
-      <button
-        v-if="userId"
-        type="button"
-        @click="toggleEditMode"
-        :class="['edit-button', { 'enabled-button': isEditMode }]"
-      >
-        <img
-          src="/edit.svg"
-          alt="Edit"
-          class="icon"
-          style="width: 24px; height: 24px"
-        />
-      </button>
     </div>
     <div class="section-box" v-if="userId">
-      <h2 class="section-title">Weekly Journaling Questions</h2>
-
+      <h2 class="section-title">Daily Gratitude Question</h2>
       <template v-if="!isEditMode">
-        <JournalInput
-          v-for="prompt in prompts.filter((p) => p.weekly)"
-          :key="prompt.id"
-          :prompt="prompt"
-          class="general-input"
-        />
-      </template>
-
-      <template v-else>
-        <EditPrompt
-          v-for="prompt in prompts.filter((p) => p.weekly)"
-          :key="prompt.id"
-          :prompt="prompt"
-          class="general-input"
-        />
-      </template>
-    </div>
-    <div class="section-box" v-if="userId">
-      <h2 class="section-title">Daily Journaling Questions</h2>
-
-      <template v-if="!isEditMode">
-        <JournalInput
-          v-for="prompt in prompts.filter((p) => !p.weekly)"
-          :key="prompt.id"
-          :prompt="prompt"
-          class="general-input"
-        />
-      </template>
-
-      <template v-else>
-        <EditPrompt
-          v-for="prompt in prompts.filter((p) => !p.weekly)"
+        <GratitudeInput
+          v-for="prompt in prompts"
           :key="prompt.id"
           :prompt="prompt"
           class="general-input"
@@ -97,11 +36,10 @@
 
 <script setup>
 import { inject, watchEffect, ref } from "vue";
-import JournalInput from "./JournalInput.vue";
-import EditPrompt from "./EditPrompt.vue";
+import GratitudeInput from "./GratitudeInput.vue";
 
 const userId = inject("userId");
-const prompts = inject("prompts");
+const prompts = inject("gratitude_prompts");
 const entries = inject("entries");
 const isEditMode = ref(false);
 const emit = defineEmits(["navigateToJournalLog", "navigateToAddPrompt"]);
@@ -135,10 +73,6 @@ const matchEntriesWithPrompts = () => {
       prompt.content = entry.content;
     }
   });
-};
-
-const toggleEditMode = () => {
-  isEditMode.value = !isEditMode.value;
 };
 
 watchEffect(async () => {

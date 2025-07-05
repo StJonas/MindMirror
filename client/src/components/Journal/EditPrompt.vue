@@ -59,7 +59,7 @@ const savePrompt = async () => {
 };
 
 const deletePrompt = async () => {
-  if (confirm("Are you sure you want to delete this habit?")) {
+  if (confirm("Are you sure you want to delete this prompt?")) {
     const res = await fetch(`${API_URL}/prompts/${props.prompt.id}`, {
       method: "DELETE",
     });

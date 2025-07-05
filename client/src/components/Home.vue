@@ -2,8 +2,10 @@
   <div class="home-container" v-if="userId">
     <router-link to="/habits" class="home-btn">Habits</router-link>
     <router-link to="/JournalOverview" class="home-btn">Journal</router-link>
-    <router-link to="/stats" class="home-btn">Gratitude</router-link>
-    <router-link to="/" class="home-btn">Stress</router-link>
+    <router-link to="/GratitudeOverview" class="home-btn"
+      >Gratitude</router-link
+    >
+    <router-link to="/" class="home-btn">Emotions</router-link>
   </div>
 </template>
 

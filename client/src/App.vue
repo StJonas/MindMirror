@@ -24,6 +24,9 @@ const API_URL = "http://localhost:3000/";
 const userId = ref("");
 const username = ref("");
 const sessionToken = ref("");
+const gratitude_prompts = ref([]);
+const predefinedGratitudePrompts = ref([]);
+const gratitude_entries = ref([]);
 
 provide("userId", userId);
 provide("username", username);
@@ -32,6 +35,9 @@ provide("prompts", prompts);
 provide("entries", entries);
 provide("predefinedPrompts", predefinedPrompts);
 provide("API_URL", API_URL);
+provide("gratitude_prompts", gratitude_prompts);
+provide("predefinedGratitudePrompts", predefinedGratitudePrompts);
+provide("gratitude_entries", gratitude_entries);
 
 const route = useRoute();
 const hideNavigation = computed(
@@ -50,6 +56,9 @@ const fetchUserData = async () => {
       fetchPrompts();
       fetchEntries();
       fetchPredefinedPrompts();
+      fetchGratitudeEntries();
+      fetchGratitudePrompts();
+      fetchPredefinedGratitudePrompts();
     } else {
       console.error("Failed to fetch user data");
     }
@@ -87,6 +96,30 @@ const fetchEntries = async () => {
 const fetchPredefinedPrompts = async () => {
   const res = await fetch(`${API_URL}/prompts?predefined=true`);
   predefinedPrompts.value = await res.json();
+};
+
+const fetchGratitudePrompts = async () => {
+  if (userId.value) {
+    const url = `${API_URL}/users/${userId.value}/gratitude_prompts`;
+    const res = await fetch(url);
+    gratitude_prompts.value = await res.json();
+    gratitude_prompts.value.forEach((gratitude_prompt) => {
+      gratitude_prompt.content = "";
+    });
+  }
+};
+
+const fetchGratitudeEntries = async () => {
+  if (userId.value) {
+    const url = `${API_URL}/users/${userId.value}/gratitude_entries`;
+    const res = await fetch(url);
+    gratitude_entries.value = await res.json();
+  }
+};
+
+const fetchPredefinedGratitudePrompts = async () => {
+  const res = await fetch(`${API_URL}/gratitude_prompts?predefined=true`);
+  predefinedGratitudePrompts.value = await res.json();
 };
 
 const logout = () => {

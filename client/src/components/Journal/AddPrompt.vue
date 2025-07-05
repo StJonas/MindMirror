@@ -99,52 +99,6 @@ const createPrompt = async () => {
 </script>
 
 <style scoped>
-.toggle-switch {
-  margin: 20px 0;
-}
-.checkbox {
-  opacity: 0;
-  position: fixed;
-  width: 0;
-}
-.label {
-  background-color: #ccc;
-  border-radius: 20px;
-  cursor: pointer;
-  display: inline-block;
-  height: 24px;
-  position: relative;
-  width: 48px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-.label:after {
-  background-color: #fff;
-  border-radius: 20px;
-  content: "";
-  height: 20px;
-  left: 2px;
-  position: absolute;
-  top: 2px;
-  transition: 0.2s;
-  width: 20px;
-}
-.checkbox:checked + .label {
-  background-color: #66bb6a;
-}
-.checkbox:checked + .label:after {
-  transform: translateX(24px);
-}
-.toggle-container {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.text-label {
-  position: relative;
-  top: -3px;
-}
-
 @media (max-width: 600px) {
 }
 </style>
