@@ -1,11 +1,13 @@
 <template>
   <div class="home-container" v-if="userId">
-    <router-link to="/habits" class="home-btn">Habits</router-link>
+    <router-link to="/HabitOverview" class="home-btn">Habits</router-link>
     <router-link to="/JournalOverview" class="home-btn">Journal</router-link>
     <router-link to="/GratitudeOverview" class="home-btn"
       >Gratitude</router-link
     >
     <router-link to="/" class="home-btn">Emotions</router-link>
+    <router-link to="/" class="home-btn">De-Stress</router-link>
+    <router-link to="/" class="home-btn">Open Journal</router-link>
   </div>
 </template>
 
@@ -16,6 +18,7 @@ const userId = inject("userId");
 
 <style scoped>
 .home-container {
+  margin-top: 30px;
   display: grid;
   flex-direction: row;
   justify-content: center;

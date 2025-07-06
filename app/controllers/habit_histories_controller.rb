@@ -43,7 +43,23 @@ class HabitHistoriesController < ApplicationController
     user = User.find(params[:user_id])
     habit_histories = user.habit_histories
 
+    if params[:date]
+      date = Date.parse(params[:date])
+      habit_histories = habit_histories.where("DATE(date) = ?", date)
+    end
+
     render json: habit_histories
+  end
+
+  def by_date
+    habit = Habit.find(params[:habit_id])
+    if params[:date]
+      date = Date.parse(params[:date])
+      histories = habit.habit_histories.where("DATE(date) = ?", date)
+    else
+      histories = habit.habit_histories
+    end
+    render json: histories
   end
 
   # POST /habit_histories
@@ -57,6 +73,34 @@ class HabitHistoriesController < ApplicationController
     else
       render json: @habit_histories.map(&:errors), status: :unprocessable_entity
     end
+  end
+
+  def log_by_user
+    user = User.find(params[:user_id])
+    # Optionally filter by date range if params[:start_date] and params[:end_date] are provided
+    histories = user.habit_histories
+
+    if params[:start_date] && params[:end_date]
+      start_date = Date.parse(params[:start_date])
+      end_date = Date.parse(params[:end_date])
+      histories = histories.where(date: start_date.beginning_of_day..end_date.end_of_day)
+    end
+
+    # Group by date and map to desired structure
+    grouped = histories
+      .includes(:habit)
+      .group_by { |h| h.date.to_date }
+      .sort_by { |date, _| date }
+      .reverse # most recent first
+
+    result = grouped.map do |date, habits|
+      {
+        date: date.to_s,
+        habits: habits.map { |h| { name: h.habit.name, completed: h.completed } }
+      }
+    end
+
+    render json: result
   end
 
   # PATCH/PUT /habit_histories/1

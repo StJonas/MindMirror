@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_07_02_143543) do
+ActiveRecord::Schema[7.1].define(version: 2025_07_06_153733) do
   create_table "gratitude_entries", force: :cascade do |t|
     t.text "content"
     t.date "entry_date"
@@ -60,6 +60,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_07_02_143543) do
     t.datetime "updated_at", null: false
     t.boolean "is_timed"
     t.decimal "duration", precision: 5, scale: 2, default: "0.0"
+    t.string "description"
   end
 
   create_table "journal_entries", force: :cascade do |t|

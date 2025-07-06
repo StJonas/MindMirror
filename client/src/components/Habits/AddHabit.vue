@@ -1,12 +1,19 @@
 <template>
   <div class="form-container">
     <div class="header-row">
-      <button @click="goBack">&lt;</button>
+      <router-link to="/HabitOverview">
+        <button type="button">&lt;</button>
+      </router-link>
       <h2>Add Habit</h2>
     </div>
 
     <!-- Create or Habit -->
-    <input type="text" v-model="name" placeholder="Name" class="name-input" />
+    <input
+      type="text"
+      v-model="name"
+      placeholder="Name"
+      class="general-input"
+    />
 
     <div class="toggle-container">
       <span class="text-label">Timed Habit</span>
@@ -26,7 +33,7 @@
       type="number"
       v-model="frequency"
       placeholder="Frequency"
-      class="body-input"
+      class="general-input"
       v-if="!is_timed"
     />
     <!-- <select v-model="category" class="name-input">
@@ -53,7 +60,6 @@ const frequency = ref("");
 const isEditing = ref(false);
 const is_timed = ref(false);
 const userId = ref("");
-const emit = defineEmits(["navigateBackToHabit"]);
 const API_URL = inject("API_URL");
 
 onMounted(async () => {
@@ -83,95 +89,6 @@ const createHabit = async () => {
   is_timed.value = false;
   router.push("/");
 };
-
-const goBack = () => {
-  emit("navigateBackToHabit");
-};
 </script>
 
-<style scoped>
-.header-row {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-.form-container {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-left: 20px;
-}
-.name-input {
-  width: 300px;
-  padding: 12px 20px;
-  margin: 8px 0;
-  box-sizing: border-box;
-  border: 2px solid #ccc;
-  background-color: #f8f8f8;
-  color: #111;
-  border-radius: 4px;
-  resize: vertical;
-}
-
-.body-input {
-  width: 300px;
-  padding: 12px 20px;
-  margin: 8px 0;
-  box-sizing: border-box;
-  border: 2px solid #ccc;
-  background-color: #f8f8f8;
-  color: #111;
-  border-radius: 4px;
-  resize: vertical;
-}
-
-.toggle-switch {
-  margin: 20px 0;
-}
-.checkbox {
-  opacity: 0;
-  position: fixed;
-  width: 0;
-}
-.label {
-  background-color: #ccc;
-  border-radius: 20px;
-  cursor: pointer;
-  display: inline-block;
-  height: 24px;
-  position: relative;
-  width: 48px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-.label:after {
-  background-color: #fff;
-  border-radius: 20px;
-  content: "";
-  height: 20px;
-  left: 2px;
-  position: absolute;
-  top: 2px;
-  transition: 0.2s;
-  width: 20px;
-}
-.checkbox:checked + .label {
-  background-color: #66bb6a;
-}
-.checkbox:checked + .label:after {
-  transform: translateX(24px);
-}
-.toggle-container {
-  display: flex;
-  align-items: center;
-  gap: 10px; /* gap between elements */
-}
-.text-label {
-  position: relative;
-  top: -3px; /* move label higher or lower */
-}
-.save-button {
-  margin-top: 10px;
-  margin-left: 0px;
-}
-</style>
+<style scoped></style>

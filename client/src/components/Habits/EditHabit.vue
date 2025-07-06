@@ -1,22 +1,10 @@
 <template>
   <div class="form-container">
     <div class="header-row">
-      <button @click="goBack">&lt;</button>
+      <router-link to="/HabitOverview">
+        <button type="button">&lt;</button>
+      </router-link>
       <h2>Edit Habit: {{ oldName }}</h2>
-    </div>
-
-    <input type="text" v-model="name" placeholder="name" class="name-input" />
-    <input
-      type="number"
-      v-model="frequency"
-      placeholder="frequency"
-      class="body-input"
-    />
-
-    <button @click="updateHabit(habit_id)" class="save-button">
-      <img src="/save.svg" alt="Save" class="white-icon" />
-    </button>
-    <div class="button-wrapper">
       <button @click="deleteHabit(habit_id)" class="delete-button">
         <img
           src="/delete.svg"
@@ -26,6 +14,23 @@
         />
       </button>
     </div>
+
+    <input
+      type="text"
+      v-model="name"
+      placeholder="name"
+      class="general-input"
+    />
+    <input
+      rows="4"
+      v-model="description"
+      placeholder="description"
+      class="general-input"
+    />
+
+    <button @click="updateHabit(habit_id)" class="save-button">
+      <img src="/save.svg" alt="Save" class="white-icon" />
+    </button>
   </div>
 </template>
 
@@ -38,15 +43,13 @@ const habits = ref([]);
 const name = ref("");
 const oldName = ref("");
 const frequency = ref("");
+const description = ref("");
 const habit_id = ref(0);
 const isEditing = ref(false);
 const API_URL = inject("API_URL");
-const emit = defineEmits(["navigateBackToHabit"]);
-
-const route = useRoute();
 
 const props = defineProps({
-  habitId: Number,
+  habitId: String,
 });
 
 onMounted(async () => {
@@ -58,6 +61,7 @@ onMounted(async () => {
       frequency.value = fetchedHabit.frequency;
       habit_id.value = fetchedHabit.id;
       oldName.value = fetchedHabit.name;
+      description.value = fetchedHabit.description;
     }
   }
 });
@@ -70,8 +74,9 @@ const updateHabit = async () => {
     },
     body: JSON.stringify({
       name: name.value,
-      frequency: frequency.value,
+      frequency: 0,
       id: habit_id.value,
+      description: description.value,
     }),
   });
 
@@ -80,12 +85,9 @@ const updateHabit = async () => {
   const index = habits.value.findIndex((habit) => habit.id === data.id);
   habits.value[index] = data;
 
-  name.value = "";
-  frequency.value = "";
-  habit_id.value = 0;
-  isEditing.value = false;
-
-  router.push("/");
+  router.push("/HabitOverview").then(() => {
+    window.location.reload();
+  });
 };
 
 const deleteHabit = async (id) => {
@@ -102,60 +104,8 @@ const deleteHabit = async (id) => {
 
     habits.value = habits.value.filter((habit) => habit.id !== id);
   }
-  router.push("/");
-};
-
-const goBack = () => {
-  emit("navigateBackToHabit");
+  router.push("/HabitOverview");
 };
 </script>
 
-<style scoped>
-.form-container {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-left: 30px;
-}
-
-.header-row {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-
-.name-input {
-  width: 300px;
-  padding: 12px 20px;
-  margin: 8px 0;
-  box-sizing: border-box;
-  border: 2px solid #ccc;
-  background-color: #f8f8f8;
-  color: #111;
-  border-radius: 4px;
-  resize: vertical;
-}
-
-.body-input {
-  width: 300px;
-  padding: 12px 20px;
-  margin: 8px 0;
-  box-sizing: border-box;
-  border: 2px solid #ccc;
-  background-color: #f8f8f8;
-  color: #111;
-  border-radius: 4px;
-  resize: vertical;
-}
-
-.button-wrapper {
-  margin-top: -225px;
-  margin-left: 400px;
-  margin-bottom: 50px;
-}
-
-.save-button {
-  margin-top: 10px;
-  margin-left: -1px;
-}
-</style>
+<style scoped></style>

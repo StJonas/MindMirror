@@ -40,9 +40,6 @@ provide("predefinedGratitudePrompts", predefinedGratitudePrompts);
 provide("gratitude_entries", gratitude_entries);
 
 const route = useRoute();
-const hideNavigation = computed(
-  () => route.path === "/login" || route.path === "/signup"
-);
 
 const fetchUserData = async () => {
   try {

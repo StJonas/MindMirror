@@ -2,7 +2,7 @@
   <div class="">
     <div class="content">
       <div v-if="currentPage === 'habits'">
-        <HabitsOverview
+        <HabitOverview
           @navigateToAddHabit="navigateToAddHabit"
           @navigateToStatistics="navigateToStatistics"
           @navigateToEditHabit="navigateToEditHabit"
@@ -37,7 +37,7 @@
 </template>
 
 <script setup>
-import HabitsOverview from "./Habits/HabitsOverview.vue";
+import HabitOverview from "./Habits/HabitOverview.vue";
 import JournalOverview from "./Journal/JournalOverview.vue";
 import JournalLog from "./Journal/JournalLog.vue";
 import AddPrompt from "./Journal/AddPrompt.vue";

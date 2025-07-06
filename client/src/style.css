@@ -41,7 +41,7 @@ h1 {
 
 #app {
   max-width: 1280px;
-  margin: 1 auto;
+  margin: 0 auto;
   padding: 2rem;
   text-align: left;
 }
@@ -66,6 +66,12 @@ own styles
 
 .page-styling{
   margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: 40px;
+  min-height: 100vh;
 }
 
 button {
@@ -123,6 +129,12 @@ button:focus-visible {
   margin-top: 0px;
 }
 .save-button:hover {
+  background-color: #37943c;
+}
+.checked-button {
+  background-color: green;
+}
+.check-button:hover {
   background-color: #37943c;
 }
 .log-button {
@@ -188,21 +200,26 @@ button:focus-visible {
 
 .header {
   display: flex;
-  align-items: center;
-  margin-left: 36px;
+  align-items: left;
+  margin-left: -200px;
 }
 .header-row {
   display: flex;
-  align-items: center;
-  gap: 20px;
+    align-items: center;
+    gap: 20px;
+    font-size: 1.2rem;
 }
 .section-box {
   margin: 24px auto;
   padding: 24px 16px;
-  max-width: 600px;
+  max-width: 800px;
+  width: 90%;
   background: #f8f8f8;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .section-title {
   font-size: 1.5rem;
@@ -234,11 +251,11 @@ button:focus-visible {
     align-items: center;
     gap: 20px;
     font-size: 0.8rem;
-    margin-top: 30px;
+    
   }
   .section-box {
     padding: 16px 4vw;
-    max-width: 98vw;
+    width: 75vw;
   }
   .section-title {
     font-size: 1.1rem;

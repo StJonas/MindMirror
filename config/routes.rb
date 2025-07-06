@@ -11,6 +11,7 @@ Rails.application.routes.draw do
     get 'journal_entries', to: 'journal_entries#user_journal_entries'
     resources :habits do
       get 'habit_histories/week', to: 'habit_histories#week'
+      get 'habit_histories/date', to: 'habit_histories#by_date'
     end
     get 'habit_histories', to: 'habit_histories#user_histories'
   end
@@ -26,6 +27,12 @@ Rails.application.routes.draw do
   end
   resources :users do
     get 'gratitude_prompts', to: 'gratitude_prompts#user_gratitude_prompts'
+  end
+  resources :habits do
+    get 'habit_histories/date', to: 'habit_histories#by_date'     # <-- add this line if you want /habits/:habit_id/habit_histories/date
+  end
+  resources :users do
+    get 'habit_log', to: 'habit_histories#log_by_user'
   end
 
   get "up" => "rails/health#show", as: :rails_health_check

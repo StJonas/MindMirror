@@ -9,9 +9,9 @@ const router = createRouter({
       component: () => import("../components/Home.vue"),
     },
     {
-      path: "/habits",
-      name: "HabitsOverview",
-      component: () => import("../components/Habits/HabitsOverview.vue"),
+      path: "/HabitOverview",
+      name: "HabitOverview",
+      component: () => import("../components/Habits/HabitOverview.vue"),
     },
     {
       path: "/JournalOverview",
@@ -24,9 +24,15 @@ const router = createRouter({
       component: () => import("../components/Habits/AddHabit.vue"),
     },
     {
-      path: "/edit/:habitId",
+      path: "/editHabit/:habitId",
       name: "EditHabit",
       component: () => import("../components/Habits/EditHabit.vue"),
+      props: true,
+    },
+    {
+      path: "/HabitLog",
+      name: "HabitLog",
+      component: () => import("../components/Habits/HabitLog.vue"),
       props: true,
     },
     {
