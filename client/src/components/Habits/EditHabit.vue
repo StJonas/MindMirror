@@ -1,5 +1,5 @@
 <template>
-  <div class="form-container">
+  <div class="page-styling">
     <div class="header-row">
       <router-link to="/HabitOverview">
         <button type="button">&lt;</button>
@@ -14,23 +14,24 @@
         />
       </button>
     </div>
+    <div class="section-box"> 
+      <input
+        type="text"
+        v-model="name"
+        placeholder="name"
+        class="general-input"
+      />
+      <input
+        rows="4"
+        v-model="description"
+        placeholder="description"
+        class="general-input"
+      />
 
-    <input
-      type="text"
-      v-model="name"
-      placeholder="name"
-      class="general-input"
-    />
-    <input
-      rows="4"
-      v-model="description"
-      placeholder="description"
-      class="general-input"
-    />
-
-    <button @click="updateHabit(habit_id)" class="save-button">
-      <img src="/save.svg" alt="Save" class="white-icon" />
-    </button>
+      <button @click="updateHabit(habit_id)" class="save-button">
+        <img src="/save.svg" alt="Save" class="white-icon" />
+      </button>
+    </div>
   </div>
 </template>
 

@@ -1,13 +1,15 @@
 <template>
-  <div class="home-container" v-if="userId">
-    <router-link to="/HabitOverview" class="home-btn">Habits</router-link>
-    <router-link to="/JournalOverview" class="home-btn">Journal</router-link>
-    <router-link to="/GratitudeOverview" class="home-btn"
-      >Gratitude</router-link
-    >
-    <router-link to="/" class="home-btn">Emotions</router-link>
-    <router-link to="/" class="home-btn">De-Stress</router-link>
-    <router-link to="/" class="home-btn">Open Journal</router-link>
+  <div class="page-styling">
+    <div class="home-container" v-if="userId">
+      <router-link to="/HabitOverview" class="home-btn">Habits</router-link>
+      <router-link to="/JournalOverview" class="home-btn">Journal</router-link>
+      <router-link to="/GratitudeOverview" class="home-btn"
+        >Gratitude</router-link
+      >
+      <router-link to="/" class="home-btn">Emotions</router-link>
+      <router-link to="/" class="home-btn">De-Stress</router-link>
+      <router-link to="/" class="home-btn">Open Journal</router-link>
+    </div>
   </div>
 </template>
 
@@ -18,13 +20,14 @@ const userId = inject("userId");
 
 <style scoped>
 .home-container {
-  margin-top: 30px;
   display: grid;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  height: 80vh;
-  gap: 32px;
+    gap: 30px;
+    justify-items: center;
+    align-items: center;
+    align-content: center;
+    padding: 10px;
+    width: 70vw;
+    margin: 0 auto;
 }
 
 .home-btn {

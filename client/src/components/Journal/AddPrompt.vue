@@ -1,5 +1,5 @@
 <template>
-  <div class="form-container">
+  <div class="page-styling">
     <div class="header-row">
       <router-link to="/JournalOverview">
         <button type="button">&lt;</button>

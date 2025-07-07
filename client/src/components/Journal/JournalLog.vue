@@ -7,13 +7,14 @@
 
       <h2>Journal Log</h2>
     </div>
-
-    <div v-for="entry in entries" :key="entry.id" class="general-input">
-      <h2>{{ entry.entry_date }}</h2>
-      <h3>{{ entry.prompt_title }}</h3>
-      <p>
-        <em>{{ entry.content }}</em>
-      </p>
+    <div class="section-box">
+      <div v-for="entry in entries" :key="entry.id" class="general-input">
+        <h3 class="section-title">{{ entry.entry_date }}</h3>
+        <h2>{{ entry.prompt_title }}</h2>
+        <p>
+          <em>{{ entry.content }}</em>
+        </p>
+      </div>
     </div>
   </div>
 </template>

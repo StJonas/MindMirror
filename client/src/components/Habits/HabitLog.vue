@@ -6,7 +6,7 @@
       </router-link>
       <h2>Habit Log</h2>
     </div>
-    <div class="section-box" style="margin-bottom: 24px">
+    <div class="section-box">
       <div class="header-row">
         <h3 class="section-title">Total habits checked: {{ sumHabits }}</h3>
       </div>
@@ -57,5 +57,6 @@ const sumHabits = computed(() =>
 <style scoped>
 .general-input {
   background-color: green;
+  color: white;
 }
 </style>

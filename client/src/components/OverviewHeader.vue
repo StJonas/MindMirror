@@ -86,12 +86,10 @@ const logout = () => {
 }
 
 .circle-btn {
-  display: flex;
-  align-items: center;
   background: none;
   border: none;
+  margin-left: 20rem;
   cursor: pointer;
-  margin-left: 60px;
 }
 
 .circle-icon {
@@ -114,9 +112,13 @@ const logout = () => {
 }
 
 @media (max-width: 700px) {
+  .circle-btn {
+    margin-left: 4rem;
+  }
   .circle-icon {
     width: 2rem;
     height: 2rem;
+    
   }
   .home-text {
     font-size: 2rem;

@@ -1,53 +1,54 @@
 <template>
-  <div class="form-container">
+  <div class="page-styling">
     <div class="header-row">
       <router-link to="/HabitOverview">
         <button type="button">&lt;</button>
       </router-link>
       <h2>Add Habit</h2>
     </div>
+    <div class="section-box">
+      <!-- Create or Habit -->
+      <input
+        type="text"
+        v-model="name"
+        placeholder="Name"
+        class="general-input"
+      />
 
-    <!-- Create or Habit -->
-    <input
-      type="text"
-      v-model="name"
-      placeholder="Name"
-      class="general-input"
-    />
-
-    <div class="toggle-container">
-      <span class="text-label">Timed Habit</span>
-      <!-- Textual label -->
-      <div class="switch" @mousedown.prevent="">
-        <input
-          type="checkbox"
-          id="isTimed"
-          v-model="is_timed"
-          class="checkbox"
+      <div class="toggle-container">
+        <span class="text-label">Timed Habit</span>
+        <!-- Textual label -->
+        <div class="switch" @mousedown.prevent="">
+          <input
+            type="checkbox"
+            id="isTimed"
+            v-model="is_timed"
+            class="checkbox"
         />
         <label for="isTimed" class="label"></label>
         <!-- Switch UI -->
       </div>
+      </div>
+      <input
+        type="number"
+        v-model="frequency"
+        placeholder="Frequency"
+        class="general-input"
+        v-if="!is_timed"
+      />
+      <!-- <select v-model="category" class="name-input">
+        <option value="1">relationships</option>
+        <option value="7">work</option>
+        <option value="0">hobbies</option>
+      </select> -->
+
+      <button v-if="isEditing" @click="updateHabit">Update</button>
+      <button v-if="isEditing" @click="cancelEdit">Cancel</button>
+
+      <button @click="createHabit" class="save-button">
+        <img src="/save.svg" alt="Save" class="white-icon" />
+      </button>
     </div>
-    <input
-      type="number"
-      v-model="frequency"
-      placeholder="Frequency"
-      class="general-input"
-      v-if="!is_timed"
-    />
-    <!-- <select v-model="category" class="name-input">
-      <option value="1">relationships</option>
-      <option value="7">work</option>
-      <option value="0">hobbies</option>
-    </select> -->
-
-    <button v-if="isEditing" @click="updateHabit">Update</button>
-    <button v-if="isEditing" @click="cancelEdit">Cancel</button>
-
-    <button @click="createHabit" class="save-button">
-      <img src="/save.svg" alt="Save" class="white-icon" />
-    </button>
   </div>
 </template>
 
