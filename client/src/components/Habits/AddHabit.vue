@@ -30,9 +30,9 @@
       </div>
       </div>
       <input
-        type="number"
-        v-model="frequency"
-        placeholder="Frequency"
+        type="text"
+        v-model="description"
+        placeholder="Description"
         class="general-input"
         v-if="!is_timed"
       />
@@ -58,6 +58,7 @@ import router from "../../router";
 
 const name = ref("");
 const frequency = ref("");
+const description = ref("");
 const isEditing = ref(false);
 const is_timed = ref(false);
 const userId = ref("");
@@ -79,16 +80,19 @@ const createHabit = async () => {
     },
     body: JSON.stringify({
       name: name.value,
-      frequency: frequency.value,
+      frequency: 0,
       user_id: userId.value,
       is_timed: is_timed.value,
+      description: description.value
     }),
   });
 
   name.value = "";
   frequency.value = "";
   is_timed.value = false;
-  router.push("/");
+  router.push("/HabitOverview").then(() => {
+    window.location.reload();
+  });
 };
 </script>
 

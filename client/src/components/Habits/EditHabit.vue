@@ -105,7 +105,9 @@ const deleteHabit = async (id) => {
 
     habits.value = habits.value.filter((habit) => habit.id !== id);
   }
-  router.push("/HabitOverview");
+  router.push("/HabitOverview").then(() => {
+    window.location.reload();
+  });
 };
 </script>
 

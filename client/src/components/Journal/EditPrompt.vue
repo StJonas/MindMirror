@@ -50,8 +50,7 @@ const savePrompt = async () => {
   });
 
   if (res.ok) {
-    console.log("Prompt updated successfully");
-    location.reload();
+    window.location.reload();
   } else {
     const errorData = await res.json();
     console.error("Error updating prompt:", errorData);
@@ -65,8 +64,7 @@ const deletePrompt = async () => {
     });
 
     if (res.ok) {
-      console.log("Prompt deleted successfully");
-      location.reload();
+      window.location.reload();
     } else {
       const errorData = await res.json();
       console.error("Error deleting prompt:", errorData);

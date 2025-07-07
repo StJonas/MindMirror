@@ -89,8 +89,9 @@ const createPrompt = async () => {
 
   if (res.ok) {
     prompt.value = "";
-    //location.reload();
-    emit("navigateBackToJournal");
+    router.push("/JournalOverview").then(() => {
+      window.location.reload();
+    });
   } else {
     const errorData = await res.json();
     console.error("Error creating prompt:", errorData);
