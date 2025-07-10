@@ -10,12 +10,38 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_07_06_153733) do
+ActiveRecord::Schema[7.1].define(version: 2025_07_10_100321) do
+  create_table "emotion_log_entries", force: :cascade do |t|
+    t.integer "emotion_log_id", null: false
+    t.integer "emotion_id", null: false
+    t.text "note"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["emotion_id"], name: "index_emotion_log_entries_on_emotion_id"
+    t.index ["emotion_log_id"], name: "index_emotion_log_entries_on_emotion_log_id"
+  end
+
+  create_table "emotion_logs", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.date "date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_emotion_logs_on_user_id"
+  end
+
+  create_table "emotions", force: :cascade do |t|
+    t.string "name"
+    t.string "color"
+    t.string "icon"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "gratitude_entries", force: :cascade do |t|
     t.text "content"
     t.date "entry_date"
     t.integer "user_id", null: false
-    t.integer "gratitude_prompt_id", null: false
+    t.integer "gratitude_prompt_id"
     t.string "prompt_title"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -108,6 +134,9 @@ ActiveRecord::Schema[7.1].define(version: 2025_07_06_153733) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "emotion_log_entries", "emotion_logs"
+  add_foreign_key "emotion_log_entries", "emotions"
+  add_foreign_key "emotion_logs", "users"
   add_foreign_key "gratitude_entries", "gratitude_prompts"
   add_foreign_key "gratitude_entries", "users"
   add_foreign_key "gratitude_entry_tags", "gratitude_entries"

@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  resources :emotion_log_entries
+  resources :emotion_logs
+  resources :emotions
   resources :gratitude_entries
   resources :tags
   resources :gratitude_prompts

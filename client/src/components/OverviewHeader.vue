@@ -36,7 +36,7 @@
       </router-link>
     </div>
     <div v-if="userId" class="auth-logout">
-      <button @click="logout">
+      <button @click="logout" style="background: #ff4c4c">
         <img
           src="/logout.svg"
           alt="Logout"
@@ -118,7 +118,6 @@ const logout = () => {
   .circle-icon {
     width: 2rem;
     height: 2rem;
-    
   }
   .home-text {
     font-size: 2rem;

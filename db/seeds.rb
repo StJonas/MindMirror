@@ -16,3 +16,12 @@ predefined_prompts.each do |prompt|
 end
 
 puts "Predefined prompts added."
+
+Emotion.create([
+  { name: 'happy', color: '#FFD700', icon: 'fa-solid fa-face-smile' },
+  { name: 'sad', color: '#1E90FF', icon: 'fa-solid fa-face-frown' },
+  { name: 'tired', color: '#A9A9A9', icon: 'fa-solid fa-bed' },
+  { name: 'calm', color: '#00CED1', icon: 'fa-solid fa-leaf' }
+])
+
+puts "Emotions added."

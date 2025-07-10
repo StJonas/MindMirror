@@ -21,17 +21,17 @@ const userId = inject("userId");
 <style scoped>
 .home-container {
   display: grid;
-    gap: 30px;
-    justify-items: center;
-    align-items: center;
-    align-content: center;
-    padding: 10px;
-    width: 70vw;
-    margin: 0 auto;
+  gap: 30px;
+  justify-items: center;
+  align-items: center;
+  align-content: center;
+  padding: 10px;
+  width: 70vw;
+  margin: 0 auto;
 }
 
 .home-btn {
-  background: #77dd77;
+  background: #fe712d;
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -44,7 +44,7 @@ const userId = inject("userId");
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 .home-btn:hover {
-  background: #45a049;
+  background: #fe8042;
 }
 @media (max-width: 600px) {
   .home-container {
