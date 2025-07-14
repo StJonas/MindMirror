@@ -37,6 +37,9 @@ Rails.application.routes.draw do
   resources :users do
     get 'habit_log', to: 'habit_histories#log_by_user'
   end
+  resources :users do
+    resources :emotion_log_entries, only: [:index]
+  end
 
   get "up" => "rails/health#show", as: :rails_health_check
 

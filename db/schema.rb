@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_07_10_100321) do
+ActiveRecord::Schema[7.1].define(version: 2025_07_14_090958) do
   create_table "emotion_log_entries", force: :cascade do |t|
     t.integer "emotion_log_id", null: false
     t.integer "emotion_id", null: false
@@ -35,6 +35,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_07_10_100321) do
     t.string "icon"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "category"
   end
 
   create_table "gratitude_entries", force: :cascade do |t|

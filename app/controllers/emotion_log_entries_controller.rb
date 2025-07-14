@@ -3,7 +3,11 @@ class EmotionLogEntriesController < ApplicationController
 
   # GET /emotion_log_entries
   def index
-    @emotion_log_entries = EmotionLogEntry.all
+    if params[:user_id]
+      @emotion_log_entries = EmotionLogEntry.joins(:emotion_log).where(emotion_logs: { user_id: params[:user_id] })
+    else
+      @emotion_log_entries = EmotionLogEntry.all
+    end
 
     render json: @emotion_log_entries
   end
@@ -15,7 +19,14 @@ class EmotionLogEntriesController < ApplicationController
 
   # POST /emotion_log_entries
   def create
-    @emotion_log_entry = EmotionLogEntry.new(emotion_log_entry_params)
+    # Find or create the log for this user and date
+    log = EmotionLog.find_or_create_by(user_id: params[:emotion_log_entry][:user_id], date: params[:emotion_log_entry][:date])
+
+    # Build the entry associated with the log
+    @emotion_log_entry = log.emotion_log_entries.build(
+      emotion_id: params[:emotion_log_entry][:emotion_id],
+      note: params[:emotion_log_entry][:note]
+    )
 
     if @emotion_log_entry.save
       render json: @emotion_log_entry, status: :created, location: @emotion_log_entry
@@ -46,6 +57,6 @@ class EmotionLogEntriesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def emotion_log_entry_params
-      params.require(:emotion_log_entry).permit(:emotion_log_id, :emotion_id, :note)
+      params.require(:emotion_log_entry).permit(:user_id, :date, :emotion_id, :note)
     end
 end

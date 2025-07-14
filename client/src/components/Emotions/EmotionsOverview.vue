@@ -4,27 +4,7 @@
       <h2 v-if="userId">{{ currentDate }}</h2>
       <router-link
         v-if="userId"
-        to="/addPrompt"
-        :class="{ 'disabled-button': isEditMode }"
-        :tabindex="isEditMode ? -1 : 0"
-        aria-disabled="isEditMode"
-        style="pointer-events: auto"
-      >
-        <button type="button" :disabled="isEditMode">
-          <img
-            src="/add.svg"
-            alt="Add"
-            class="icon"
-            style="width: 24px; height: 24px"
-          />
-        </button>
-      </router-link>
-      <router-link
-        v-if="userId"
-        to="/journalLog"
-        :class="{ 'disabled-button': isEditMode }"
-        :tabindex="isEditMode ? -1 : 0"
-        aria-disabled="isEditMode"
+        to="/EmotionsLog"
         style="pointer-events: auto"
       >
         <button type="button" :disabled="isEditMode">
@@ -36,73 +16,75 @@
           />
         </button>
       </router-link>
-      <button
-        v-if="userId"
-        type="button"
-        @click="toggleEditMode"
-        :class="['edit-button', { 'enabled-button': isEditMode }]"
-      >
-        <img
-          src="/edit.svg"
-          alt="Edit"
-          class="icon"
-          style="width: 24px; height: 24px"
+    </div>
+
+    <div v-if="userId" class="section-box">
+      <h2 class="section-title">Select an emotion</h2>
+      <div>
+        <span class="section-title">
+          Pleasant
+          <button @click="togglePleasant" class="toggle-btn">
+            {{ showPleasant ? '−' : '+' }}
+          </button>
+        </span>
+        <div v-if="showPleasant" class="emotions-row">
+          <button
+            v-for="emotion in pleasantEmotions"
+            :key="emotion.id"
+            class="emotion-btn"
+            :class="{ active: selectedEmotion === emotion.id }"
+            :style="{ backgroundColor: emotion.color }"
+            @click="selectEmotion(emotion)"
+          >
+            <i :class="emotion.icon" style=""></i>
+            {{ emotion.name }}
+          </button>
+        </div>
+      </div>
+      <div>
+        <span class="section-title">
+          Unpleasant
+          <button @click="toggleUnpleasant" class="toggle-btn">
+            {{ showUnpleasant ? '−' : '+' }}
+          </button>
+        </span>
+        <div v-if="showUnpleasant" class="emotions-row">
+          <button
+            v-for="emotion in unpleasantEmotions"
+            :key="emotion.id"
+            class="emotion-btn"
+            :class="{ active: selectedEmotion === emotion.id }"
+            :style="{ backgroundColor: emotion.color }"
+            @click="selectEmotion(emotion)"
+          >
+            <i :class="emotion.icon" style=""></i>
+            {{ emotion.name }}
+          </button>
+        </div>
+      </div>
+      <textarea type="text" 
+        v-model="emotionNote"
+        name="site_notes" 
+        rows="5" 
+        class="general-input" 
+        placeholder="Write your thoughts here..."
         />
+      <button @click="saveEmotionEntry" class="save-button">
+        Save
       </button>
     </div>
-    <div class="section-box" v-if="userId">
-      <h2 class="section-title">Weekly Questions</h2>
-
-      <template v-if="!isEditMode">
-        <JournalInput
-          v-for="prompt in prompts.filter((p) => p.weekly)"
-          :key="prompt.id"
-          :prompt="prompt"
-          class="general-input"
-        />
-      </template>
-
-      <template v-else>
-        <EditPrompt
-          v-for="prompt in prompts.filter((p) => p.weekly)"
-          :key="prompt.id"
-          :prompt="prompt"
-          class="general-input"
-        />
-      </template>
+    
     </div>
-    <div class="section-box" v-if="userId">
-      <h2 class="section-title">Daily Questions</h2>
-
-      <template v-if="!isEditMode">
-        <JournalInput
-          v-for="prompt in prompts.filter((p) => !p.weekly)"
-          :key="prompt.id"
-          :prompt="prompt"
-          class="general-input"
-        />
-      </template>
-
-      <template v-else>
-        <EditPrompt
-          v-for="prompt in prompts.filter((p) => !p.weekly)"
-          :key="prompt.id"
-          :prompt="prompt"
-          class="general-input"
-        />
-      </template>
-    </div>
-  </div>
 </template>
 
 <script setup>
-import { inject, watchEffect, ref } from "vue";
-import JournalInput from "./JournalInput.vue";
-import EditPrompt from "./EditPrompt.vue";
+import { inject, ref, computed } from "vue";
 
 const userId = inject("userId");
-const prompts = inject("prompts");
-const entries = inject("entries");
+const API_URL = inject("API_URL");
+const emotions = inject("emotions");
+const showPleasant = ref(true);
+const showUnpleasant = ref(true);
 const isEditMode = ref(false);
 const emit = defineEmits(["navigateToJournalLog", "navigateToAddPrompt"]);
 const currentDate = new Date().toLocaleDateString("de-DE", {
@@ -111,44 +93,92 @@ const currentDate = new Date().toLocaleDateString("de-DE", {
   year: "numeric",
 });
 
-const matchEntriesWithPrompts = () => {
-  const today = new Date();
-  const startOfWeek = new Date(today);
-  startOfWeek.setDate(today.getDate() - today.getDay() + 1); // Monday
-  const endOfWeek = new Date(startOfWeek);
-  endOfWeek.setDate(startOfWeek.getDate() + 6); // Sunday
+const selectedEmotion = ref(null); 
+const emotionNote = ref("");
 
-  prompts.value.forEach((prompt) => {
-    const entry = entries.value.find((entry) => {
-      const entryDate = new Date(entry.entry_date);
-      if (prompt.id === entry.prompt_id) {
-        if (prompt.weekly) {
-          return entryDate >= startOfWeek && entryDate <= endOfWeek;
-        } else {
-          return entryDate.toDateString() === today.toDateString();
-        }
-      }
-      return false;
-    });
+const pleasantEmotions = computed(() =>
+  emotions.value.filter(e => e.category === 'pleasant')
+);
+const unpleasantEmotions = computed(() =>
+  emotions.value.filter(e => e.category === 'unpleasant')
+);
 
-    if (entry) {
-      prompt.content = entry.content;
-    }
-  });
-};
+function selectEmotion(emotion) {
+  selectedEmotion.value = emotion.id;
+}
 
-const toggleEditMode = () => {
-  isEditMode.value = !isEditMode.value;
-};
+function togglePleasant() {
+  showPleasant.value = !showPleasant.value;
+}
+function toggleUnpleasant() {
+  showUnpleasant.value = !showUnpleasant.value;
+}
 
-watchEffect(async () => {
-  if (entries.value) {
-    matchEntriesWithPrompts();
+async function saveEmotionEntry() {
+  if (!selectedEmotion.value) {
+    alert("Please select an emotion.");
+    return;
   }
-});
+
+  const res = await fetch(`${API_URL}/emotion_log_entries`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      emotion_log_entry: {
+        user_id: userId.value,
+        date: new Date().toISOString().split("T")[0],
+        emotion_id: selectedEmotion.value,
+        note: emotionNote.value
+      }
+    }),
+  });
+
+  if (res.ok) {
+    alert("Emotion entry saved!");
+    selectedEmotion.value = null;
+    emotionNote.value = ""; 
+    window.location.reload();
+  } else {
+    const errorData = await res.json();
+    alert("Error saving entry: " + (errorData.error || "Unknown error"));
+  }
+}
 </script>
 
 <style scoped>
+.emotions-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+.emotion-btn {
+  color: #fff;
+  width: 80px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: filter 0.2s;
+  text-align: center;
+}
+.emotion-btn:hover {
+  filter: brightness(1.1);
+}
+.emotion-btn.active {
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 3px #fe712d;
+}
+.save-button {
+  margin: 0;
+}
+
 @media (max-width: 600px) {
 }
 </style>

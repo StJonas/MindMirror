@@ -70,6 +70,21 @@ const router = createRouter({
       name: "GratitudeLog",
       component: () => import("../components/Gratitude/GratitudeLog.vue"),
     },
+    {
+      path: "/FreetextOverview",
+      name: "FreetextOverview",
+      component: () => import("../components/Freetext/FreetextOverview.vue"),
+    },
+    {
+      path: "/EmotionsOverview",
+      name: "EmotionsOverview",
+      component: () => import("../components/Emotions/EmotionsOverview.vue"),
+    },
+    {
+      path: "/EmotionsLog",
+      name: "EmotionsLog",
+      component: () => import("../components/Emotions/EmotionsLog.vue"),
+    },
   ],
 });
 

@@ -17,11 +17,27 @@ end
 
 puts "Predefined prompts added."
 
+EmotionLogEntry.destroy_all
+puts "Existing emotion log entries cleared."
+Emotion.destroy_all
+puts "Existing emotions cleared."
+
 Emotion.create([
-  { name: 'happy', color: '#FFD700', icon: 'fa-solid fa-face-smile' },
-  { name: 'sad', color: '#1E90FF', icon: 'fa-solid fa-face-frown' },
-  { name: 'tired', color: '#A9A9A9', icon: 'fa-solid fa-bed' },
-  { name: 'calm', color: '#00CED1', icon: 'fa-solid fa-leaf' }
+  # Pleasant
+  { name: 'happy', color: '#FFD700', icon: 'fa-solid fa-face-smile', category: 'pleasant' },
+  { name: 'calm', color: '#00CED1', icon: 'fa-solid fa-leaf', category: 'pleasant' },
+  { name: 'excited', color: '#FF8C00', icon: 'fa-solid fa-bolt', category: 'pleasant' },
+  { name: 'content', color: '#90EE90', icon: 'fa-solid fa-face-grin-beam', category: 'pleasant' },
+  { name: 'hopeful', color: '#87CEEB', icon: 'fa-solid fa-star', category: 'pleasant' },
+  { name: 'proud', color: '#FFB6C1', icon: 'fa-solid fa-trophy', category: 'pleasant' },
+
+  # Unpleasant
+  { name: 'sad', color: '#1E90FF', icon: 'fa-solid fa-face-frown', category: 'unpleasant' },
+  { name: 'tired', color: '#A9A9A9', icon: 'fa-solid fa-bed', category: 'unpleasant' },
+  { name: 'angry', color: '#FF6347', icon: 'fa-solid fa-face-angry', category: 'unpleasant' },
+  { name: 'anxious', color: '#B22222', icon: 'fa-solid fa-face-meh', category: 'unpleasant' },
+  { name: 'frustrated', color: '#8B0000', icon: 'fa-solid fa-face-grimace', category: 'unpleasant' },
+  { name: 'lonely', color: '#4682B4', icon: 'fa-solid fa-user-slash', category: 'unpleasant' }
 ])
 
 puts "Emotions added."
