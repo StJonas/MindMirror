@@ -1,106 +1,93 @@
 <template>
   <div class="section-box">
-    <div v-if="prompts.value && prompts.value.length === 0">
-      <h2>No prompts yet</h2>
-      <input
-        v-model="newPromptTitle"
-        placeholder="Create your first gratitude prompt"
-        class="general-input"
-      />
-      <button @click="addPrompt" class="save-button">
-        <img src="/save.svg" alt="Save" class="white-icon" />
+    <div class="header-row">
+      <h2>{{ prompt.title }}</h2>
+      <button
+        v-if="userId"
+        type="button"
+        @click="toggleEditMode"
+        :class="['edit-button', { 'enabled-button': isEditMode }]"
+      >
+        <img
+          src="/edit.svg"
+          alt="Edit"
+          class="icon"
+          style="width: 24px; height: 24px"
+        />
+      </button>
+      <button @click="deletePrompt" v-if="isEditMode" class="delete-button">
+        <img
+          src="/delete.svg"
+          alt="Delete"
+          class="white-icon"
+          style="width: 24px; height: 24px"
+        />
       </button>
     </div>
-    <div v-else>
-      <div class="header-row">
-        <h2>{{ prompt.title }}</h2>
+    <div v-if="isEditMode && !new_question">
+      <select v-model="selectedPromptId" class="general-input">
+        <option
+          v-for="prompt in predefinedGratitudePrompts"
+          :key="prompt.id"
+          :value="prompt.id"
+        >
+          {{ prompt.title }}
+        </option>
+      </select>
+    </div>
+    <div class="" v-if="isEditMode">
+      <div class="toggle-container">
+        <span class="text-label">update current question</span>
+        <!-- Textual label -->
+        <div class="" @mousedown.prevent="">
+          <input
+            type="checkbox"
+            id="isWeekly"
+            v-model="new_question"
+            @change="updatepredefinedGratitudePrompts"
+            class="checkbox"
+          />
+
+          <label for="isWeekly" class="label"></label>
+        </div>
+      </div>
+    </div>
+    <div v-if="!isEditMode">
+      <input
+        type="text"
+        v-model="prompt.content"
+        placeholder="Your answer"
+        min="1"
+        class="general-input"
+      />
+
+      <div v-if="!isEditMode">
         <button
           v-if="userId"
           type="button"
-          @click="toggleEditMode"
-          :class="['edit-button', { 'enabled-button': isEditMode }]"
+          @click="saveGratitudeEntry(prompt.content)"
+          class="save-button"
         >
-          <img
-            src="/edit.svg"
-            alt="Edit"
-            class="icon"
-            style="width: 24px; height: 24px"
-          />
-        </button>
-        <button @click="deletePrompt" v-if="isEditMode" class="delete-button">
-          <img
-            src="/delete.svg"
-            alt="Delete"
-            class="white-icon"
-            style="width: 24px; height: 24px"
-          />
+          <img src="/save.svg" alt="Save" class="white-icon" />
         </button>
       </div>
-      <div v-if="isEditMode && !new_question">
-        <select v-model="selectedPromptId" class="general-input">
-          <option
-            v-for="prompt in predefinedPrompts"
-            :key="prompt.id"
-            :value="prompt.id"
-          >
-            {{ prompt.title }}
-          </option>
-        </select>
-      </div>
-      <div class="" v-if="isEditMode">
-        <div class="toggle-container">
-          <span class="text-label">update current question</span>
-          <!-- Textual label -->
-          <div class="" @mousedown.prevent="">
-            <input
-              type="checkbox"
-              id="isWeekly"
-              v-model="new_question"
-              @change="updatePredefinedPrompts"
-              class="checkbox"
-            />
-
-            <label for="isWeekly" class="label"></label>
-          </div>
-        </div>
-      </div>
-      <div v-if="!isEditMode">
-        <input
-          type="text"
-          v-model="prompt.content"
-          placeholder="Your answer"
-          min="1"
-          class="general-input"
+    </div>
+    <div v-if="new_question && isEditMode" class="add-prompt-row">
+      <input v-model="editablePromptTitle" class="general-input" />
+      <button @click="updatePrompt(props.prompt.id)" class="save-button">
+        <img
+          src="/save.svg"
+          alt="Save"
+          class="white-icon"
+          style="width: 24px; height: 24px"
         />
-
-        <div class="button-wrapper" v-if="!isEditMode">
-          <button
-            v-if="userId"
-            type="button"
-            @click="saveGratitudeEntry(prompt.content)"
-            class="save-button"
-          >
-            <img src="/save.svg" alt="Save" class="white-icon" />
-          </button>
-        </div>
-      </div>
-      <div v-if="new_question && isEditMode" class="add-prompt-row">
-        <input v-model="editablePromptTitle" class="general-input" />
-        <button @click="updatePrompt(props.prompt.id)" class="save-button">
-          <img
-            src="/save.svg"
-            alt="Save"
-            class="white-icon"
-            style="width: 24px; height: 24px"
-          />
-        </button>
-      </div>
+      </button>
     </div>
   </div>
 </template>
 
 <script setup>
-import { inject, ref, computed } from "vue";
+import { inject, ref, computed, watch } from "vue";
 
 const props = defineProps({
   prompt: Object,
@@ -112,12 +99,11 @@ const userId = inject("userId");
 const isEditMode = ref(false);
 const selectedPromptId = ref(prompts.value[0]?.id || null);
 const showAddPrompt = ref(false);
-const newPromptTitle = ref("");
 const new_question = ref(false);
 const entries = inject("gratitude_entries");
 const editablePromptTitle = ref(props.prompt.title);
 
-const predefinedPrompts = computed(() =>
+const predefinedGratitudePrompts = computed(() =>
   prompts.value.filter((prompt) => prompt.predefined)
 );
 
@@ -236,14 +222,14 @@ const saveGratitudeEntry = async (content) => {
       console.error("Error saving gratitude entry:", errorData);
     }
   }
-
-  watch(
-    () => props.prompt.title,
-    (newTitle) => {
-      editablePromptTitle.value = newTitle;
-    }
-  );
 };
+
+watch(
+  () => props.prompt.title,
+  (newTitle) => {
+    editablePromptTitle.value = newTitle;
+  }
+);
 </script>
 
 <style scoped>

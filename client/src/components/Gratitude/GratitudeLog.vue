@@ -21,14 +21,8 @@
 <script setup>
 import { inject } from "vue";
 
-const prompts = inject("gratitude_prompts");
 const entries = inject("gratitude_entries");
-const emit = defineEmits(["navigateBackToJournal"]);
 
-const getPromptTitle = (promptId) => {
-  const prompt = prompts.value.find((prompt) => prompt.id === promptId);
-  return prompt ? prompt.title : "Unknown Prompt";
-};
 </script>
 
 <style scoped>
