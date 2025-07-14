@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_07_14_090958) do
+ActiveRecord::Schema[7.1].define(version: 2025_07_14_132814) do
   create_table "emotion_log_entries", force: :cascade do |t|
     t.integer "emotion_log_id", null: false
     t.integer "emotion_id", null: false
@@ -36,6 +36,16 @@ ActiveRecord::Schema[7.1].define(version: 2025_07_14_090958) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "category"
+  end
+
+  create_table "freetext_entries", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.text "content"
+    t.date "date"
+    t.boolean "done_offline"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_freetext_entries_on_user_id"
   end
 
   create_table "gratitude_entries", force: :cascade do |t|
@@ -121,6 +131,25 @@ ActiveRecord::Schema[7.1].define(version: 2025_07_14_090958) do
     t.index ["user_id"], name: "index_prompts_on_user_id"
   end
 
+  create_table "recharge_exercises", force: :cascade do |t|
+    t.string "title"
+    t.text "description"
+    t.boolean "active"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "recharge_logs", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.date "date"
+    t.string "exercise"
+    t.boolean "completed"
+    t.text "note"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_recharge_logs_on_user_id"
+  end
+
   create_table "tags", force: :cascade do |t|
     t.string "name"
     t.string "category"
@@ -138,6 +167,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_07_14_090958) do
   add_foreign_key "emotion_log_entries", "emotion_logs"
   add_foreign_key "emotion_log_entries", "emotions"
   add_foreign_key "emotion_logs", "users"
+  add_foreign_key "freetext_entries", "users"
   add_foreign_key "gratitude_entries", "gratitude_prompts"
   add_foreign_key "gratitude_entries", "users"
   add_foreign_key "gratitude_entry_tags", "gratitude_entries"
@@ -148,4 +178,5 @@ ActiveRecord::Schema[7.1].define(version: 2025_07_14_090958) do
   add_foreign_key "journal_entry_tags", "journal_entries"
   add_foreign_key "journal_entry_tags", "tags"
   add_foreign_key "prompts", "users"
+  add_foreign_key "recharge_logs", "users"
 end

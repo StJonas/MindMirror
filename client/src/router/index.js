@@ -76,6 +76,11 @@ const router = createRouter({
       component: () => import("../components/Freetext/FreetextOverview.vue"),
     },
     {
+      path: "/FreetextLog",
+      name: "FreetextLog",
+      component: () => import("../components/Freetext/FreetextLog.vue"),
+    },
+    {
       path: "/EmotionsOverview",
       name: "EmotionsOverview",
       component: () => import("../components/Emotions/EmotionsOverview.vue"),
@@ -85,6 +90,16 @@ const router = createRouter({
       name: "EmotionsLog",
       component: () => import("../components/Emotions/EmotionsLog.vue"),
     },
+    {
+      path: "/RechargeOverview",
+      name: "RechargeOverview",
+      component: () => import("../components/Recharge/RechargeOverview.vue"),
+    },
+    {
+      path: "/RechargeLog",
+      name: "RechargeLog",
+      component: () => import("../components/Recharge/RechargeLog.vue"),
+    }
   ],
 });
 
