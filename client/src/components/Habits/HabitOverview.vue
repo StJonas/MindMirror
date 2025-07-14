@@ -68,7 +68,7 @@ import Toast from "../Toast.vue";
 
 import { inject, ref, onMounted, computed } from "vue";
 
-const habits = inject("habits");
+const habits = ref([]);
 const API_URL = inject("API_URL");
 const userId = inject("userId");
 const toastRef = ref(null);
@@ -156,8 +156,16 @@ const sortedHabits = computed(() => {
     });
 });
 
+const fetchHabits = async () => {
+  if (userId.value != null) {
+    const res = await fetch(`${API_URL}/users/${userId.value}/habits`);
+    habits.value = await res.json();
+  }
+};
+
 onMounted(async () => {
   fetchHabitHistories(new Date());
+  fetchHabits();
 });
 </script>
 

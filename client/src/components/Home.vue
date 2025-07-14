@@ -6,9 +6,9 @@
       <router-link to="/GratitudeOverview" class="home-btn"
         >Gratitude</router-link
       >
-      <router-link to="/" class="home-btn">Emotions</router-link>
+      <router-link to="/EmotionsOverview" class="home-btn">Emotions</router-link>
       <router-link to="/" class="home-btn">De-Stress</router-link>
-      <router-link to="/" class="home-btn">Open Journal</router-link>
+      <router-link to="/FreetextOverview" class="home-btn">Freetext</router-link>
     </div>
   </div>
 </template>
@@ -58,6 +58,9 @@ const userId = inject("userId");
     padding: 10px;
     width: 80vw;
     margin: 0 auto;
+    margin-top: auto;
+    margin-bottom: auto;
+    height: 65vh;
   }
   .home-btn {
     width: 100px;

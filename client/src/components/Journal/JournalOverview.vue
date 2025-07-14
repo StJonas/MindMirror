@@ -96,12 +96,13 @@
 </template>
 
 <script setup>
-import { inject, watchEffect, ref } from "vue";
+import { inject, watchEffect, ref, onMounted } from "vue";
 import JournalInput from "./JournalInput.vue";
 import EditPrompt from "./EditPrompt.vue";
 
 const userId = inject("userId");
-const prompts = inject("prompts");
+const API_URL = inject("API_URL");
+const prompts = ref([]);
 const entries = inject("entries");
 const isEditMode = ref(false);
 const emit = defineEmits(["navigateToJournalLog", "navigateToAddPrompt"]);
@@ -140,6 +141,23 @@ const matchEntriesWithPrompts = () => {
 const toggleEditMode = () => {
   isEditMode.value = !isEditMode.value;
 };
+
+const fetchPrompts = async () => {
+  if (userId.value) {
+    const url = `${API_URL}/users/${userId.value}/prompts`;
+    const res = await fetch(url);
+    prompts.value = await res.json();
+    prompts.value.forEach((prompt) => {
+      prompt.content = "";
+    });
+  }
+};
+
+onMounted(() => {
+  if (userId.value) {
+    fetchPrompts();
+  }
+});
 
 watchEffect(async () => {
   if (entries.value) {

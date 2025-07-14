@@ -31,7 +31,6 @@
 <script setup>
 import { ref, inject } from "vue";
 import router from "../router";
-import axios from "axios";
 
 const username = ref("");
 const password = ref("");

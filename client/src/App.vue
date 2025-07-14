@@ -11,35 +11,26 @@
 
 <script setup>
 import OverviewHeader from "./components/OverviewHeader.vue";
-import OverviewNavigationButtons from "./components/OverviewNavigationButtons.vue";
 
-import { ref, onMounted, provide, computed } from "vue";
+import { ref, onMounted, provide } from "vue";
 import { useRoute } from "vue-router";
 
-const habits = ref([]);
-const prompts = ref([]);
-const predefinedPrompts = ref([]);
 const entries = ref([]);
 const API_URL = "http://localhost:3000/";
 const userId = ref("");
 const username = ref("");
 const sessionToken = ref("");
-const gratitude_prompts = ref([]);
-const predefinedGratitudePrompts = ref([]);
 const gratitude_entries = ref([]);
+const gratitude_prompts = ref([]);
+const emotions = ref([]);
 
 provide("userId", userId);
 provide("username", username);
-provide("habits", habits);
-provide("prompts", prompts);
 provide("entries", entries);
-provide("predefinedPrompts", predefinedPrompts);
 provide("API_URL", API_URL);
 provide("gratitude_prompts", gratitude_prompts);
-provide("predefinedGratitudePrompts", predefinedGratitudePrompts);
 provide("gratitude_entries", gratitude_entries);
-
-const route = useRoute();
+provide("emotions", emotions);
 
 const fetchUserData = async () => {
   try {
@@ -49,13 +40,10 @@ const fetchUserData = async () => {
       userId.value = data.id;
       username.value = data.username;
       sessionToken.value = localStorage.getItem("sessionToken");
-      fetchHabits();
-      fetchPrompts();
       fetchEntries();
-      fetchPredefinedPrompts();
       fetchGratitudeEntries();
+      fetchEmotions();
       fetchGratitudePrompts();
-      fetchPredefinedGratitudePrompts();
     } else {
       console.error("Failed to fetch user data");
     }
@@ -64,20 +52,12 @@ const fetchUserData = async () => {
   }
 };
 
-const fetchHabits = async () => {
-  if (userId.value != null) {
-    const res = await fetch(`${API_URL}/users/${userId.value}/habits`);
-    habits.value = await res.json();
-  }
-};
-
-const fetchPrompts = async () => {
+const fetchGratitudePrompts = async () => {
   if (userId.value) {
-    const url = `${API_URL}/users/${userId.value}/prompts`;
-    const res = await fetch(url);
-    prompts.value = await res.json();
-    prompts.value.forEach((prompt) => {
-      prompt.content = "";
+    const res = await fetch(`${API_URL}/users/${userId.value}/gratitude_prompts`);
+    gratitude_prompts.value = await res.json();
+    gratitude_prompts.value.forEach((gratitude_prompt) => {
+      gratitude_prompt.content = "";
     });
   }
 };
@@ -90,22 +70,6 @@ const fetchEntries = async () => {
   }
 };
 
-const fetchPredefinedPrompts = async () => {
-  const res = await fetch(`${API_URL}/prompts?predefined=true`);
-  predefinedPrompts.value = await res.json();
-};
-
-const fetchGratitudePrompts = async () => {
-  if (userId.value) {
-    const url = `${API_URL}/users/${userId.value}/gratitude_prompts`;
-    const res = await fetch(url);
-    gratitude_prompts.value = await res.json();
-    gratitude_prompts.value.forEach((gratitude_prompt) => {
-      gratitude_prompt.content = "";
-    });
-  }
-};
-
 const fetchGratitudeEntries = async () => {
   if (userId.value) {
     const url = `${API_URL}/users/${userId.value}/gratitude_entries`;
@@ -114,9 +78,10 @@ const fetchGratitudeEntries = async () => {
   }
 };
 
-const fetchPredefinedGratitudePrompts = async () => {
-  const res = await fetch(`${API_URL}/gratitude_prompts?predefined=true`);
-  predefinedGratitudePrompts.value = await res.json();
+const fetchEmotions = async () => {
+  const res = await fetch(`${API_URL}/emotions`);
+  const data = await res.json();
+  emotions.value = Array.isArray(data) ? data : [];
 };
 
 const logout = () => {
@@ -133,7 +98,6 @@ const logout = () => {
 onMounted(() => {
   userId.value = localStorage.getItem("userId");
   fetchUserData();
-  fetchHabits();
 });
 </script>
 

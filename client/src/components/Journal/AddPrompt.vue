@@ -60,8 +60,13 @@ const prompt = ref("");
 const selectedPrompt = ref("");
 const emit = defineEmits(["navigateBackToJournal"]);
 const API_URL = inject("API_URL");
-const predefinedPrompts = inject("predefinedPrompts");
+const predefinedPrompts = ref([]);
 import router from "../../router";
+
+const fetchPredefinedPrompts = async () => {
+  const res = await fetch(`${API_URL}/prompts?predefined=true`);
+  predefinedPrompts.value = await res.json();
+};
 
 const filteredPredefinedPrompts = computed(() => {
   return predefinedPrompts.value.filter(
@@ -97,6 +102,10 @@ const createPrompt = async () => {
     console.error("Error creating prompt:", errorData);
   }
 };
+
+onMounted(() => {
+  fetchPredefinedPrompts();
+});
 </script>
 
 <style scoped>
