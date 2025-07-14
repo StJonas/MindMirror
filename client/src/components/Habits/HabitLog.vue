@@ -1,5 +1,5 @@
 <template>
-  <div class="page-styling">
+  <div class="topic-log">
     <div class="header-row" v-if="userId">
       <router-link to="/HabitOverview">
         <button type="button">&lt;</button>

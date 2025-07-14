@@ -127,7 +127,7 @@ const updatePrompt = async (promptId) => {
   });
 
   if (res.ok) {
-    alert("Prompt created!");
+    alert("Prompt updated!");
     window.location.reload();
   } else {
     const errorData = await res.json();

@@ -1,5 +1,5 @@
 <template>
-  <div class="journal-log">
+  <div class="topic-log">
     <div class="header-row">
       <router-link to="/JournalOverview">
         <button type="button">&lt;</button>
@@ -27,15 +27,5 @@ const emit = defineEmits(["navigateBackToJournal"]);
 </script>
 
 <style scoped>
-.journal-log {
-  margin-left: 20px;
-}
 
-@media (max-width: 600px) {
-  .journal-log {
-    margin-left: 0px;
-    margin-top: 30px;
-    font-size: 0.8rem;
-  }
-}
 </style>

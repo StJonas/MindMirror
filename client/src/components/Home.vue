@@ -7,7 +7,7 @@
         >Gratitude</router-link
       >
       <router-link to="/EmotionsOverview" class="home-btn">Emotions</router-link>
-      <router-link to="/" class="home-btn">De-Stress</router-link>
+      <router-link to="/RechargeOverview" class="home-btn">Recharge</router-link>
       <router-link to="/FreetextOverview" class="home-btn">Freetext</router-link>
     </div>
   </div>

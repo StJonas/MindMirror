@@ -46,7 +46,7 @@
 </template>
 
 <script setup>
-import { inject, watchEffect, ref } from "vue";
+import { inject, ref } from "vue";
 import GratitudeInput from "./GratitudeInput.vue";
 
 const API_URL = inject("API_URL");
