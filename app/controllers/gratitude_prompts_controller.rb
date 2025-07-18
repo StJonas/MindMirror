@@ -35,6 +35,8 @@ class GratitudePromptsController < ApplicationController
 
   # DELETE /gratitude_prompts/1
   def destroy
+    GratitudeEntry.where(gratitude_prompt_id: params[:id]).update_all(gratitude_prompt_id: nil)
+    @gratitude_prompt = GratitudePrompt.find(params[:id])
     @gratitude_prompt.destroy!
   end
 
