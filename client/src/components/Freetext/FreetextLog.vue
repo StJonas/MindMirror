@@ -1,5 +1,6 @@
 <template>
   <div class="topic-log">
+    <Toast ref="toastRef" :message="toastMessage" :type="toastType" />
     <div class="header-row-log">
       <router-link to="/FreetextOverview">
         <button type="button">&lt;</button>
@@ -23,21 +24,35 @@
 <script setup>
 import { inject, ref, onMounted } from "vue";
 import LoadingBar from "../LoadingBar.vue";
+import Toast from "../Toast.vue";
+import { useToast } from "../../utils/useToast.js";
 
 const entries = ref([]);
 const userId = inject("userId");
 const API_URL = inject("API_URL");
 const isLoading = ref(false);
+const toastRef = ref(null);
+const { showToast, toastMessage, toastType } = useToast(toastRef);
 
 const fetchFreetextEntries = async () => {
-  const res = await fetch(`${API_URL}/users/${userId.value}/freetext_entries`);
-  const data = await res.json();
-  entries.value = Array.isArray(data) ? data : [];
+  try {
+    const res = await fetch(`${API_URL}/users/${userId.value}/freetext_entries`);
+    if (!res.ok) {
+      showToast("Error loading log entries!", "error");
+      entries.value = [];
+      return;
+    }
+    const data = await res.json();
+    entries.value = Array.isArray(data) ? data : [];
+  } catch (error) {
+    showToast("Error loading log entries!", "error");
+    entries.value = [];
+  }
 };
 
-onMounted(() => {
+onMounted(async () => {
   isLoading.value = true;
-  fetchFreetextEntries();
+  await fetchFreetextEntries();
   isLoading.value = false;
 });
 </script>

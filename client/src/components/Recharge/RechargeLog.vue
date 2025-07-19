@@ -1,5 +1,6 @@
 <template>
   <div class="topic-log">
+    <Toast ref="toastRef" :message="toastMessage" :type="toastType" />
     <div class="header-row-log">
       <router-link to="/RechargeOverview">
         <button type="button">&lt;</button>
@@ -23,16 +24,31 @@
 <script setup>
 import { inject, ref, onMounted, computed } from "vue";
 import LoadingBar from "../LoadingBar.vue";
+import Toast from "../Toast.vue";
+import { useToast } from "../../utils/useToast.js";
 
 const entries = ref([]);
 const userId = inject("userId");
 const API_URL = inject("API_URL");
 const isLoading = ref(false);
+const toastRef = ref(null);
+const { showToast, toastMessage, toastType } = useToast(toastRef);
 
 const fetchRechargeEntries = async () => {
-  const res = await fetch(`${API_URL}/users/${userId.value}/recharge_logs`);
-  const data = await res.json();
-  entries.value = Array.isArray(data) ? data : [];
+  try {
+    const res = await fetch(`${API_URL}/users/${userId.value}/recharge_logs`);
+    if (!res.ok) {
+      showToast("Error loading log entries!", "error");
+      entries.value = [];
+      return;
+    }
+    const data = await res.json();
+    entries.value = Array.isArray(data) ? data : [];
+  } catch (error) {
+    showToast("Error loading log entries!", "error");
+    entries.value = [];
+    console.error("Failed to fetch recharge entries:", error);
+  }
 };
 
 const groupedEntries = computed(() => {
@@ -45,9 +61,9 @@ const groupedEntries = computed(() => {
   return groups;
 });
 
-onMounted(() => {
+onMounted(async () => {
   isLoading.value = true;
-  fetchRechargeEntries();
+  await fetchRechargeEntries();
   isLoading.value = false;
 });
 </script>

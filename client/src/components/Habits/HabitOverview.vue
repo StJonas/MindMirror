@@ -162,8 +162,8 @@ const fetchHabits = async () => {
 
 onMounted(async () => {
   isLoading.value = true;
-  fetchHabitHistories(new Date());
-  fetchHabits();
+  await fetchHabitHistories(new Date());
+  await fetchHabits();
   isLoading.value = false;
 });
 </script>

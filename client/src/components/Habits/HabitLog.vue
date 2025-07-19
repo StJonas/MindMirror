@@ -1,5 +1,6 @@
 <template>
   <div class="topic-log">
+    <Toast ref="toastRef" :message="toastMessage" :type="toastType" />
     <div class="header-row-log" v-if="userId">
       <router-link to="/HabitOverview">
         <button type="button">&lt;</button>
@@ -31,23 +32,37 @@
 <script setup>
 import { inject, ref, watchEffect, onMounted, computed } from "vue";
 import LoadingBar from "../LoadingBar.vue";
+import Toast from "../Toast.vue";
+import { useToast } from "../../utils/useToast.js";
 
 const habits = ref([]);
 const API_URL = inject("API_URL");
 const userId = inject("userId");
 const isLoading = ref(false);
+const toastRef = ref(null);
+const { showToast, toastMessage, toastType } = useToast(toastRef);
 
 const fetchHabitLog = async (currentDay) => {
   if (userId.value) {
-    const url = `${API_URL}/users/${userId.value}/habit_log`;
-    const res = await fetch(url);
-    habits.value = await res.json();
+    try {
+      const url = `${API_URL}/users/${userId.value}/habit_log`;
+      const res = await fetch(url);
+      if (!res.ok) {
+        showToast("Error loading log entries!", "error");
+        habits.value = [];
+        return;
+      }
+      habits.value = await res.json();
+    } catch (error) {
+      showToast("Error loading log entries!", "error");
+      habits.value = [];
+    }
   }
 };
 
 onMounted(async () => {
   isLoading.value = true;
-  fetchHabitLog(new Date());
+  await fetchHabitLog(new Date());
   isLoading.value = false;
 });
 

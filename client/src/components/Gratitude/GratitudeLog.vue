@@ -27,9 +27,7 @@ const entries = inject("gratitude_entries");
 
 onMounted(() => {
   isLoading.value = true;
-  if (entries === null) {
-    isLoading.value = false;
-  } else {
+  if (entries.value && entries.value.length > 0) {
     isLoading.value = false;
   }
 });

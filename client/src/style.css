@@ -283,7 +283,7 @@ button:focus-visible {
   resize: vertical;
 }
 .topic-log {
-  margin-left: 20px;
+  margin-left: 0px;
 }
 .card-move-move {
   transition: transform 0.4s cubic-bezier(0.55, 0, 0.1, 1);

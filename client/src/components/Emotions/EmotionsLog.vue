@@ -1,5 +1,6 @@
 <template>
   <div class="topic-log">
+    <Toast ref="toastRef" :message="toastMessage" :type="toastType" />
     <div class="header-row-log">
       <router-link to="/EmotionsOverview">
         <button type="button">&lt;</button>
@@ -23,17 +24,31 @@
 <script setup>
 import { inject, computed, ref, onMounted } from "vue";
 import LoadingBar from "../LoadingBar.vue";
+import Toast from "../Toast.vue";
+import { useToast } from "../../utils/useToast.js";
 
 const entries = ref([]);
 const userId = inject("userId");
 const emotions = inject("emotions");
 const API_URL = inject("API_URL");
 const isLoading = ref(false);
+const toastRef = ref(null);
+const { showToast, toastMessage, toastType } = useToast(toastRef);
 
 const fetchEmotionEntries = async () => {
-  const res = await fetch(`${API_URL}/users/${userId.value}/emotion_log_entries`);
-  const data = await res.json();
-  entries.value = Array.isArray(data) ? data : [];
+  try {
+    const res = await fetch(`${API_URL}/users/${userId.value}/emotion_log_entries`);
+    if (!res.ok) {
+      showToast("Error loading log entries!", "error");
+      entries.value = [];
+      return;
+    }
+    const data = await res.json();
+    entries.value = Array.isArray(data) ? data : [];
+  } catch (error) {
+    showToast("Error loading log entries!", "error");
+    entries.value = [];
+  }
 };
 
 function getEmotionName(id) {
@@ -57,9 +72,9 @@ function getEmotionColor(id) {
   return emotion ? emotion.color : "#fff";
 }
 
-onMounted(() => {
+onMounted(async () => {
   isLoading.value = true;
-  fetchEmotionEntries();
+  await fetchEmotionEntries();
   isLoading.value = false;
 });
 </script>
