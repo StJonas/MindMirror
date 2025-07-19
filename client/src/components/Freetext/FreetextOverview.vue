@@ -29,6 +29,8 @@
           rows="5" 
           class="general-input" 
           placeholder="Write your thoughts here..."
+          :disabled="doneOffline"
+          :class="{ 'greyed-out': doneOffline }"
           />
         <div class="toggle-container">
           <span class="text-label">done offline</span>

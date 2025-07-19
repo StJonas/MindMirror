@@ -1,4 +1,4 @@
-<template>
+<template class="page-styling">
   <div class="header">
     <router-link to="/">
       <button class="circle-btn">
@@ -6,7 +6,6 @@
         <span class="home-text">MindMirror</span>
       </button>
     </router-link>
-    <!-- <h1>{{ greeting }}</h1> -->
     <div class="auth-buttons">
       <router-link
         to="/login"
@@ -88,8 +87,8 @@ const logout = () => {
 .circle-btn {
   background: none;
   border: none;
-  margin-left: 20rem;
   cursor: pointer;
+  margin: 0;
 }
 
 .circle-icon {
@@ -107,8 +106,8 @@ const logout = () => {
 
 .auth-logout {
   position: absolute;
-  top: 30px;
-  right: 30px;
+  top: 20px;
+  right: 150px;
 }
 
 @media (max-width: 700px) {
@@ -123,6 +122,7 @@ const logout = () => {
     font-size: 2rem;
     color: white;
     font-weight: 500;
+    margin-bottom: 0.25rem;
   }
   .auth-buttons {
     position: fixed;
@@ -136,8 +136,8 @@ const logout = () => {
   }
   .auth-logout {
     position: absolute;
-    top: 30px;
-    right: 30px;
+    top: 20px;
+    right: 20px;
   }
 }
 </style>

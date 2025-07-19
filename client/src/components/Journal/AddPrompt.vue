@@ -1,28 +1,12 @@
 <template>
   <div class="page-styling">
-    <div class="header-row">
+    <div class="header-row-log">
       <router-link to="/JournalOverview">
         <button type="button">&lt;</button>
       </router-link>
       <h2>Add Question</h2>
     </div>
     <div class="general-input">
-      <div class="toggle-container">
-        <span class="text-label">Daily Question</span>
-        <!-- Textual label -->
-        <div class="switch" @mousedown.prevent="">
-          <input
-            type="checkbox"
-            id="isWeekly"
-            v-model="is_weekly"
-            @change="updatePredefinedPrompts"
-            class="checkbox"
-          />
-
-          <label for="isWeekly" class="label"></label>
-        </div>
-        <span class="text-label">Weekly Question</span>
-      </div>
       <select
         v-model="selectedPrompt"
         @change="updatePrompt"

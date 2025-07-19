@@ -26,13 +26,16 @@ const userId = inject("userId");
   align-items: center;
   align-content: center;
   padding: 10px;
-  width: 70vw;
+  width: 60vw;
   margin: 0 auto;
+  background: #95b3db;
+  border-radius: 18px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
 }
 
 .home-btn {
-  background: #fe712d;
-  color: #fff;
+  background: #748CAB;
+  color: #000000;
   border: none;
   border-radius: 8px;
   padding: 24px 48px;
@@ -44,23 +47,21 @@ const userId = inject("userId");
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 .home-btn:hover {
-  background: #fe8042;
+  background: #8aa6ca;
 }
 @media (max-width: 600px) {
   .home-container {
     display: grid;
     grid-template-columns: auto auto;
-    grid-template-rows: 50px 50px;
-    gap: 50px;
+    grid-template-rows: 50px 100px;
+    gap: 40px; 
     justify-items: center;
     align-items: center;
     align-content: center;
     padding: 10px;
-    width: 80vw;
-    margin: 0 auto;
-    margin-top: auto;
-    margin-bottom: auto;
+    margin: 0;
     height: 65vh;
+    width: 100%;
   }
   .home-btn {
     width: 100px;

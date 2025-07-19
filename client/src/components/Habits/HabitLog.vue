@@ -1,6 +1,6 @@
 <template>
   <div class="topic-log">
-    <div class="header-row" v-if="userId">
+    <div class="header-row-log" v-if="userId">
       <router-link to="/HabitOverview">
         <button type="button">&lt;</button>
       </router-link>

@@ -1,6 +1,6 @@
 <template>
   <div class="topic-log">
-    <div class="header-row">
+    <div class="header-row-log">
       <router-link to="/FreetextOverview">
         <button type="button">&lt;</button>
       </router-link>
@@ -8,15 +8,15 @@
       <h2>Freetext Log</h2>
     </div>
 
-    <div v-for="entry in entries" :key="entry.id" class="general-input">
-      <h2>{{ entry.date }}</h2>
-      <p class="general-input">
-      <em>
-        <span v-if="entry.content && entry.content.trim()">{{ entry.content }}</span>
-        <span v-else-if="entry.done_offline">done offline</span>
-      </em>
-      </p>
-    </div>
+<div v-for="entry in entries" :key="entry.id" class="general-input">
+  <h2>{{ entry.date }}</h2>
+  <p class="general-input" :class="{ 'greyed-out': entry.done_offline }">
+    <em>
+      <span v-if="entry.content && entry.content.trim()">{{ entry.content }}</span>
+      <span v-else-if="entry.done_offline">done offline</span>
+    </em>
+  </p>
+</div>
   </div>
 </template>
 
@@ -39,5 +39,4 @@ onMounted(() => {
 </script>
 
 <style scoped>
-
 </style>

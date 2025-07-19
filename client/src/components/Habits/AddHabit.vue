@@ -1,6 +1,6 @@
 <template>
   <div class="page-styling">
-    <div class="header-row">
+    <div class="header-row-log">
       <router-link to="/HabitOverview">
         <button type="button">&lt;</button>
       </router-link>

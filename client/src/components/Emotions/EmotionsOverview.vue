@@ -20,60 +20,61 @@
 
     <div v-if="userId" class="section-box">
       <h2 class="section-title">Select an emotion</h2>
-      <div>
-        <span class="section-title">
-          Pleasant
-          <button @click="togglePleasant" class="toggle-btn">
-            {{ showPleasant ? '−' : '+' }}
-          </button>
-        </span>
-        <div v-if="showPleasant" class="emotions-row">
-          <button
-            v-for="emotion in pleasantEmotions"
-            :key="emotion.id"
-            class="emotion-btn"
-            :class="{ active: selectedEmotion === emotion.id }"
-            :style="{ backgroundColor: emotion.color }"
-            @click="selectEmotion(emotion)"
-          >
-            <i :class="emotion.icon" style=""></i>
-            {{ emotion.name }}
-          </button>
+      <div class="general-input">
+        <div>
+          <span class="section-title">
+            Pleasant
+            <button @click="togglePleasant" class="toggle-btn">
+              {{ showPleasant ? '−' : '+' }}
+            </button>
+          </span>
+          <div v-if="showPleasant" class="emotions-row">
+            <button
+              v-for="emotion in pleasantEmotions"
+              :key="emotion.id"
+              class="emotion-btn"
+              :class="{ active: selectedEmotion === emotion.id }"
+              :style="{ backgroundColor: emotion.color }"
+              @click="selectEmotion(emotion)"
+            >
+              <i :class="emotion.icon" style=""></i>
+              {{ emotion.name }}
+            </button>
+          </div>
         </div>
-      </div>
-      <div>
-        <span class="section-title">
-          Unpleasant
-          <button @click="toggleUnpleasant" class="toggle-btn">
-            {{ showUnpleasant ? '−' : '+' }}
-          </button>
-        </span>
-        <div v-if="showUnpleasant" class="emotions-row">
-          <button
-            v-for="emotion in unpleasantEmotions"
-            :key="emotion.id"
-            class="emotion-btn"
-            :class="{ active: selectedEmotion === emotion.id }"
-            :style="{ backgroundColor: emotion.color }"
-            @click="selectEmotion(emotion)"
-          >
-            <i :class="emotion.icon" style=""></i>
-            {{ emotion.name }}
-          </button>
+        <div>
+          <span class="section-title">
+            Unpleasant
+            <button @click="toggleUnpleasant" class="toggle-btn">
+              {{ showUnpleasant ? '−' : '+' }}
+            </button>
+          </span>
+          <div v-if="showUnpleasant" class="emotions-row">
+            <button
+              v-for="emotion in unpleasantEmotions"
+              :key="emotion.id"
+              class="emotion-btn"
+              :class="{ active: selectedEmotion === emotion.id }"
+              :style="{ backgroundColor: emotion.color }"
+              @click="selectEmotion(emotion)"
+            >
+              <i :class="emotion.icon" style=""></i>
+              {{ emotion.name }}
+            </button>
+          </div>
         </div>
+        <textarea type="text" 
+          v-model="emotionNote"
+          name="site_notes" 
+          rows="5" 
+          class="general-input" 
+          placeholder="Write your thoughts here..."
+          />
+        <button @click="saveEmotionEntry" class="save-button">
+          Save
+        </button>
       </div>
-      <textarea type="text" 
-        v-model="emotionNote"
-        name="site_notes" 
-        rows="5" 
-        class="general-input" 
-        placeholder="Write your thoughts here..."
-        />
-      <button @click="saveEmotionEntry" class="save-button">
-        Save
-      </button>
     </div>
-    
     </div>
 </template>
 
@@ -148,11 +149,19 @@ async function saveEmotionEntry() {
 </script>
 
 <style scoped>
+.general-input {
+  padding: 2px;
+}
 .emotions-row {
   display: flex;
   gap: 16px;
   flex-wrap: wrap;
   margin-bottom: 1rem;
+  width: 100%;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 16px;
+  box-sizing: border-box;
 }
 .emotion-btn {
   color: #fff;
@@ -180,5 +189,8 @@ async function saveEmotionEntry() {
 }
 
 @media (max-width: 600px) {
+  .emotions-row {
+    justify-content: center;
+  }
 }
 </style>

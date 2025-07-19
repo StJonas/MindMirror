@@ -1,5 +1,5 @@
 <template>
-  <div class="section-box">
+  <div class="">
     <h2>Edit: {{ prompt.title }}</h2>
     <input
       type="text"
@@ -77,15 +77,16 @@ const deletePrompt = async () => {
 .button-wrapper {
   display: flex;
   flex-direction: row;
-  align-items: center;
-  gap: 16px;
+  align-items: space-between;
+  justify-content: space-between;
+  gap: 8px;
 }
 @media (max-width: 600px) {
   .button-wrapper {
     display: flex;
     flex-direction: row;
-    align-items: center;
-    gap: 145px;
+    align-items: space-between;
+    justify-content: space-between;
     margin: 0px;
   }
 }

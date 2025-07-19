@@ -1,6 +1,6 @@
 <template>
   <div class="topic-log">
-    <div class="header-row">
+    <div class="header-row-log">
       <router-link to="/EmotionsOverview">
         <button type="button">&lt;</button>
       </router-link>

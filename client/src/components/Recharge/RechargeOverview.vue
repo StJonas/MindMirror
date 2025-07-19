@@ -18,21 +18,23 @@
       </router-link>
     </div>
 
-    <div v-if="userId" class="section-box">
+    <div v-if="userId  && showPrompts" class="section-box">
       <h1 class="section-title">Daily recharge exercise</h1>
       <div class="general-input">
-        <div class="header-row">
+        <div class="content-row">
           <h3 v-if="currentExercise">{{ currentExercise.title }}</h3>
           <button @click="showRandomExercise" class="">
             <img src="/shuffle.svg" alt="Shuffle" class="icon" style="width: 24px; height: 24px" />
           </button>
         </div>
+
+        <hr class="content-divider" />
         
         <p v-if="currentExercise">{{ currentExercise.description }}</p>
         <textarea
           type="text"
           v-model="exerciseNote"
-          name="site_notes"
+          name="exercise_note"
           rows="5"
           class="general-input"
           placeholder="Reflect on the exercise..."
@@ -42,7 +44,7 @@
         </button>
       </div>
     </div>
-    
+
     </div>
 </template>
 
@@ -60,6 +62,7 @@ const currentDate = new Date().toLocaleDateString("de-DE", {
   month: "long",
   year: "numeric",
 });
+const showPrompts = ref(false);
 
 const fetchExercises = async () => {
   const res = await fetch(`${API_URL}/recharge_exercises`);
@@ -114,40 +117,14 @@ async function saveEmotionEntry() {
 
 onMounted(() => {
   fetchExercises();
+
+  setTimeout(() => {
+    showPrompts.value = true;
+  }, 300);
 });
 </script>
 
 <style scoped>
-.emotions-row {
-  display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
-  margin-bottom: 1rem;
-}
-.emotion-btn {
-  color: #fff;
-  width: 80px;
-  border: none;
-  border-radius: 8px;
-  font-size: 1.1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  transition: filter 0.2s;
-  text-align: center;
-}
-.emotion-btn:hover {
-  filter: brightness(1.1);
-}
-.emotion-btn.active {
-  border: 2px solid #fff;
-  box-shadow: 0 0 0 3px #fe712d;
-}
-.save-button {
-  margin: 0;
-}
 
 @media (max-width: 600px) {
 }
