@@ -24,6 +24,7 @@
         </button>
       </router-link>
     </div>
+    <LoadingBar :visible="isLoading" />
     <!-- List of Habits -->
     <transition-group name="card-move" tag="div">
       <div v-for="habit in sortedHabits" :key="habit.id" class="section-box">
@@ -67,7 +68,7 @@
 <script setup>
 import Toast from "../Toast.vue";
 import { useToast } from "../../utils/useToast.js";
-
+import LoadingBar from "../LoadingBar.vue";
 import { inject, ref, onMounted, computed } from "vue";
 
 const habits = ref([]);
@@ -81,6 +82,7 @@ const currentDate = new Date().toLocaleDateString("de-DE", {
 const toastRef = ref(null);
 const { showToast, toastMessage, toastType } = useToast(toastRef);
 const savedHabits = ref(new Set());
+const isLoading = ref(false);
 
 async function fetchHabitHistories(date) {
   const url = `${API_URL}/users/${userId.value}/habit_histories?date=${date}`;
@@ -159,8 +161,10 @@ const fetchHabits = async () => {
 };
 
 onMounted(async () => {
+  isLoading.value = true;
   fetchHabitHistories(new Date());
   fetchHabits();
+  isLoading.value = false;
 });
 </script>
 

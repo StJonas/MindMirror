@@ -312,6 +312,14 @@ button:focus-visible {
   pointer-events: none;
 }
 
+.loading-spinner {
+  position: fixed;
+  top: 50%;
+  left: 45%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+}
+
 
 @media (max-width: 600px) {
   #app {

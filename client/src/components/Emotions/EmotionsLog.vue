@@ -7,7 +7,7 @@
 
       <h2>Emotion Log</h2>
     </div>
-
+    <LoadingBar :visible="isLoading" />
     <div v-for="(dayEntries, date) in groupedEntries" :key="date">
       <h2>{{ date }}</h2>
       <div v-for="entry in dayEntries" :key="entry.id" 
@@ -22,11 +22,13 @@
 
 <script setup>
 import { inject, computed, ref, onMounted } from "vue";
+import LoadingBar from "../LoadingBar.vue";
 
 const entries = ref([]);
 const userId = inject("userId");
 const emotions = inject("emotions");
 const API_URL = inject("API_URL");
+const isLoading = ref(false);
 
 const fetchEmotionEntries = async () => {
   const res = await fetch(`${API_URL}/users/${userId.value}/emotion_log_entries`);
@@ -56,7 +58,9 @@ function getEmotionColor(id) {
 }
 
 onMounted(() => {
+  isLoading.value = true;
   fetchEmotionEntries();
+  isLoading.value = false;
 });
 </script>
 

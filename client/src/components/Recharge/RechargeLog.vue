@@ -7,7 +7,7 @@
 
       <h2>Recharge Log</h2>
     </div>
-
+    <LoadingBar :visible="isLoading" />
     <div v-for="(dayEntries, date) in groupedEntries" :key="date">
       <h2>Complete on {{ date }}</h2>
       <div v-for="entry in dayEntries" :key="entry.id" 
@@ -22,10 +22,12 @@
 
 <script setup>
 import { inject, ref, onMounted, computed } from "vue";
+import LoadingBar from "../LoadingBar.vue";
 
 const entries = ref([]);
 const userId = inject("userId");
 const API_URL = inject("API_URL");
+const isLoading = ref(false);
 
 const fetchRechargeEntries = async () => {
   const res = await fetch(`${API_URL}/users/${userId.value}/recharge_logs`);
@@ -44,7 +46,9 @@ const groupedEntries = computed(() => {
 });
 
 onMounted(() => {
+  isLoading.value = true;
   fetchRechargeEntries();
+  isLoading.value = false;
 });
 </script>
 

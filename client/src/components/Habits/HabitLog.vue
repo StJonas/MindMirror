@@ -12,6 +12,7 @@
       </div>
     </div>
   </div>
+  <LoadingBar :visible="isLoading" />
   <div v-for="day in habits" :key="day.date" class="section-box" style="">
     <div class="header-row">
       <h3 class="section-title">{{ day.date }}</h3>
@@ -29,10 +30,12 @@
 
 <script setup>
 import { inject, ref, watchEffect, onMounted, computed } from "vue";
+import LoadingBar from "../LoadingBar.vue";
 
 const habits = ref([]);
 const API_URL = inject("API_URL");
 const userId = inject("userId");
+const isLoading = ref(false);
 
 const fetchHabitLog = async (currentDay) => {
   if (userId.value) {
@@ -43,7 +46,9 @@ const fetchHabitLog = async (currentDay) => {
 };
 
 onMounted(async () => {
+  isLoading.value = true;
   fetchHabitLog(new Date());
+  isLoading.value = false;
 });
 
 const sumHabits = computed(() =>
