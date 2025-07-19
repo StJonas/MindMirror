@@ -243,18 +243,6 @@ button:focus-visible {
     gap: 20px;
     font-size: 0.8rem;
 }
-.content-box {
-  background: #dbdbdb;
-  border-radius: 18px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-  padding: 2rem 1.5rem;
-  margin: 0rem auto;
-  max-width: 700px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
 .content-row {
   display: flex;
   align-items: center;
@@ -327,7 +315,8 @@ button:focus-visible {
 
 @media (max-width: 600px) {
   #app {
-    max-width: 100wv;
+    width: 100%;
+    max-width: 100%;
   }
   .content{
     margin-top: 90px;
@@ -346,16 +335,11 @@ button:focus-visible {
   }
   .section-box {
     min-width:0px;
-    max-width: 80vw;
+    max-width: 100%;
     margin: 24px auto;
     padding: 16px;
     width: 75vw;
   }
-  .content-box {
-    min-width: 75vw;
-    padding: 18px;
-    width: 75vw;
-  } 
   .section-title {
     font-size: 1.1rem;
     margin-bottom: 10px;
@@ -372,6 +356,5 @@ button:focus-visible {
   textarea.general-input {
     background-color: white;
     width: 70vw;
-
   }
 }

@@ -1,6 +1,7 @@
 <template>
   <div class="section-box">
-    <div class="header-row">
+    <Toast ref="toastRef" :message="toastMessage" :type="toastType" />
+    <div class="content-row">
       <h2>{{ prompt.title }}</h2>
       <button
         v-if="userId"
@@ -24,6 +25,7 @@
         />
       </button>
     </div>
+    <hr class="content-divider" />
     <div v-if="isEditMode && !new_question">
       <select v-model="selectedPromptId" class="general-input">
         <option
@@ -53,13 +55,19 @@
       </div>
     </div>
     <div v-if="!isEditMode">
-      <input
+      <!-- <input
         type="text"
         v-model="prompt.content"
         placeholder="Your answer"
         min="1"
         class="general-input"
-      />
+      /> -->
+      <textarea type="text" 
+          v-model="prompt.content"
+          rows="5" 
+          class="general-input" 
+          placeholder="Your answer..."
+          />
 
       <div v-if="!isEditMode">
         <button
@@ -88,6 +96,8 @@
 
 <script setup>
 import { inject, ref, computed, watch } from "vue";
+import Toast from "../Toast.vue";
+import { useToast } from "../../utils/useToast.js";
 
 const props = defineProps({
   prompt: Object,
@@ -102,6 +112,8 @@ const showAddPrompt = ref(false);
 const new_question = ref(false);
 const entries = inject("gratitude_entries");
 const editablePromptTitle = ref(props.prompt.title);
+const toastRef = ref(null);
+const { showToast, toastMessage, toastType } = useToast(toastRef);
 
 const predefinedGratitudePrompts = computed(() =>
   prompts.value.filter((prompt) => prompt.predefined)
@@ -127,9 +139,12 @@ const updatePrompt = async (promptId) => {
   });
 
   if (res.ok) {
-    alert("Prompt updated!");
-    window.location.reload();
+    showToast("Prompt updated", "success");
+    setTimeout(() => {
+      location.reload();
+    }, 500);
   } else {
+    showToast("Update error", "error");
     const errorData = await res.json();
     alert("Error", errorData);
   }
@@ -142,11 +157,14 @@ const deletePrompt = async () => {
     });
 
     if (res.ok) {
-      console.log("Prompt deleted successfully");
-      location.reload();
+      showToast("Prompt deleted successfully", "success");
+      setTimeout(() => {
+        location.reload();
+      }, 500);
     } else {
       const errorData = await res.json();
       console.error("Error deleting prompt:", errorData);
+      showToast("Error deleting prompt", "error");
     }
   }
 };
@@ -193,11 +211,14 @@ const saveGratitudeEntry = async (content) => {
     );
 
     if (updateRes.ok) {
-      console.log("Gratitude entry updated successfully");
-      window.location.reload();
+      showToast("Gratitude entry updated", "success");
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
     } else {
       const errorData = await updateRes.json();
       console.error("Error updating gratitude entry:", errorData);
+      showToast("Error updating gratitude entry", "error");
     }
   } else {
     const createRes = await fetch(`${API_URL}/gratitude_entries`, {
@@ -215,11 +236,14 @@ const saveGratitudeEntry = async (content) => {
     });
 
     if (createRes.ok) {
-      console.log("Gratitude entry saved successfully");
-      window.location.reload();
+      showToast("Gratitude entry saved", "success");
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
     } else {
       const errorData = await createRes.json();
       console.error("Error saving gratitude entry:", errorData);
+      showToast("Error saving gratitude entry", "error");
     }
   }
 };

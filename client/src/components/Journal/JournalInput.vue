@@ -1,13 +1,22 @@
 <template>
-  <div class="section-box">
-    <h2>{{ prompt.title }}</h2>
-    <input
+  <div class="">
+    <Toast ref="toastRef" :message="toastMessage" :type="toastType" />
+    <h2 class="section-title">{{ prompt.title }}</h2>
+    <hr class="content-divider" />
+    <textarea type="text" 
+          name="journal_input" 
+          v-model="prompt.content"
+          rows="5" 
+          class="general-input" 
+          placeholder="Your answer..."
+          />
+    <!-- <input
       type="text"
       v-model="prompt.content"
       placeholder="Your answer"
       min="1"
       class="general-input"
-    />
+    /> -->
     <div class="button-wrapper">
       <button
         v-if="userId"
@@ -22,7 +31,9 @@
 </template>
 
 <script setup>
-import { inject } from "vue";
+import { inject, ref } from "vue";
+import Toast from "../Toast.vue";
+import { useToast } from "../../utils/useToast.js";
 
 const props = defineProps({
   prompt: Object,
@@ -31,6 +42,9 @@ const API_URL = inject("API_URL");
 
 const userId = inject("userId");
 const entries = inject("entries");
+
+const toastRef = ref(null);
+const { showToast, toastMessage, toastType } = useToast(toastRef);
 
 const saveJournalEntry = async (content) => {
   const today = new Date();
@@ -73,11 +87,15 @@ const saveJournalEntry = async (content) => {
     );
 
     if (updateRes.ok) {
-      console.log("Journal entry updated successfully");
-      window.location.reload();
+      showToast("Entry saved", "success");
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
     } else {
       const errorData = await updateRes.json();
       console.error("Error updating journal entry:", errorData);
+      showToast("Error saving entry!", "error");
     }
   } else {
     const createRes = await fetch(`${API_URL}/journal_entries`, {
@@ -95,17 +113,19 @@ const saveJournalEntry = async (content) => {
     });
 
     if (createRes.ok) {
-      console.log("Journal entry saved successfully");
+      showToast("Entry saved", "success");
       window.location.reload();
     } else {
       const errorData = await createRes.json();
       console.error("Error saving journal entry:", errorData);
+      showToast("Error saving entry!", "error");
     }
   }
 };
 </script>
 
 <style scoped>
+
 @media (max-width: 600px) {
 }
 </style>

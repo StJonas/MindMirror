@@ -1,5 +1,6 @@
 <template>
   <div class="page-styling">
+    <Toast ref="toastRef" :message="toastMessage" :type="toastType" />
     <div class="header-row-log">
       <router-link to="/JournalOverview">
         <button type="button">&lt;</button>
@@ -37,6 +38,9 @@
 
 <script setup>
 import { ref, onMounted, inject, computed } from "vue";
+import router from "../../router";
+import Toast from "../Toast.vue";
+import { useToast } from "../../utils/useToast.js";
 
 const is_weekly = ref(false);
 const userId = inject("userId");
@@ -45,11 +49,15 @@ const selectedPrompt = ref("");
 const emit = defineEmits(["navigateBackToJournal"]);
 const API_URL = inject("API_URL");
 const predefinedPrompts = ref([]);
-import router from "../../router";
+const toastRef = ref(null);
+const { showToast, toastMessage, toastType } = useToast(toastRef);
 
 const fetchPredefinedPrompts = async () => {
   const res = await fetch(`${API_URL}/prompts?predefined=true`);
   predefinedPrompts.value = await res.json();
+  if (!res.ok) {
+    showToast("Error fetching predefined prompts", "error");
+  }
 };
 
 const filteredPredefinedPrompts = computed(() => {
@@ -78,12 +86,15 @@ const createPrompt = async () => {
 
   if (res.ok) {
     prompt.value = "";
-    router.push("/JournalOverview").then(() => {
-      window.location.reload();
-    });
+
+    showToast("Entry saved", "success");
+    setTimeout(() => {
+      router.push("/JournalOverview").then(() => {
+        window.location.reload();
+      });
+    }, 500);
   } else {
-    const errorData = await res.json();
-    console.error("Error creating prompt:", errorData);
+    showToast("Error creating prompt", "error");
   }
 };
 

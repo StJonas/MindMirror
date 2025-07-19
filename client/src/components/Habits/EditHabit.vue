@@ -1,5 +1,6 @@
 <template>
   <div class="page-styling">
+    <Toast ref="toastRef" :message="toastMessage" :type="toastType" />
     <div class="header-row">
       <router-link to="/HabitOverview">
         <button type="button">&lt;</button>
@@ -39,6 +40,8 @@
 import { ref, onMounted, inject } from "vue";
 import { useRoute } from "vue-router";
 import router from "../../router";
+import Toast from "../Toast.vue";
+import { useToast } from "../../utils/useToast.js";
 
 const habits = ref([]);
 const name = ref("");
@@ -48,6 +51,8 @@ const description = ref("");
 const habit_id = ref(0);
 const isEditing = ref(false);
 const API_URL = inject("API_URL");
+const toastRef = ref(null);
+const { showToast, toastMessage, toastType } = useToast(toastRef);
 
 const props = defineProps({
   habitId: String,
@@ -68,46 +73,65 @@ onMounted(async () => {
 });
 
 const updateHabit = async () => {
-  const res = await fetch(`${API_URL}/habits/${habit_id.value}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      name: name.value,
-      frequency: 0,
-      id: habit_id.value,
-      description: description.value,
-    }),
-  });
+  try {
+    const res = await fetch(`${API_URL}/habits/${habit_id.value}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: name.value,
+        frequency: 0,
+        id: habit_id.value,
+        description: description.value,
+      }),
+    });
 
-  const data = await res.json();
-
-  const index = habits.value.findIndex((habit) => habit.id === data.id);
-  habits.value[index] = data;
-
-  router.push("/HabitOverview").then(() => {
-    window.location.reload();
-  });
+    if (res.ok) {
+      const data = await res.json();
+      const index = habits.value.findIndex((habit) => habit.id === data.id);
+      habits.value[index] = data;
+      showToast("Habit updated successfully!", "success");
+      setTimeout(() => {
+        router.push("/HabitOverview").then(() => {
+          window.location.reload();
+        });
+      }, 500);
+    } else {
+      showToast("Failed to update habit!", "error");
+      const errorData = await res.json();
+      console.error("Error updating habit:", errorData);
+    }
+  } catch (error) {
+    showToast("Failed to update habit!", "error");
+    console.error(error);
+  }
 };
 
 const deleteHabit = async (id) => {
   if (confirm("Are you sure you want to delete this habit?")) {
-    //deleting all habit histories associated with the habit
-    await fetch(`${API_URL}/habit_histories/habit/${id}`, {
-      method: "DELETE",
-    });
+    try {
+      const habitRes = await fetch(`${API_URL}/habits/${id}`, {
+        method: "DELETE",
+      });
 
-    //deleting habit itself
-    await fetch(`${API_URL}/habits/${id}`, {
-      method: "DELETE",
-    });
-
-    habits.value = habits.value.filter((habit) => habit.id !== id);
+      if (habitRes.ok) {
+        habits.value = habits.value.filter((habit) => habit.id !== id);
+        showToast("Habit deleted successfully!", "success");
+        setTimeout(() => {
+          router.push("/HabitOverview").then(() => {
+            window.location.reload();
+          });
+        }, 500);
+      } else {
+        showToast("Failed to delete habit!", "error");
+        console.error("Error deleting habit:", await habitRes.text());
+      }
+    } catch (error) {
+      showToast("Failed to delete habit!", "error");
+      console.error(error);
+    }
   }
-  router.push("/HabitOverview").then(() => {
-    window.location.reload();
-  });
 };
 </script>
 

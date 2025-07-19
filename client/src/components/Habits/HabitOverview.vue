@@ -27,28 +27,29 @@
     <!-- List of Habits -->
     <transition-group name="card-move" tag="div">
       <div v-for="habit in sortedHabits" :key="habit.id" class="section-box">
-        <div class="header-row">
-          <h2 class="section-title">{{ habit.name }}</h2>
-          <router-link
-            :to="`/editHabit/${habit.id}`"
-            style="pointer-events: auto"
-          >
-            <button type="button">
-              <img
-                src="/edit.svg"
-                alt="Log"
-                class="icon"
-                style="width: 24px; height: 24px"
-              />
-            </button>
-          </router-link>
-        </div>
-        <div class="general-input">
-          <span>{{ habit.description }}</span>
+          <div class="content-row">
+            <h2 class="section-title">{{ habit.name }}</h2>
+            <router-link
+              :to="`/editHabit/${habit.id}`"
+              style="pointer-events: auto"
+            >
+              <button type="button">
+                <img
+                  src="/edit.svg"
+                  alt="Log"
+                  class="icon"
+                  style="width: 24px; height: 24px"
+                />
+              </button>
+            </router-link>
+          </div>
+        <hr class="content-divider" />
+        <div class="habit-action-row">
+          <span class="habit-description">{{ habit.description }}</span>
           <button
             type="button"
             @click="saveHabit(habit.id)"
-            :class="['', { 'checked-button': savedHabits.has(habit.id) }]"
+            :class="['save-habit-btn', { 'checked-button': savedHabits.has(habit.id) }]"
           >
             <img
               src="/save.svg"
@@ -65,38 +66,21 @@
 
 <script setup>
 import Toast from "../Toast.vue";
+import { useToast } from "../../utils/useToast.js";
 
 import { inject, ref, onMounted, computed } from "vue";
 
 const habits = ref([]);
 const API_URL = inject("API_URL");
 const userId = inject("userId");
-const toastRef = ref(null);
-const toastType = ref("success");
-const toastMessage = ref("Habit saved successfully!");
 const currentDate = new Date().toLocaleDateString("de-DE", {
   day: "2-digit",
   month: "long",
   year: "numeric",
 });
-
+const toastRef = ref(null);
+const { showToast, toastMessage, toastType } = useToast(toastRef);
 const savedHabits = ref(new Set());
-
-const handleSaveSuccess = (habitId) => {
-  toastMessage.value = "Habit saved successfully!";
-  toastType.value = "success";
-  if (toastRef.value && typeof toastRef.value.show === "function") {
-    toastRef.value.show();
-  }
-};
-
-const handleSaveFailure = (error) => {
-  toastMessage.value = "Error saving habit!";
-  toastType.value = "error";
-  if (toastRef.value && typeof toastRef.value.show === "function") {
-    toastRef.value.show();
-  }
-};
 
 async function fetchHabitHistories(date) {
   const url = `${API_URL}/users/${userId.value}/habit_histories?date=${date}`;
@@ -131,17 +115,18 @@ async function saveHabit(habitId) {
     });
 
     if (!response.ok) {
-      handleSaveFailure(habitId);
+      showToast("Error saving habit!", "error");
       return;
     }
 
-    const data = await response.json();
-    console.log("Save successful", data);
-    handleSaveSuccess(habitId);
-    window.location.reload();
+
+    showToast("Save successful", "success");
+    setTimeout(() => {
+        location.reload();
+    }, 500);
   } catch (error) {
     console.error("There was a problem with the save operation:", error);
-    handleSaveFailure(habitId);
+    showToast("Error saving habit!", "error");
   }
 }
 
@@ -158,8 +143,18 @@ const sortedHabits = computed(() => {
 
 const fetchHabits = async () => {
   if (userId.value != null) {
-    const res = await fetch(`${API_URL}/users/${userId.value}/habits`);
-    habits.value = await res.json();
+    try {
+      const res = await fetch(`${API_URL}/users/${userId.value}/habits`);
+      if (!res.ok) {
+        showToast("Failed to fetch habits!", "error");
+        console.error("HTTP error:", res.status, await res.text());
+        return;
+      }
+      habits.value = await res.json();
+    } catch (error) {
+      showToast("Failed to fetch habits!", "error");
+      console.error(error);
+    }
   }
 };
 
@@ -170,16 +165,28 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.card-move-move {
-  transition: transform 0.4s cubic-bezier(0.55, 0, 0.1, 1);
+.section-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
-.card-move-enter-active,
-.card-move-leave-active {
-  transition: all 0.4s cubic-bezier(0.55, 0, 0.1, 1);
+.habit-action-row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 0;
 }
-.card-move-enter-from,
-.card-move-leave-to {
-  opacity: 0;
-  transform: translateY(30px);
+
+.habit-description {
+  font-size: 1.1rem;
+  color: black;
+  width: 100%;
+  text-align: left;
 }
+
+.save-habit-btn {
+  border-color: #007BFF;
+}
+
 </style>

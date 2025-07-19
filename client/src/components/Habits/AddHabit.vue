@@ -1,5 +1,6 @@
 <template>
   <div class="page-styling">
+    <Toast ref="toastRef" :message="toastMessage" :type="toastType" />
     <div class="header-row-log">
       <router-link to="/HabitOverview">
         <button type="button">&lt;</button>
@@ -55,6 +56,8 @@
 <script setup>
 import { ref, onMounted, inject } from "vue"; //habit
 import router from "../../router";
+import Toast from "../Toast.vue";
+import { useToast } from "../../utils/useToast.js";
 
 const name = ref("");
 const frequency = ref("");
@@ -63,6 +66,8 @@ const isEditing = ref(false);
 const is_timed = ref(false);
 const userId = ref("");
 const API_URL = inject("API_URL");
+const toastRef = ref(null);
+const { showToast, toastMessage, toastType } = useToast(toastRef);
 
 onMounted(async () => {
   userId.value = localStorage.getItem("userId");
@@ -87,12 +92,21 @@ const createHabit = async () => {
     }),
   });
 
-  name.value = "";
-  frequency.value = "";
-  is_timed.value = false;
-  router.push("/HabitOverview").then(() => {
-    window.location.reload();
-  });
+  if (res.ok) {
+    showToast("Habit created successfully!", "success");
+    setTimeout(() => {
+      name.value = "";
+      frequency.value = "";
+      is_timed.value = false;
+      router.push("/HabitOverview").then(() => {
+        window.location.reload();
+      });
+    }, 500);
+  } else {
+    showToast("Failed to create habit!", "error");
+    const errorData = await res.json();
+    console.error("Error creating habit:", errorData);
+  }
 };
 </script>
 

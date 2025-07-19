@@ -1,5 +1,6 @@
 <template>
   <div class="page-styling">
+    <Toast ref="toastRef" :message="toastMessage" :type="toastType" />
     <div class="header-row">
       <h2 v-if="userId">{{ currentDate }}</h2>
       <router-link
@@ -50,6 +51,8 @@
 
 <script setup>
 import { inject, ref, onMounted } from "vue";
+import Toast from "../Toast.vue";
+import { useToast } from "../../utils/useToast.js";
 
 const userId = inject("userId");
 const API_URL = inject("API_URL");
@@ -63,6 +66,8 @@ const currentDate = new Date().toLocaleDateString("de-DE", {
   year: "numeric",
 });
 const showPrompts = ref(false);
+const toastRef = ref(null);
+const { showToast, toastMessage, toastType } = useToast(toastRef);
 
 const fetchExercises = async () => {
   const res = await fetch(`${API_URL}/recharge_exercises`);
@@ -70,7 +75,7 @@ const fetchExercises = async () => {
     exercises.value = await res.json();
     showRandomExercise();
   } else {
-    console.error("Failed to fetch recharge exercises");
+    showToast("Failed to fetch exercises!", "error");
     return [];
   }
 };
@@ -85,11 +90,6 @@ function showRandomExercise() {
 }
 
 async function saveEmotionEntry() {
-  if (!currentExercise.value) {
-    alert("No exercise selected.");
-    return;
-  }
-
   const res = await fetch(`${API_URL}/recharge_logs`, {
     method: "POST",
     headers: {
@@ -105,13 +105,15 @@ async function saveEmotionEntry() {
   });
 
   if (res.ok) {
-    alert("Exercise saved!");
     showRandomExercise();
     exerciseNote.value = ""; 
-    window.location.reload();
+
+    showToast("Entry saved", "success");
+    setTimeout(() => {
+        location.reload();
+    }, 500);
   } else {
-    const errorData = await res.json();
-    alert("Error saving entry: " + (errorData.error || "Unknown error"));
+    showToast("Error saving entry!", "error");
   }
 }
 

@@ -1,5 +1,6 @@
 <template>
   <div class="page-styling">
+    <Toast ref="toastRef" :message="toastMessage" :type="toastType" />
     <div class="header-row">
       <h2 v-if="userId">{{ currentDate }}</h2>
       <router-link
@@ -80,6 +81,8 @@
 
 <script setup>
 import { inject, ref, computed } from "vue";
+import Toast from "../Toast.vue";
+import { useToast } from "../../utils/useToast.js";
 
 const userId = inject("userId");
 const API_URL = inject("API_URL");
@@ -93,7 +96,8 @@ const currentDate = new Date().toLocaleDateString("de-DE", {
   month: "long",
   year: "numeric",
 });
-
+const toastRef = ref(null);
+const { showToast, toastMessage, toastType } = useToast(toastRef);
 const selectedEmotion = ref(null); 
 const emotionNote = ref("");
 
@@ -137,13 +141,15 @@ async function saveEmotionEntry() {
   });
 
   if (res.ok) {
-    alert("Emotion entry saved!");
     selectedEmotion.value = null;
     emotionNote.value = ""; 
-    window.location.reload();
+
+    showToast("Entry saved", "success");
+    setTimeout(() => {
+        location.reload();
+    }, 500);
   } else {
-    const errorData = await res.json();
-    alert("Error saving entry: " + (errorData.error || "Unknown error"));
+    showToast("Error saving entry!", "error");
   }
 }
 </script>

@@ -1,5 +1,6 @@
 <template>
   <div class="">
+    <Toast ref="toastRef" :message="toastMessage" :type="toastType" />
     <h2>Edit: {{ prompt.title }}</h2>
     <input
       type="text"
@@ -30,6 +31,8 @@
 
 <script setup>
 import { ref, inject } from "vue";
+import Toast from "../Toast.vue";
+import { useToast } from "../../utils/useToast.js";
 
 const props = defineProps({
   prompt: Object,
@@ -37,6 +40,8 @@ const props = defineProps({
 
 const promptTitle = ref(props.prompt.title);
 const API_URL = inject("API_URL");
+const toastRef = ref(null);
+const { showToast, toastMessage, toastType } = useToast(toastRef);
 
 const savePrompt = async () => {
   const res = await fetch(`${API_URL}/prompts/${props.prompt.id}`, {
@@ -50,10 +55,12 @@ const savePrompt = async () => {
   });
 
   if (res.ok) {
-    window.location.reload();
+    showToast("Prompt saved", "success");
+    setTimeout(() => {
+        location.reload();
+    }, 500);
   } else {
-    const errorData = await res.json();
-    console.error("Error updating prompt:", errorData);
+    showToast("Error saving prompt!", "error");
   }
 };
 
@@ -64,10 +71,12 @@ const deletePrompt = async () => {
     });
 
     if (res.ok) {
-      window.location.reload();
+      showToast("Prompt deleted", "success");
+      setTimeout(() => {
+          location.reload();
+      }, 500);
     } else {
-      const errorData = await res.json();
-      console.error("Error deleting prompt:", errorData);
+      showToast("Error deleting prompt!", "error");
     }
   }
 };

@@ -1,5 +1,6 @@
 <template>
   <div class="page-styling">
+    <Toast ref="toastRef" :message="toastMessage" :type="toastType" />
     <div class="header-row">
       <h2 v-if="userId">{{ currentDate }}</h2>
       <router-link
@@ -54,6 +55,8 @@
 
 <script setup>
 import { inject, ref } from "vue";
+import Toast from "../Toast.vue";
+import { useToast } from "../../utils/useToast.js";
 
 const userId = inject("userId");
 const isEditMode = ref(false);
@@ -66,6 +69,8 @@ const currentDate = new Date().toLocaleDateString("de-DE", {
   month: "long",
   year: "numeric",
 });
+const toastRef = ref(null);
+const { showToast, toastMessage, toastType } = useToast(toastRef);
 
 const saveFreetextEntry = async () => {
   const res = await fetch(`${API_URL}/users/${userId.value}/freetext_entries`, {
@@ -84,13 +89,15 @@ const saveFreetextEntry = async () => {
   });
 
   if (res.ok) {
-    alert("Freetext entry saved!");
     freetextContent.value = "";
     doneOffline.value = false;
-    window.location.reload();
+
+    showToast("Freetext entry saved", "success");
+    setTimeout(() => {
+        location.reload();
+    }, 500);
   } else {
-    const errorData = await res.json();
-    alert("Error saving entry: " + (errorData.error || "Unknown error"));
+    showToast("Error saving entry!", "error");
   }
 };
 
