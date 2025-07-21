@@ -1,7 +1,13 @@
 <template>
   <div class="input">
     <Toast ref="toastRef" :message="toastMessage" :type="toastType" />
-    <h2>Login</h2>
+    <div class="side-by-side">
+      <router-link to="/">
+        <button type="button" class="back-btn">&lt;</button>
+      </router-link>
+      <h2>Login</h2>
+    </div>
+
     <form @submit.prevent="login">
       <label for="username">Username:</label>
       <input
@@ -22,9 +28,6 @@
       />
 
       <button type="submit">Login</button>
-      <router-link to="/">
-        <button type="button">Go Back</button>
-      </router-link>
     </form>
   </div>
 </template>
@@ -32,8 +35,8 @@
 <script setup>
 import { ref, inject } from "vue";
 import router from "../router";
-import Toast from "../Toast.vue";
-import { useToast } from "../../utils/useToast.js";
+import Toast from "./Toast.vue";
+import { useToast } from "../utils/useToast.js";
 
 const username = ref("");
 const password = ref("");

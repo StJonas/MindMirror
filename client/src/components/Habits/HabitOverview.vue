@@ -2,27 +2,36 @@
   <div class="page-styling">
     <Toast ref="toastRef" :message="toastMessage" :type="toastType" />
     <div class="header-row" v-if="userId">
-      <h2>{{ currentDate }}</h2>
-      <router-link to="/AddHabit" style="pointer-events: auto">
-        <button type="button">
-          <img
-            src="/add.svg"
-            alt="Add"
-            class="icon"
-            style="width: 24px; height: 24px"
-          />
-        </button>
-      </router-link>
-      <router-link to="/HabitLog" style="pointer-events: auto">
-        <button type="button">
-          <img
-            src="/log.svg"
-            alt="Log"
-            class="icon"
-            style="width: 24px; height: 24px"
-          />
-        </button>
-      </router-link>
+      <div class="side-by-side">
+        <router-link to="/">
+          <button type="button" class="back-btn">&lt;</button>
+        </router-link>
+        <img src="/calender.svg" alt="Shuffle" class="icon" style="width: 36px; height: 36px" />
+        <h2 class="header-row-title">Habits</h2>
+      </div>
+      <div class="side-by-side">
+        <router-link to="/AddHabit" style="pointer-events: auto">
+          <button type="button">
+            <img
+              src="/add.svg"
+              alt="Add"
+              class="icon"
+              style="width: 24px; height: 24px"
+            />
+          </button>
+        </router-link>
+        <router-link to="/HabitLog" style="pointer-events: auto">
+          <button type="button">
+            <img
+              src="/log.svg"
+              alt="Log"
+              class="icon"
+              style="width: 24px; height: 24px"
+            />
+          </button>
+        </router-link>
+      </div>
+
     </div>
     <LoadingBar :visible="isLoading" />
     <!-- List of Habits -->

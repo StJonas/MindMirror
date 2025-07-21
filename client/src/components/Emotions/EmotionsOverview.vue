@@ -2,7 +2,13 @@
   <div class="page-styling">
     <Toast ref="toastRef" :message="toastMessage" :type="toastType" />
     <div class="header-row">
-      <h2 v-if="userId">{{ currentDate }}</h2>
+      <div class="side-by-side">
+        <router-link to="/">
+          <button type="button" class="back-btn">&lt;</button>
+        </router-link>
+        <img src="/brain.svg" alt="Shuffle" class="icon" style="width: 36px; height: 36px" />
+        <h2 class="header-row-title">Emotions</h2>
+      </div>
       <router-link
         v-if="userId"
         to="/EmotionsLog"
@@ -22,13 +28,13 @@
     <div v-if="userId" class="section-box">
       <h2 class="section-title">Select an emotion</h2>
       <div class="general-input">
-        <div>
-          <span class="section-title">
-            Pleasant
+        <div class="emotion-container">
+          <div class="emotion-title-row">
+            <span class="section-title" style="font-weight: bold;">Pleasant</span>
             <button @click="togglePleasant" class="toggle-btn">
               {{ showPleasant ? '−' : '+' }}
             </button>
-          </span>
+          </div>
           <div v-if="showPleasant" class="emotions-row">
             <button
               v-for="emotion in pleasantEmotions"
@@ -43,13 +49,13 @@
             </button>
           </div>
         </div>
-        <div>
-          <span class="section-title">
-            Unpleasant
+        <div class="emotion-container">
+          <div class="emotion-title-row">
+            <span class="section-title" style="font-weight: bold;">Unpleasant</span>
             <button @click="toggleUnpleasant" class="toggle-btn">
               {{ showUnpleasant ? '−' : '+' }}
             </button>
-          </span>
+          </div>
           <div v-if="showUnpleasant" class="emotions-row">
             <button
               v-for="emotion in unpleasantEmotions"
@@ -192,6 +198,17 @@ async function saveEmotionEntry() {
 }
 .save-button {
   margin: 0;
+}
+.emotion-container {
+  background-color: #cfe4ff;
+  border-radius: 8px;
+}
+.emotion-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 12px;
 }
 
 @media (max-width: 600px) {

@@ -1,5 +1,10 @@
 <template>
   <div class="page-styling">
+    <div class="header-row">
+      <h2 v-if="!userId">Please sign up or login:</h2>
+      <h2 v-if="userId">Hello {{ username }}</h2>
+      <h2 v-if="userId">{{ currentDate }}</h2>
+    </div>
     <div class="home-container" v-if="userId">
       <router-link to="/HabitOverview" class="home-btn">
         <img src="/calender.svg" alt="icon" class="home-icon" />
@@ -32,6 +37,12 @@
 <script setup>
 import { inject } from "vue";
 const userId = inject("userId");
+const username = inject("username");
+const currentDate = new Date().toLocaleDateString("de-DE", {
+  day: "2-digit",
+  month: "long",
+  year: "numeric",
+});
 </script>
 
 <style scoped>
@@ -77,7 +88,6 @@ const userId = inject("userId");
   height: 32px;
   margin-bottom: 8px;
 }
-
 @media (max-width: 600px) {
   .home-container {
     width: 80vw;
@@ -85,7 +95,7 @@ const userId = inject("userId");
     padding: 12px 0;
     gap: 12px;
     grid-template-columns: 1fr 1fr;
-    margin-top: 100px;
+    margin-top: 20px;
   }
   .home-btn {
     font-size: 1.2rem;

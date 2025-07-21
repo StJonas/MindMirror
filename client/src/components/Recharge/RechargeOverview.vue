@@ -2,7 +2,14 @@
   <div class="page-styling">
     <Toast ref="toastRef" :message="toastMessage" :type="toastType" />
     <div class="header-row">
-      <h2 v-if="userId">{{ currentDate }}</h2>
+      <div class="side-by-side">
+        <router-link to="/">
+          <button type="button" class="back-btn">&lt;</button>
+        </router-link>
+        <img src="/battery.svg" alt="Shuffle" class="icon" style="width: 36px; height: 36px" />
+        <h2 class="header-row-title">Recharge</h2>
+      </div>
+
       <router-link
         v-if="userId"
         to="/RechargeLog"

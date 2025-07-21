@@ -3,7 +3,14 @@
     <Toast ref="toastRef" :message="toastMessage" :type="toastType" />
     <div class="">
       <div class="header-row">
-        <h2 v-if="userId">{{ currentDate }}</h2>
+        <div class="side-by-side">
+        <router-link to="/">
+          <button type="button" class="back-btn">&lt;</button>
+        </router-link>
+        <img src="/book.svg" alt="Shuffle" class="icon" style="width: 36px; height: 36px" />
+        <h2 class="header-row-title">Journal</h2>
+      </div>
+      <div class="side-by-side">
           <router-link
             v-if="userId"
             to="/addPrompt"
@@ -38,24 +45,28 @@
             />
           </button>
         </router-link>
-        <button
-          v-if="userId"
-          type="button"
-          @click="toggleEditMode"
-          :class="['edit-button', { 'enabled-button': isEditMode }]"
-        >
-          <img
-            src="/edit.svg"
-            alt="Edit"
-            class="icon"
-            style="width: 24px; height: 24px"
-          />
-        </button>
+      </div>
       </div>
       
       <transition-group name="card-move" tag="div">
         <div class="section-box" v-if="userId && showPrompts"  :key="prompts.length ? 'has-prompts' : 'no-prompts'">
-          <h2 class="section-title">Daily Journaling Questions</h2>
+          <div class="header-row">
+            <h2 class="section-title">Daily Journaling Questions</h2>
+                    <button
+            v-if="userId"
+            type="button"
+            @click="toggleEditMode"
+            :class="['edit-button', { 'enabled-button': isEditMode }]"
+            >
+              <img
+                src="/edit.svg"
+                alt="Edit"
+                class="icon"
+                style="width: 24px; height: 24px"
+              />
+            </button>
+          </div>
+
           <div class="">
             
               <template v-if="!isEditMode">
@@ -96,11 +107,6 @@ const prompts = ref([]);
 const entries = inject("entries");
 const isEditMode = ref(false);
 const emit = defineEmits(["navigateToJournalLog", "navigateToAddPrompt"]);
-const currentDate = new Date().toLocaleDateString("de-DE", {
-  day: "2-digit",
-  month: "long",
-  year: "numeric",
-});
 const showPrompts = ref(false);
 const toastRef = ref(null);
 const { showToast, toastMessage, toastType } = useToast(toastRef);

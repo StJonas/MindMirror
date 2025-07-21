@@ -77,7 +77,7 @@ const logout = () => {
 <style scoped>
 .auth-buttons {
   position: absolute;
-  top: 75px;
+  top: 20px;
   right: 50px;
   display: flex;
   gap: 16px;
