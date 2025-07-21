@@ -3,8 +3,11 @@ class GratitudePromptsController < ApplicationController
 
   # GET /gratitude_prompts
   def index
-    @gratitude_prompts = GratitudePrompt.all
-
+    if params[:predefined] == "true"
+      @gratitude_prompts = GratitudePrompt.where(predefined: true)
+    else
+      @gratitude_prompts = GratitudePrompt.all
+    end
     render json: @gratitude_prompts
   end
 

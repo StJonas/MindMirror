@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_07_14_132814) do
+ActiveRecord::Schema[7.1].define(version: 2025_07_21_074551) do
   create_table "emotion_log_entries", force: :cascade do |t|
     t.integer "emotion_log_id", null: false
     t.integer "emotion_id", null: false
@@ -73,7 +73,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_07_14_132814) do
     t.string "title"
     t.boolean "predefined"
     t.boolean "weekly"
-    t.integer "user_id", null: false
+    t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_gratitude_prompts_on_user_id"
