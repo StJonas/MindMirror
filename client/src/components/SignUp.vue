@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Toast ref="toastRef" :message="toastMessage" :type="toastType" />
     <h2>Sign Up</h2>
     <form @submit.prevent="signUp">
       <label for="name">Username:</label>
@@ -33,17 +34,21 @@
 <script setup>
 import { ref, inject } from "vue"; //habit
 import router from "../router";
+import Toast from "../Toast.vue";
+import { useToast } from "../../utils/useToast.js";
 
 const name = ref("");
 const password = ref("");
 const password_confirmation = ref("");
 const API_URL = inject("API_URL");
+const toastRef = ref(null);
+const { showToast, toastMessage, toastType } = useToast(toastRef);
 
 const signUp = async () => {
   if (password.value !== password_confirmation.value) {
     password.value = "";
     password_confirmation.value = "";
-    alert("Passwords do not match!");
+    showToast("Passwords do not match!", "error");
     return;
   }
 
@@ -61,18 +66,17 @@ const signUp = async () => {
   });
 
   if (!res.ok) {
-    const data = await res.json();
-    console.log("data: ", name.value, " ", password.value);
-    console.log("error data:", data, res);
-    alert("Signup failed!");
+    showToast("Signup failed!", "error");
   } else {
-    alert("Signup successful!");
     name.value = "";
     password.value = "";
     password_confirmation.value = "";
-    router.push("/login").then(() => {
-      window.location.reload();
-    });
+    showToast("Signup successful!", "success");
+    setTimeout(() => {
+      router.push("/login").then(() => {
+        window.location.reload();
+      });
+    }, 500);
   }
 };
 </script>

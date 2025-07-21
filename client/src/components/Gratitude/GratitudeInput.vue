@@ -145,8 +145,6 @@ const updatePrompt = async (promptId) => {
     }, 500);
   } else {
     showToast("Update error", "error");
-    const errorData = await res.json();
-    alert("Error", errorData);
   }
 };
 

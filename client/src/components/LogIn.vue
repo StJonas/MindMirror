@@ -1,5 +1,6 @@
 <template>
   <div class="input">
+    <Toast ref="toastRef" :message="toastMessage" :type="toastType" />
     <h2>Login</h2>
     <form @submit.prevent="login">
       <label for="username">Username:</label>
@@ -31,11 +32,15 @@
 <script setup>
 import { ref, inject } from "vue";
 import router from "../router";
+import Toast from "../Toast.vue";
+import { useToast } from "../../utils/useToast.js";
 
 const username = ref("");
 const password = ref("");
 const API_URL = inject("API_URL");
 const user = inject("user");
+const toastRef = ref(null);
+const { showToast, toastMessage, toastType } = useToast(toastRef);
 
 const login = async () => {
   const res = await fetch(`${API_URL}/login`, {
@@ -57,16 +62,14 @@ const login = async () => {
     localStorage.setItem("sessionToken", data.token);
     localStorage.setItem("userId", data.user.id);
 
-    alert("Login successful!");
-
-    router.push("/").then(() => {
-      window.location.reload();
-    });
+    showToast("Login successful!", "success");
+    setTimeout(() => {
+      router.push("/").then(() => {
+        window.location.reload();
+      });
+    }, 500);    
   } else {
-    alert("Login failed!");
-    console.error("Login failed");
-    console.log("name ", username.value);
-    console.log("pw ", password.value);
+    showToast("Error saving entry!", "error");
   }
 
   username.value = "";

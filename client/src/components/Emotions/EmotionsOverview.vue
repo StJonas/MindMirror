@@ -121,7 +121,7 @@ function toggleUnpleasant() {
 
 async function saveEmotionEntry() {
   if (!selectedEmotion.value) {
-    alert("Please select an emotion.");
+    showToast("Please select an emotion", "info");
     return;
   }
 
