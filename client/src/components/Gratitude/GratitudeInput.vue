@@ -36,6 +36,14 @@
           {{ prompt.title }}
         </option>
       </select>
+      <button
+        v-if="selectedPromptId"
+        @click="updatePrompt(props.prompt.id, predefinedGratitudePrompts.find(p => p.id === selectedPromptId)?.title)"
+        class="save-button"
+        style="margin-top: 8px;"
+      >
+        <img src="/save.svg" alt="Save" class="white-icon" />
+      </button>
     </div>
     <div class="" v-if="isEditMode">
       <div class="toggle-container">
@@ -55,13 +63,6 @@
       </div>
     </div>
     <div v-if="!isEditMode">
-      <!-- <input
-        type="text"
-        v-model="prompt.content"
-        placeholder="Your answer"
-        min="1"
-        class="general-input"
-      /> -->
       <textarea type="text" 
           v-model="prompt.content"
           rows="5" 
@@ -82,20 +83,15 @@
     </div>
     <div v-if="new_question && isEditMode" class="add-prompt-row">
       <input v-model="editablePromptTitle" class="general-input" />
-      <button @click="updatePrompt(props.prompt.id)" class="save-button">
-        <img
-          src="/save.svg"
-          alt="Save"
-          class="white-icon"
-          style="width: 24px; height: 24px"
-        />
-      </button>
+        <button @click="updatePrompt(props.prompt.id, editablePromptTitle)" class="save-button">
+          <img src="/save.svg" alt="Save" class="white-icon" style="width: 24px; height: 24px" />
+        </button>
     </div>
   </div>
 </template>
 
 <script setup>
-import { inject, ref, computed, watch } from "vue";
+import { inject, ref, onMounted, watch } from "vue";
 import Toast from "../Toast.vue";
 import { useToast } from "../../utils/useToast.js";
 
@@ -115,23 +111,21 @@ const editablePromptTitle = ref(props.prompt.title);
 const toastRef = ref(null);
 const { showToast, toastMessage, toastType } = useToast(toastRef);
 
-const predefinedGratitudePrompts = computed(() =>
-  prompts.value.filter((prompt) => prompt.predefined)
-);
+const predefinedGratitudePrompts = ref([]);
 
 function toggleEditMode() {
   isEditMode.value = !isEditMode.value;
   showAddPrompt.value = !showAddPrompt.value;
 }
 
-const updatePrompt = async (promptId) => {
+const updatePrompt = async (promptId, newTitle) => {
   const res = await fetch(`${API_URL}/gratitude_prompts/${promptId}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      title: editablePromptTitle.value,
+      title: newTitle,
       user_id: userId.value,
       weekly: false,
       predefined: false,
@@ -139,7 +133,7 @@ const updatePrompt = async (promptId) => {
   });
 
   if (res.ok) {
-    showToast("Prompt updated", "success");
+    showToast("Question updated", "success");
     setTimeout(() => {
       location.reload();
     }, 500);
@@ -155,14 +149,12 @@ const deletePrompt = async () => {
     });
 
     if (res.ok) {
-      showToast("Prompt deleted successfully", "success");
+      showToast("Quetion deleted successfully", "success");
       setTimeout(() => {
         location.reload();
       }, 500);
     } else {
-      const errorData = await res.json();
-      console.error("Error deleting prompt:", errorData);
-      showToast("Error deleting prompt", "error");
+      showToast("Error deleting Quetion", "error");
     }
   }
 };
@@ -246,12 +238,41 @@ const saveGratitudeEntry = async (content) => {
   }
 };
 
+const fetchUnusedPredefinedPrompts = async () => {
+  try {
+    const res = await fetch(`${API_URL}/gratitude_prompts?predefined=true`);
+    if (!res.ok) {
+      showToast("Failed to fetch predefined prompts", "error");
+      return [];
+    }
+    const allPredefined = await res.json();
+
+    const userPromptsRes = await fetch(`${API_URL}/users/${userId.value}/gratitude_prompts`);
+    if (!userPromptsRes.ok) {
+      showToast("Failed to fetch user prompts", "error");
+      return [];
+    }
+    const userPrompts = await userPromptsRes.json();
+    const userPromptTitles = userPrompts.map(p => p.title);
+
+    return allPredefined.filter(p => !userPromptTitles.includes(p.title));
+  } catch (error) {
+    showToast("Error fetching prompts", "error");
+    console.error(error);
+    return [];
+  }
+};
+
 watch(
   () => props.prompt.title,
   (newTitle) => {
     editablePromptTitle.value = newTitle;
   }
 );
+
+onMounted(async () => {
+  predefinedGratitudePrompts.value = await fetchUnusedPredefinedPrompts();
+});
 </script>
 
 <style scoped>

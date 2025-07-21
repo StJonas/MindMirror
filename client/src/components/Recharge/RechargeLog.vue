@@ -6,7 +6,7 @@
         <button type="button">&lt;</button>
       </router-link>
 
-      <h2>Recharge Log</h2>
+      <h2>Recharge History</h2>
     </div>
     <LoadingBar :visible="isLoading" />
     <div v-for="(dayEntries, date) in groupedEntries" :key="date">

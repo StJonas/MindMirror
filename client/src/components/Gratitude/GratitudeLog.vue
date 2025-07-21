@@ -4,8 +4,12 @@
       <router-link to="/GratitudeOverview">
         <button type="button">&lt;</button>
       </router-link>
-
-      <h2>Gratitude Log</h2>
+      <h2>Gratitude History</h2>
+    </div>
+    <div class="section-box">
+      <div class="header-row">
+        <h3 class="section-title">Number of entries: {{ sumEntries }}</h3>
+      </div>
     </div>
     <LoadingBar :visible="isLoading" />
     <div v-for="entry in entries" :key="entry.id" class="general-input">
@@ -19,15 +23,19 @@
 </template>
 
 <script setup>
-import { inject, ref, onMounted } from "vue";
+import { inject, ref, onMounted, computed } from "vue";
 import LoadingBar from "../LoadingBar.vue";
 
 const isLoading = ref(false);
 const entries = inject("gratitude_entries");
 
+const sumEntries = computed(() =>
+  Array.isArray(entries?.value) ? entries.value.length : 0
+);
+
 onMounted(() => {
   isLoading.value = true;
-  if (entries.value && entries.value.length > 0) {
+  if (entries.value) {
     isLoading.value = false;
   }
 });

@@ -12,24 +12,10 @@
       <input
         type="text"
         v-model="name"
-        placeholder="Name"
+        placeholder="Habit title"
         class="general-input"
       />
 
-      <div class="toggle-container">
-        <span class="text-label">Timed Habit</span>
-        <!-- Textual label -->
-        <div class="switch" @mousedown.prevent="">
-          <input
-            type="checkbox"
-            id="isTimed"
-            v-model="is_timed"
-            class="checkbox"
-        />
-        <label for="isTimed" class="label"></label>
-        <!-- Switch UI -->
-      </div>
-      </div>
       <input
         type="text"
         v-model="description"
@@ -37,11 +23,6 @@
         class="general-input"
         v-if="!is_timed"
       />
-      <!-- <select v-model="category" class="name-input">
-        <option value="1">relationships</option>
-        <option value="7">work</option>
-        <option value="0">hobbies</option>
-      </select> -->
 
       <button v-if="isEditing" @click="updateHabit">Update</button>
       <button v-if="isEditing" @click="cancelEdit">Cancel</button>

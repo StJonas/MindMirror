@@ -27,7 +27,7 @@
     <LoadingBar :visible="isLoading" />
     <!-- List of Habits -->
     <transition-group name="card-move" tag="div">
-      <div v-for="habit in sortedHabits" :key="habit.id" class="section-box">
+      <div v-for="habit in sortedHabits" :key="habit.id" :class="['section-box', { 'checked-border': savedHabits.has(habit.id) }]">
           <div class="content-row">
             <h2 class="section-title">{{ habit.name }}</h2>
             <router-link
@@ -50,7 +50,7 @@
           <button
             type="button"
             @click="saveHabit(habit.id)"
-            :class="['save-habit-btn', { 'checked-button': savedHabits.has(habit.id) }]"
+            class="save-button"
           >
             <img
               src="/save.svg"
@@ -181,16 +181,14 @@ onMounted(async () => {
   gap: 10px;
   padding: 8px 0;
 }
-
 .habit-description {
   font-size: 1.1rem;
   color: black;
   width: 100%;
   text-align: left;
 }
-
-.save-habit-btn {
-  border-color: #007BFF;
+.checked-border {
+  border: 6px solid #4caf50; 
 }
 
 </style>

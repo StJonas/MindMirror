@@ -5,7 +5,7 @@
       <router-link to="/HabitOverview">
         <button type="button">&lt;</button>
       </router-link>
-      <h2>Habit Log</h2>
+      <h2>Habit History</h2>
     </div>
     <div class="section-box">
       <div class="header-row">

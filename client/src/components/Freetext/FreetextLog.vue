@@ -6,7 +6,7 @@
         <button type="button">&lt;</button>
       </router-link>
 
-      <h2>Freetext Log</h2>
+      <h2>Freetext History</h2>
     </div>
     <LoadingBar :visible="isLoading" />
     <div v-for="entry in entries" :key="entry.id" class="general-input">

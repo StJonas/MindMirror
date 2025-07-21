@@ -320,6 +320,11 @@ button:focus-visible {
   z-index: 9999;
 }
 
+select.general-input {
+  background-color: #748CAB;
+  border: none;
+}
+
 
 @media (max-width: 600px) {
   #app {
