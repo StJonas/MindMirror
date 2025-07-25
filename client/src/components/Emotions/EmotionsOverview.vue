@@ -89,6 +89,7 @@
 import { inject, ref, computed } from "vue";
 import Toast from "../Toast.vue";
 import { useToast } from "../../utils/useToast.js";
+import { fetchWithAuth } from '../../utils/apiHelpers';
 
 const userId = inject("userId");
 const API_URL = inject("API_URL");
@@ -97,11 +98,6 @@ const showPleasant = ref(true);
 const showUnpleasant = ref(true);
 const isEditMode = ref(false);
 const emit = defineEmits(["navigateToJournalLog", "navigateToAddPrompt"]);
-const currentDate = new Date().toLocaleDateString("de-DE", {
-  day: "2-digit",
-  month: "long",
-  year: "numeric",
-});
 const toastRef = ref(null);
 const { showToast, toastMessage, toastType } = useToast(toastRef);
 const selectedEmotion = ref(null); 
@@ -131,20 +127,24 @@ async function saveEmotionEntry() {
     return;
   }
 
-  const res = await fetch(`${API_URL}/emotion_log_entries`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
+  const res = await fetchWithAuth(
+    `${API_URL}/emotion_log_entries`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        emotion_log_entry: {
+          user_id: userId.value,
+          date: new Date().toISOString().split("T")[0],
+          emotion_id: selectedEmotion.value,
+          note: emotionNote.value,
+        },
+      }),
     },
-    body: JSON.stringify({
-      emotion_log_entry: {
-        user_id: userId.value,
-        date: new Date().toISOString().split("T")[0],
-        emotion_id: selectedEmotion.value,
-        note: emotionNote.value
-      }
-    }),
-  });
+    true
+  );
 
   if (res.ok) {
     selectedEmotion.value = null;

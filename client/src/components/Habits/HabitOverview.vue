@@ -79,24 +79,19 @@ import Toast from "../Toast.vue";
 import { useToast } from "../../utils/useToast.js";
 import LoadingBar from "../LoadingBar.vue";
 import { inject, ref, onMounted, computed } from "vue";
+import { fetchWithAuth } from '../../utils/apiHelpers';
 
 const habits = ref([]);
 const API_URL = inject("API_URL");
 const userId = inject("userId");
-const currentDate = new Date().toLocaleDateString("de-DE", {
-  day: "2-digit",
-  month: "long",
-  year: "numeric",
-});
 const toastRef = ref(null);
 const { showToast, toastMessage, toastType } = useToast(toastRef);
 const savedHabits = ref(new Set());
 const isLoading = ref(false);
 
 async function fetchHabitHistories(date) {
-  const url = `${API_URL}/users/${userId.value}/habit_histories?date=${date}`;
-  const res = await fetch(url);
-  const histories = await res.json();
+  const data = await fetchWithAuth(`${API_URL}/users/${userId.value}/habit_histories?date=${date}`);
+  const histories = await data;
 
   if (savedHabits) {
     savedHabits.value = new Set(
@@ -117,19 +112,21 @@ async function saveHabit(habitId) {
   };
 
   try {
-    const response = await fetch(`${API_URL}/habit_histories`, {
+    const response = await fetchWithAuth(
+      `${API_URL}/habit_histories`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify([habitHistory]),
-    });
+      },
+      true
+    );
 
     if (!response.ok) {
       showToast("Error saving habit!", "error");
       return;
     }
-
 
     showToast("Save successful", "success");
     setTimeout(() => {
@@ -155,13 +152,12 @@ const sortedHabits = computed(() => {
 const fetchHabits = async () => {
   if (userId.value != null) {
     try {
-      const res = await fetch(`${API_URL}/users/${userId.value}/habits`);
-      if (!res.ok) {
+      const data = await fetchWithAuth(`${API_URL}/users/${userId.value}/habits`);
+      if (!data) {
         showToast("Failed to fetch habits!", "error");
-        console.error("HTTP error:", res.status, await res.text());
         return;
       }
-      habits.value = await res.json();
+      habits.value = await data;
     } catch (error) {
       showToast("Failed to fetch habits!", "error");
       console.error(error);

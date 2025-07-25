@@ -63,6 +63,7 @@
 import { inject, ref } from "vue";
 import Toast from "../Toast.vue";
 import { useToast } from "../../utils/useToast.js";
+import { fetchWithAuth } from '../../utils/apiHelpers';
 
 const userId = inject("userId");
 const isEditMode = ref(false);
@@ -70,29 +71,26 @@ const API_URL = inject("API_URL");
 const doneOffline = ref(false);
 const emit = defineEmits(["navigateToJournalLog", "navigateToAddPrompt"]);
 const freetextContent = ref("");
-const currentDate = new Date().toLocaleDateString("de-DE", {
-  day: "2-digit",
-  month: "long",
-  year: "numeric",
-});
 const toastRef = ref(null);
 const { showToast, toastMessage, toastType } = useToast(toastRef);
 
 const saveFreetextEntry = async () => {
-  const res = await fetch(`${API_URL}/users/${userId.value}/freetext_entries`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
+  const res = await fetchWithAuth(`${API_URL}/users/${userId.value}/freetext_entries`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        freetext_entry: {
+          user_id: userId.value,
+          content: freetextContent.value,
+          date: new Date().toISOString().split("T")[0],
+          done_offline: doneOffline.value
+        }
+      }),
     },
-    body: JSON.stringify({
-      freetext_entry: {
-        user_id: userId.value,
-        content: freetextContent.value,
-        date: new Date().toISOString().split("T")[0],
-        done_offline: doneOffline.value
-      }
-    }),
-  });
+    true
+  );
 
   if (res.ok) {
     freetextContent.value = "";

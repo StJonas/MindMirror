@@ -13,7 +13,7 @@
 import OverviewHeader from "./components/OverviewHeader.vue";
 
 import { ref, onMounted, provide } from "vue";
-import { useRoute } from "vue-router";
+import { fetchWithAuth, fetchSortedEntries } from './utils/apiHelpers';
 
 const entries = ref([]);
 const API_URL = "http://localhost:3000/";
@@ -34,12 +34,12 @@ provide("emotions", emotions);
 
 const fetchUserData = async () => {
   try {
-    const response = await fetch(`${API_URL}/users/${userId.value}`);
-    if (response.ok) {
-      const data = await response.json();
+    const response = await fetchWithAuth(`${API_URL}/users/${userId.value}`);
+
+    if (response) {
+      const data = await response;
       userId.value = data.id;
       username.value = data.username;
-      sessionToken.value = localStorage.getItem("sessionToken");
       fetchEntries();
       fetchGratitudeEntries();
       fetchEmotions();
@@ -54,8 +54,8 @@ const fetchUserData = async () => {
 
 const fetchGratitudePrompts = async () => {
   if (userId.value) {
-    const res = await fetch(`${API_URL}/users/${userId.value}/gratitude_prompts`);
-    gratitude_prompts.value = await res.json();
+    const res = await fetchWithAuth(`${API_URL}/users/${userId.value}/gratitude_prompts`);
+    gratitude_prompts.value = await res;
     gratitude_prompts.value.forEach((gratitude_prompt) => {
       gratitude_prompt.content = "";
     });
@@ -64,23 +64,20 @@ const fetchGratitudePrompts = async () => {
 
 const fetchEntries = async () => {
   if (userId.value) {
-    const url = `${API_URL}/users/${userId.value}/journal_entries`;
-    const res = await fetch(url);
-    entries.value = await res.json();
+    const res = await fetchSortedEntries(`${API_URL}/users/${userId.value}/journal_entries`, "entry_date");
+    entries.value = await res;
   }
 };
 
 const fetchGratitudeEntries = async () => {
   if (userId.value) {
-    const url = `${API_URL}/users/${userId.value}/gratitude_entries`;
-    const res = await fetch(url);
-    gratitude_entries.value = await res.json();
+    const res = await fetchSortedEntries(`${API_URL}/users/${userId.value}/gratitude_entries`, "entry_date");
+    gratitude_entries.value = await res;
   }
 };
 
 const fetchEmotions = async () => {
-  const res = await fetch(`${API_URL}/emotions`);
-  const data = await res.json();
+  const data = await fetchWithAuth(`${API_URL}/emotions`);
   emotions.value = Array.isArray(data) ? data : [];
 };
 

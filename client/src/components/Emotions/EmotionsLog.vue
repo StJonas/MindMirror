@@ -26,6 +26,7 @@ import { inject, computed, ref, onMounted } from "vue";
 import LoadingBar from "../LoadingBar.vue";
 import Toast from "../Toast.vue";
 import { useToast } from "../../utils/useToast.js";
+import { fetchSortedEntries } from '../../utils/apiHelpers';
 
 const entries = ref([]);
 const userId = inject("userId");
@@ -37,13 +38,7 @@ const { showToast, toastMessage, toastType } = useToast(toastRef);
 
 const fetchEmotionEntries = async () => {
   try {
-    const res = await fetch(`${API_URL}/users/${userId.value}/emotion_log_entries`);
-    if (!res.ok) {
-      showToast("Error loading log entries!", "error");
-      entries.value = [];
-      return;
-    }
-    const data = await res.json();
+    const data = await fetchSortedEntries(`${API_URL}/users/${userId.value}/emotion_log_entries`, "created_at");
     entries.value = Array.isArray(data) ? data : [];
   } catch (error) {
     showToast("Error loading log entries!", "error");

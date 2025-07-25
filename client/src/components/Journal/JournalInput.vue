@@ -34,6 +34,7 @@
 import { inject, ref } from "vue";
 import Toast from "../Toast.vue";
 import { useToast } from "../../utils/useToast.js";
+import { fetchWithAuth } from '../../utils/apiHelpers';
 
 const props = defineProps({
   prompt: Object,
@@ -73,7 +74,7 @@ const saveJournalEntry = async (content) => {
 
   // If an existing entry is found, update it; otherwise, create a new entry
   if (existingEntry) {
-    const updateRes = await fetch(
+    const updateRes = await fetchWithAuth(
       `${API_URL}/journal_entries/${existingEntry.id}`,
       {
         method: "PUT",
@@ -83,7 +84,8 @@ const saveJournalEntry = async (content) => {
         body: JSON.stringify({
           content: content,
         }),
-      }
+      },
+      true
     );
 
     if (updateRes.ok) {
@@ -98,19 +100,21 @@ const saveJournalEntry = async (content) => {
       showToast("Error saving entry!", "error");
     }
   } else {
-    const createRes = await fetch(`${API_URL}/journal_entries`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        content: content,
-        entry_date: entryDate,
-        user_id: userId.value,
-        prompt_id: props.prompt.id,
-        prompt_title: props.prompt.title,
-      }),
-    });
+    const createRes = await fetchWithAuth(`${API_URL}/journal_entries`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          content: content,
+          entry_date: entryDate,
+          user_id: userId.value,
+          prompt_id: props.prompt.id,
+          prompt_title: props.prompt.title,
+        }),
+        },
+      true
+    );
 
     if (createRes.ok) {
       showToast("Entry saved", "success");

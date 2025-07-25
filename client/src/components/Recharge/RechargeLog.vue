@@ -26,6 +26,7 @@ import { inject, ref, onMounted, computed } from "vue";
 import LoadingBar from "../LoadingBar.vue";
 import Toast from "../Toast.vue";
 import { useToast } from "../../utils/useToast.js";
+import { fetchSortedEntries } from '../../utils/apiHelpers';
 
 const entries = ref([]);
 const userId = inject("userId");
@@ -36,18 +37,16 @@ const { showToast, toastMessage, toastType } = useToast(toastRef);
 
 const fetchRechargeEntries = async () => {
   try {
-    const res = await fetch(`${API_URL}/users/${userId.value}/recharge_logs`);
-    if (!res.ok) {
+    const data = await fetchSortedEntries(`${API_URL}/users/${userId.value}/recharge_logs`);
+    if (!data) {
       showToast("Error loading log entries!", "error");
       entries.value = [];
       return;
     }
-    const data = await res.json();
     entries.value = Array.isArray(data) ? data : [];
   } catch (error) {
     showToast("Error loading log entries!", "error");
     entries.value = [];
-    console.error("Failed to fetch recharge entries:", error);
   }
 };
 

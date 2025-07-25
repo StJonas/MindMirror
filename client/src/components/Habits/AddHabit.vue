@@ -39,6 +39,7 @@ import { ref, onMounted, inject } from "vue"; //habit
 import router from "../../router";
 import Toast from "../Toast.vue";
 import { useToast } from "../../utils/useToast.js";
+import { fetchWithAuth } from '../../utils/apiHelpers';
 
 const name = ref("");
 const frequency = ref("");
@@ -59,19 +60,21 @@ const createHabit = async () => {
     frequency.value = 0;
   }
   console.log("is_timed.value", is_timed.value);
-  const res = await fetch(`${API_URL}/habits`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      name: name.value,
-      frequency: 0,
-      user_id: userId.value,
-      is_timed: is_timed.value,
-      description: description.value
-    }),
-  });
+  const res = await fetchWithAuth(`${API_URL}/habits`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: name.value,
+          frequency: 0,
+          user_id: userId.value,
+          is_timed: is_timed.value,
+          description: description.value
+        }),
+      },
+      true
+    );
 
   if (res.ok) {
     showToast("Habit created successfully!", "success");

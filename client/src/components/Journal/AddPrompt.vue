@@ -41,6 +41,7 @@ import { ref, onMounted, inject, computed } from "vue";
 import router from "../../router";
 import Toast from "../Toast.vue";
 import { useToast } from "../../utils/useToast.js";
+import { fetchWithAuth } from '../../utils/apiHelpers';
 
 const is_weekly = ref(false);
 const userId = inject("userId");
@@ -53,9 +54,9 @@ const toastRef = ref(null);
 const { showToast, toastMessage, toastType } = useToast(toastRef);
 
 const fetchPredefinedPrompts = async () => {
-  const res = await fetch(`${API_URL}/prompts?predefined=true`);
-  predefinedPrompts.value = await res.json();
-  if (!res.ok) {
+  const data = await fetchWithAuth(`${API_URL}/prompts?predefined=true`);
+  predefinedPrompts.value = await data;
+  if (!data) {
     showToast("Error fetching predefined prompts", "error");
   }
 };
@@ -71,18 +72,21 @@ const updatePrompt = () => {
 };
 
 const createPrompt = async () => {
-  const res = await fetch(`${API_URL}/prompts`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
+  const res = await fetchWithAuth(`${API_URL}/prompts`, 
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        title: prompt.value,
+        user_id: userId.value,
+        weekly: is_weekly.value,
+        predefined: false,
+      }),
     },
-    body: JSON.stringify({
-      title: prompt.value,
-      user_id: userId.value,
-      weekly: is_weekly.value,
-      predefined: false,
-    }),
-  });
+    true
+  );
 
   if (res.ok) {
     prompt.value = "";

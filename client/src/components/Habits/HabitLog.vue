@@ -30,10 +30,11 @@
 </template>
 
 <script setup>
-import { inject, ref, watchEffect, onMounted, computed } from "vue";
+import { inject, ref, onMounted, computed } from "vue";
 import LoadingBar from "../LoadingBar.vue";
 import Toast from "../Toast.vue";
 import { useToast } from "../../utils/useToast.js";
+import { fetchSortedEntries } from '../../utils/apiHelpers.js';
 
 const habits = ref([]);
 const API_URL = inject("API_URL");
@@ -45,14 +46,13 @@ const { showToast, toastMessage, toastType } = useToast(toastRef);
 const fetchHabitLog = async (currentDay) => {
   if (userId.value) {
     try {
-      const url = `${API_URL}/users/${userId.value}/habit_log`;
-      const res = await fetch(url);
-      if (!res.ok) {
+      const data = await fetchSortedEntries(`${API_URL}/users/${userId.value}/habit_log`);
+      if (!data) {
         showToast("Error loading log entries!", "error");
         habits.value = [];
         return;
       }
-      habits.value = await res.json();
+      habits.value = await data;
     } catch (error) {
       showToast("Error loading log entries!", "error");
       habits.value = [];

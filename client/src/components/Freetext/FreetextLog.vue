@@ -26,6 +26,7 @@ import { inject, ref, onMounted } from "vue";
 import LoadingBar from "../LoadingBar.vue";
 import Toast from "../Toast.vue";
 import { useToast } from "../../utils/useToast.js";
+import { fetchSortedEntries } from '../../utils/apiHelpers.js';
 
 const entries = ref([]);
 const userId = inject("userId");
@@ -36,14 +37,15 @@ const { showToast, toastMessage, toastType } = useToast(toastRef);
 
 const fetchFreetextEntries = async () => {
   try {
-    const res = await fetch(`${API_URL}/users/${userId.value}/freetext_entries`);
-    if (!res.ok) {
-      showToast("Error loading log entries!", "error");
+    const data = await fetchSortedEntries(`${API_URL}/users/${userId.value}/freetext_entries`);
+
+    if(!data) {
+      showToast("No entries found!", "info");
       entries.value = [];
       return;
     }
-    const data = await res.json();
-    entries.value = Array.isArray(data) ? data : [];
+    
+    entries.value = data
   } catch (error) {
     showToast("Error loading log entries!", "error");
     entries.value = [];

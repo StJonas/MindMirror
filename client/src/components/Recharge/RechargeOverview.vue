@@ -47,7 +47,7 @@
           class="general-input"
           placeholder="Reflect on the exercise..."
         />
-        <button class="save-button" @click="saveEmotionEntry()">
+        <button class="save-button" @click="saveRechargeEntry()">
           Done
         </button>
       </div>
@@ -60,6 +60,7 @@
 import { inject, ref, onMounted } from "vue";
 import Toast from "../Toast.vue";
 import { useToast } from "../../utils/useToast.js";
+import { fetchWithAuth } from '../../utils/apiHelpers';
 
 const userId = inject("userId");
 const API_URL = inject("API_URL");
@@ -67,19 +68,14 @@ const exercises = ref([]);
 const isEditMode = ref(false);
 const currentExercise = ref(null);
 const exerciseNote = ref(null);
-const currentDate = new Date().toLocaleDateString("de-DE", {
-  day: "2-digit",
-  month: "long",
-  year: "numeric",
-});
 const showPrompts = ref(false);
 const toastRef = ref(null);
 const { showToast, toastMessage, toastType } = useToast(toastRef);
 
 const fetchExercises = async () => {
-  const res = await fetch(`${API_URL}/recharge_exercises`);
-  if (res.ok) {
-    exercises.value = await res.json();
+  const data = await fetchWithAuth(`${API_URL}/recharge_exercises`);
+  if (data) {
+    exercises.value = await data;
     showRandomExercise();
   } else {
     showToast("Failed to fetch exercises!", "error");
@@ -96,8 +92,8 @@ function showRandomExercise() {
   }
 }
 
-async function saveEmotionEntry() {
-  const res = await fetch(`${API_URL}/recharge_logs`, {
+async function saveRechargeEntry() {
+  const res = await fetchWithAuth(`${API_URL}/recharge_logs`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -108,8 +104,10 @@ async function saveEmotionEntry() {
       exercise: currentExercise.value.title,
       completed: true,
       note: exerciseNote.value
-    }),
-  });
+      }),
+    },
+    true
+  );
 
   if (res.ok) {
     showRandomExercise();

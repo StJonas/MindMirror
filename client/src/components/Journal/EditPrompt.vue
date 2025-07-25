@@ -33,6 +33,7 @@
 import { ref, inject } from "vue";
 import Toast from "../Toast.vue";
 import { useToast } from "../../utils/useToast.js";
+import { fetchWithAuth } from '../../utils/apiHelpers';
 
 const props = defineProps({
   prompt: Object,
@@ -44,15 +45,18 @@ const toastRef = ref(null);
 const { showToast, toastMessage, toastType } = useToast(toastRef);
 
 const savePrompt = async () => {
-  const res = await fetch(`${API_URL}/prompts/${props.prompt.id}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
+  const res = await fetchWithAuth(`${API_URL}/prompts/${props.prompt.id}`, 
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        title: promptTitle.value,
+      }),
     },
-    body: JSON.stringify({
-      title: promptTitle.value,
-    }),
-  });
+    true
+  );
 
   if (res.ok) {
     showToast("Prompt saved", "success");
@@ -66,9 +70,12 @@ const savePrompt = async () => {
 
 const deletePrompt = async () => {
   if (confirm("Are you sure you want to delete this prompt?")) {
-    const res = await fetch(`${API_URL}/prompts/${props.prompt.id}`, {
-      method: "DELETE",
-    });
+    const res = await fetchWithAuth(`${API_URL}/prompts/${props.prompt.id}`, 
+      {
+        method: "DELETE",
+      },
+      true
+    );
 
     if (res.ok) {
       showToast("Prompt deleted", "success");

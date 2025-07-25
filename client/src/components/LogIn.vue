@@ -60,9 +60,9 @@ const login = async () => {
   if (res.ok) {
     const data = await res.json();
     user.data = data.id;
-    //console.log("userId", data.user.id);
+    console.log("userId", data.user.id);
 
-    localStorage.setItem("sessionToken", data.token);
+    localStorage.setItem("jwt", data.token);
     localStorage.setItem("userId", data.user.id);
 
     showToast("Login successful!", "success");

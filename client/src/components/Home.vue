@@ -1,7 +1,7 @@
 <template>
   <div class="page-styling">
     <div class="header-row">
-      <h2 v-if="!userId">Please sign up or login:</h2>
+      <h2 v-if="!userId">Please sign up or login</h2>
       <h2 v-if="userId">Hello {{ username }}</h2>
       <h2 v-if="userId">{{ currentDate }}</h2>
     </div>

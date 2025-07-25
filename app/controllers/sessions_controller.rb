@@ -1,4 +1,6 @@
 class SessionsController < ApplicationController
+  skip_before_action :authorize_request, only: [:create]
+
   def create
       user = User.find_by(username: params[:username])
 
@@ -9,10 +11,8 @@ class SessionsController < ApplicationController
       # puts "Authentication result: #{user&.authenticate(params[:password])}"  # Corrected line
 
       if user&.authenticate(params[:password])
-          token = Devise.friendly_token
-
-          # Send the token and user
-          render json: { token: token, user: user }
+          token = JsonWebToken.encode(user_id: user.id)
+          render json: { token: token, user: user }, status: :ok
       else
         render json: { status: 400, error: 'Invalid username or password' }, status: :bad_request
       end

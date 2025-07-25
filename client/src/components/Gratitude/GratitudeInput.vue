@@ -94,6 +94,7 @@
 import { inject, ref, onMounted, watch } from "vue";
 import Toast from "../Toast.vue";
 import { useToast } from "../../utils/useToast.js";
+import { fetchWithAuth } from '../../utils/apiHelpers';
 
 const props = defineProps({
   prompt: Object,
@@ -119,18 +120,20 @@ function toggleEditMode() {
 }
 
 const updatePrompt = async (promptId, newTitle) => {
-  const res = await fetch(`${API_URL}/gratitude_prompts/${promptId}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
+  const res = await fetchWithAuth(`${API_URL}/gratitude_prompts/${promptId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        title: newTitle,
+        user_id: userId.value,
+        weekly: false,
+        predefined: false,
+      }),
     },
-    body: JSON.stringify({
-      title: newTitle,
-      user_id: userId.value,
-      weekly: false,
-      predefined: false,
-    }),
-  });
+    true
+  );
 
   if (res.ok) {
     showToast("Question updated", "success");
@@ -144,9 +147,11 @@ const updatePrompt = async (promptId, newTitle) => {
 
 const deletePrompt = async () => {
   if (confirm("Are you sure you want to delete this question?")) {
-    const res = await fetch(`${API_URL}/gratitude_prompts/${props.prompt.id}`, {
-      method: "DELETE",
-    });
+    const res = await fetchWithAuth(`${API_URL}/gratitude_prompts/${props.prompt.id}`, {
+        method: "DELETE",
+      },
+      true
+    );
 
     if (res.ok) {
       showToast("Quetion deleted successfully", "success");
@@ -187,7 +192,7 @@ const saveGratitudeEntry = async (content) => {
 
   // If an existing entry is found, update it; otherwise, create a new entry
   if (existingEntry) {
-    const updateRes = await fetch(
+    const updateRes = await fetchWithAuth(
       `${API_URL}/gratitude_entries/${existingEntry.id}`,
       {
         method: "PUT",
@@ -197,7 +202,8 @@ const saveGratitudeEntry = async (content) => {
         body: JSON.stringify({
           content: content,
         }),
-      }
+      },
+      true
     );
 
     if (updateRes.ok) {
@@ -211,19 +217,21 @@ const saveGratitudeEntry = async (content) => {
       showToast("Error updating gratitude entry", "error");
     }
   } else {
-    const createRes = await fetch(`${API_URL}/gratitude_entries`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    const createRes = await fetchWithAuth(`${API_URL}/gratitude_entries`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          content: content,
+          entry_date: entryDate,
+          user_id: userId.value,
+          gratitude_prompt_id: props.prompt.id,
+          prompt_title: props.prompt.title,
+        }),
       },
-      body: JSON.stringify({
-        content: content,
-        entry_date: entryDate,
-        user_id: userId.value,
-        gratitude_prompt_id: props.prompt.id,
-        prompt_title: props.prompt.title,
-      }),
-    });
+      true
+    );
 
     if (createRes.ok) {
       showToast("Gratitude entry saved", "success");
@@ -240,25 +248,23 @@ const saveGratitudeEntry = async (content) => {
 
 const fetchUnusedPredefinedPrompts = async () => {
   try {
-    const res = await fetch(`${API_URL}/gratitude_prompts?predefined=true`);
-    if (!res.ok) {
+    const data = await fetchWithAuth(`${API_URL}/gratitude_prompts?predefined=true`);
+    if (!data) {
       showToast("Failed to fetch predefined prompts", "error");
       return [];
     }
-    const allPredefined = await res.json();
+    const allPredefined = await data;
 
-    const userPromptsRes = await fetch(`${API_URL}/users/${userId.value}/gratitude_prompts`);
-    if (!userPromptsRes.ok) {
+    const userPrompts = await fetchWithAuth(`${API_URL}/users/${userId.value}/gratitude_prompts`);
+    if (!userPrompts) {
       showToast("Failed to fetch user prompts", "error");
       return [];
     }
-    const userPrompts = await userPromptsRes.json();
     const userPromptTitles = userPrompts.map(p => p.title);
 
     return allPredefined.filter(p => !userPromptTitles.includes(p.title));
   } catch (error) {
     showToast("Error fetching prompts", "error");
-    console.error(error);
     return [];
   }
 };

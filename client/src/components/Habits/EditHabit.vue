@@ -38,7 +38,7 @@
 
 <script setup>
 import { ref, onMounted, inject } from "vue";
-import { useRoute } from "vue-router";
+import { fetchWithAuth } from '../../utils/apiHelpers';
 import router from "../../router";
 import Toast from "../Toast.vue";
 import { useToast } from "../../utils/useToast.js";
@@ -60,8 +60,8 @@ const props = defineProps({
 
 onMounted(async () => {
   if (props.habitId) {
-    const res = await fetch(`${API_URL}/habits/${props.habitId}`);
-    const fetchedHabit = await res.json();
+    const data = await fetchWithAuth(`${API_URL}/habits/${props.habitId}`);
+    const fetchedHabit = await data;
     if (fetchedHabit) {
       name.value = fetchedHabit.name;
       frequency.value = fetchedHabit.frequency;
@@ -74,18 +74,21 @@ onMounted(async () => {
 
 const updateHabit = async () => {
   try {
-    const res = await fetch(`${API_URL}/habits/${habit_id.value}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
+    const res = await fetchWithAuth(`${API_URL}/habits/${habit_id.value}`, 
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: name.value,
+          frequency: 0,
+          id: habit_id.value,
+          description: description.value,
+        }),
       },
-      body: JSON.stringify({
-        name: name.value,
-        frequency: 0,
-        id: habit_id.value,
-        description: description.value,
-      }),
-    });
+      true
+    );
 
     if (res.ok) {
       const data = await res.json();
@@ -111,9 +114,11 @@ const updateHabit = async () => {
 const deleteHabit = async (id) => {
   if (confirm("Are you sure you want to delete this habit?")) {
     try {
-      const habitRes = await fetch(`${API_URL}/habits/${id}`, {
+      const habitRes = await fetchWithAuth(`${API_URL}/habits/${id}`, {
         method: "DELETE",
-      });
+      },
+      true
+    );
 
       if (habitRes.ok) {
         habits.value = habits.value.filter((habit) => habit.id !== id);

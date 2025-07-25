@@ -100,6 +100,7 @@ import JournalInput from "./JournalInput.vue";
 import EditPrompt from "./EditPrompt.vue";
 import Toast from "../Toast.vue";
 import { useToast } from "../../utils/useToast.js";
+import { fetchWithAuth } from '../../utils/apiHelpers';
 
 const userId = inject("userId");
 const API_URL = inject("API_URL");
@@ -144,12 +145,9 @@ const toggleEditMode = () => {
 const fetchPrompts = async () => {
   if (userId.value) {
     try {
-      const res = await fetch(`${API_URL}/users/${userId.value}/prompts`);
-      if (!res.ok) {
-        showToast("Failed to fetch exercises!", "error");
-        return;
-      }
-      prompts.value = await res.json();
+      const data = await fetchWithAuth(`${API_URL}/users/${userId.value}/prompts`);
+
+      prompts.value = await data;
       prompts.value.forEach((prompt) => {
         prompt.content = "";
       });

@@ -29,7 +29,7 @@
     <transition-group name="card-move" tag="div"> 
       <div class="section-box" v-if="userId && showPrompts">
         <h2 class="section-title">Daily Gratitude Question</h2>
-          <div v-if="prompts && prompts.length === 0" :key="no-prompts" class="general-input">
+          <div v-if="prompts && prompts.length === 0" :key="'no-prompts'" class="general-input">
             <h2>No prompts yet</h2>
             <input
               v-model="newPromptTitle"
@@ -59,6 +59,7 @@ import { inject, ref, onMounted } from "vue";
 import GratitudeInput from "./GratitudeInput.vue";
 import Toast from "../Toast.vue";
 import { useToast } from "../../utils/useToast.js";
+import { fetchWithAuth } from '../../utils/apiHelpers';
 
 const API_URL = inject("API_URL");
 const userId = inject("userId");
@@ -74,18 +75,20 @@ const addPrompt = async () => {
     showToast("Please select an emotion", "info");
     return;
   }
-  const res = await fetch(`${API_URL}/gratitude_prompts`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
+  const res = await fetchWithAuth(`${API_URL}/gratitude_prompts`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        title: newPromptTitle.value,
+        user_id: userId.value,
+        weekly: false,
+        predefined: false,
+      }),
     },
-    body: JSON.stringify({
-      title: newPromptTitle.value,
-      user_id: userId.value,
-      weekly: false,
-      predefined: false,
-    }),
-  });
+    true
+  ); 
 
   if (res.ok) {
     showToast("Question added", "success");
