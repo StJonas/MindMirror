@@ -1,47 +1,110 @@
 <template>
   <div class="page-styling">
+    <Toast ref="toastRef" :message="toastMessage" :type="toastType" />
     <div class="header-row">
       <h2 v-if="!userId">Please sign up or login</h2>
       <h2 v-if="userId">Hello {{ username }}</h2>
       <h2 v-if="userId">{{ currentDate }}</h2>
     </div>
+    <button class="edit-btn" @click="toggleEditMode">
+      {{ isEditMode ? 'Done' : 'Edit' }}
+    </button>
     <div class="home-container" v-if="userId">
-      <router-link to="/HabitOverview" class="home-btn">
-        <img src="/calender.svg" alt="icon" class="home-icon" />
-        Habits
-      </router-link>
-      <router-link to="/JournalOverview" class="home-btn">
-        <img src="/book.svg" alt="icon" class="home-icon" />
-        Journal
-      </router-link>
-      <router-link to="/GratitudeOverview" class="home-btn">
-        <img src="/heart.svg" alt="icon" class="home-icon" />
-        Gratitude
-      </router-link>
-      <router-link to="/EmotionsOverview" class="home-btn">
-        <img src="/brain.svg" alt="icon" class="home-icon" />
-        Emotions
-      </router-link>
-      <router-link to="/RechargeOverview" class="home-btn">
-        <img src="/battery.svg" alt="icon" class="home-icon" />
-        Recharge
-      </router-link>
-      <router-link to="/FreetextOverview" class="home-btn">
-        <img src="/pen.svg" alt="icon" class="home-icon" />
-        Freetext
-      </router-link>
+      <template v-for="topic in topics" :key="topic.name">
+        <button
+          v-if="isEditMode"
+          class="home-btn"
+          type="button"
+          @click="toggleTopic(topic.name)"
+        >
+          <img :src="topic.icon" alt="icon" class="home-icon" />
+          {{ topic.name }}
+          <img
+            :src="selectedTopics.includes(topic.name) ? '/eye1.svg' : '/eye2.svg'"
+            alt="eye"
+            class="eye-icon"
+            style="margin-top: 8px;"
+          />
+        </button>
+        <router-link
+          v-else-if="selectedTopics.includes(topic.name)"
+          :to="topic.route"
+          class="home-btn"
+        >
+          <img :src="topic.icon" alt="icon" class="home-icon" />
+          {{ topic.name }}
+        </router-link>
+      </template>
     </div>
   </div>
 </template>
 
 <script setup>
-import { inject } from "vue";
+import { inject, ref, onMounted } from "vue";
+import { fetchWithAuth } from '../utils/apiHelpers';
+import { selectedTopics, topics } from '../utils/topics.js';
+import Toast from "./Toast.vue";
+import { useToast } from "../utils/useToast.js";
+
+const toastRef = ref(null);
+const { showToast, toastMessage, toastType } = useToast(toastRef);
+const API_URL = inject("API_URL");
 const userId = inject("userId");
 const username = inject("username");
 const currentDate = new Date().toLocaleDateString("de-DE", {
   day: "2-digit",
   month: "long",
   year: "numeric",
+});
+
+const isEditMode = ref(false);
+
+async function toggleEditMode() {
+  isEditMode.value = !isEditMode.value;
+  if (!isEditMode.value) {
+    try {
+      await fetchWithAuth(`${API_URL}/users/${userId.value}/user_topic_preferences`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          user_id: userId.value,
+          topics: selectedTopics.value,
+        }),
+      });
+      showToast("Preferences saved!", "success");
+    } catch (error) {
+      console.error("Failed to save topic preferences:", error);
+      showToast("Failed to save preferences!", "error");
+    }
+  }
+}
+
+function toggleTopic(name) {
+  if (!isEditMode.value) return;
+  const idx = selectedTopics.value.indexOf(name);
+  if (idx === -1) {
+    selectedTopics.value.push(name);
+  } else {
+    selectedTopics.value.splice(idx, 1);
+  }
+}
+
+onMounted(async () => {
+  try {
+    const res = await fetchWithAuth(`${API_URL}/users/${userId.value}/user_topic_preferences`);
+    if (res && Array.isArray(res.topics) && res.topics.length > 0) {
+      selectedTopics.value = res.topics;
+    } else {
+      selectedTopics.value = topics.map(t => t.name);
+    }
+  } catch (error) {
+    console.error("Failed to load topic preferences:", error);
+    showToast("Failed to load topic preferences!", "error");
+    // Fallback: enable all topics
+    selectedTopics.value = topics.map(t => t.name);
+  }
 });
 </script>
 
@@ -87,6 +150,13 @@ const currentDate = new Date().toLocaleDateString("de-DE", {
   width: 32px;
   height: 32px;
   margin-bottom: 8px;
+}
+
+.eye-icon {
+  width: 24px;
+  height: 24px;
+  display: block;
+  margin: 0 auto;
 }
 @media (max-width: 600px) {
   .home-container {

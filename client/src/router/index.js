@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { selectedTopics } from '../utils/topics.js';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -101,6 +102,25 @@ const router = createRouter({
       component: () => import("../components/Recharge/RechargeLog.vue"),
     }
   ],
+});
+
+router.beforeEach((to, from, next) => {
+  const routeToTopic = {
+    HabitOverview: 'Habits',
+    JournalOverview: 'Journal',
+    GratitudeOverview: 'Gratitude',
+    EmotionsOverview: 'Emotions',
+    RechargeOverview: 'Recharge',
+    FreetextOverview: 'Freetext',
+  };
+
+  const topicName = routeToTopic[to.name];
+
+  if (topicName && !selectedTopics.value.includes(topicName)) {
+    next({ path: '/' });
+  } else {
+    next();
+  }
 });
 
 export default router;

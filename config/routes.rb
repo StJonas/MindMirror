@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :user_topic_preferences
   resources :freetext_entries
   resources :recharge_exercises
   resources :recharge_logs
@@ -48,6 +49,9 @@ Rails.application.routes.draw do
   end
   resources :users do
     resources :freetext_entries, only: [:index, :create]
+  end
+  resources :users do
+    resources :user_topic_preferences, only: [:index, :create]
   end
 
   get "up" => "rails/health#show", as: :rails_health_check

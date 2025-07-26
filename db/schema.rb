@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_07_21_103918) do
+ActiveRecord::Schema[7.1].define(version: 2025_07_26_140423) do
   create_table "emotion_log_entries", force: :cascade do |t|
     t.integer "emotion_log_id", null: false
     t.integer "emotion_id", null: false
@@ -157,6 +157,14 @@ ActiveRecord::Schema[7.1].define(version: 2025_07_21_103918) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "user_topic_preferences", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "topic_name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_user_topic_preferences_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "username"
     t.string "password_digest"
@@ -179,4 +187,5 @@ ActiveRecord::Schema[7.1].define(version: 2025_07_21_103918) do
   add_foreign_key "journal_entry_tags", "tags"
   add_foreign_key "prompts", "users"
   add_foreign_key "recharge_logs", "users"
+  add_foreign_key "user_topic_preferences", "users"
 end
