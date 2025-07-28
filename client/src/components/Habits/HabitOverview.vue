@@ -12,22 +12,12 @@
       <div class="side-by-side">
         <router-link to="/AddHabit" style="pointer-events: auto">
           <button type="button">
-            <img
-              src="/add.svg"
-              alt="Add"
-              class="icon"
-              style="width: 24px; height: 24px"
-            />
+            <img src="/add.svg" alt="Add" class="icon" style="width: 24px; height: 24px" />
           </button>
         </router-link>
         <router-link to="/HabitLog" style="pointer-events: auto">
           <button type="button">
-            <img
-              src="/log.svg"
-              alt="Log"
-              class="icon"
-              style="width: 24px; height: 24px"
-            />
+            <img src="/log.svg" alt="Log" class="icon" style="width: 24px; height: 24px" />
           </button>
         </router-link>
       </div>
@@ -36,37 +26,21 @@
     <LoadingBar :visible="isLoading" />
     <!-- List of Habits -->
     <transition-group name="card-move" tag="div">
-      <div v-for="habit in sortedHabits" :key="habit.id" :class="['section-box', { 'checked-border': savedHabits.has(habit.id) }]">
-          <div class="content-row">
-            <h2 class="section-title">{{ habit.name }}</h2>
-            <router-link
-              :to="`/editHabit/${habit.id}`"
-              style="pointer-events: auto"
-            >
-              <button type="button">
-                <img
-                  src="/edit.svg"
-                  alt="Log"
-                  class="icon"
-                  style="width: 24px; height: 24px"
-                />
-              </button>
-            </router-link>
-          </div>
+      <div v-for="habit in sortedHabits" :key="habit.id"
+        :class="['section-box', { 'checked-border': savedHabits.has(habit.id) }]">
+        <div class="content-row">
+          <h2 class="section-title">{{ habit.name }}</h2>
+          <router-link :to="`/editHabit/${habit.id}`" style="pointer-events: auto">
+            <button type="button">
+              <img src="/edit.svg" alt="Log" class="icon" style="width: 24px; height: 24px" />
+            </button>
+          </router-link>
+        </div>
         <hr class="content-divider" />
         <div class="habit-action-row">
           <span class="habit-description">{{ habit.description }}</span>
-          <button
-            type="button"
-            @click="saveHabit(habit.id)"
-            class="save-button"
-          >
-            <img
-              src="/save.svg"
-              alt="Log"
-              class="icon"
-              style="width: 24px; height: 24px"
-            />
+          <button type="button" @click="saveHabit(habit.id)" class="save-button">
+            <img src="/save.svg" alt="Log" class="icon" style="width: 24px; height: 24px" />
           </button>
         </div>
       </div>
@@ -119,7 +93,7 @@ async function saveHabit(habitId) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify([habitHistory]),
-      },
+    },
       true
     );
 
@@ -130,7 +104,7 @@ async function saveHabit(habitId) {
 
     showToast("Save successful", "success");
     setTimeout(() => {
-        location.reload();
+      location.reload();
     }, 500);
   } catch (error) {
     console.error("There was a problem with the save operation:", error);
@@ -179,6 +153,7 @@ onMounted(async () => {
   flex-direction: column;
   align-items: flex-start;
 }
+
 .habit-action-row {
   display: flex;
   flex-direction: column;
@@ -186,14 +161,15 @@ onMounted(async () => {
   gap: 10px;
   padding: 8px 0;
 }
+
 .habit-description {
   font-size: 1.1rem;
   color: black;
   width: 100%;
   text-align: left;
 }
-.checked-border {
-  border: 6px solid #4caf50; 
-}
 
+.checked-border {
+  border: 6px solid #4caf50;
+}
 </style>

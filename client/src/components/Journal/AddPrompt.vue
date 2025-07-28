@@ -8,26 +8,13 @@
       <h2>Add Question</h2>
     </div>
     <div class="general-input">
-      <select
-        v-model="selectedPrompt"
-        @change="updatePrompt"
-        class="general-input"
-      >
+      <select v-model="selectedPrompt" @change="updatePrompt" class="general-input">
         <option value="" disabled>Select predefined question</option>
-        <option
-          v-for="prompt in filteredPredefinedPrompts"
-          :key="prompt.id"
-          :value="prompt.title"
-        >
+        <option v-for="prompt in filteredPredefinedPrompts" :key="prompt.id" :value="prompt.title">
           {{ prompt.title }}
         </option>
       </select>
-      <input
-        type="text"
-        v-model="prompt"
-        placeholder="write your own question"
-        class="general-input"
-      />
+      <input type="text" v-model="prompt" placeholder="write your own question" class="general-input" />
 
       <button @click="createPrompt" class="save-button">
         <img src="/save.svg" alt="Save" class="white-icon" />
@@ -72,7 +59,7 @@ const updatePrompt = () => {
 };
 
 const createPrompt = async () => {
-  const res = await fetchWithAuth(`${API_URL}/prompts`, 
+  const res = await fetchWithAuth(`${API_URL}/prompts`,
     {
       method: "POST",
       headers: {
@@ -108,6 +95,5 @@ onMounted(() => {
 </script>
 
 <style scoped>
-@media (max-width: 600px) {
-}
+@media (max-width: 600px) {}
 </style>

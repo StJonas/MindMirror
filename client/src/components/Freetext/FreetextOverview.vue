@@ -9,45 +9,22 @@
         <img src="/pen.svg" alt="Shuffle" class="icon" style="width: 36px; height: 36px" />
         <h2 class="header-row-title">Freetext</h2>
       </div>
-      <router-link
-        v-if="userId"
-        to="/FreetextLog"
-        :class="{ 'disabled-button': isEditMode }"
-        :tabindex="isEditMode ? -1 : 0"
-        aria-disabled="isEditMode"
-        style="pointer-events: auto"
-      >
+      <router-link v-if="userId" to="/FreetextLog" :class="{ 'disabled-button': isEditMode }"
+        :tabindex="isEditMode ? -1 : 0" aria-disabled="isEditMode" style="pointer-events: auto">
         <button type="button" :disabled="isEditMode">
-          <img
-            src="/log.svg"
-            alt="Log"
-            class="icon"
-            style="width: 24px; height: 24px"
-          />
+          <img src="/log.svg" alt="Log" class="icon" style="width: 24px; height: 24px" />
         </button>
       </router-link>
     </div>
     <div class="section-box" v-if="userId">
       <h2 class="section-title">Freetext</h2>
       <div class="general-input">
-        <textarea type="text" 
-          name="site_notes" 
-          v-model="freetextContent"
-          rows="5" 
-          class="general-input" 
-          placeholder="Write your thoughts here..."
-          :disabled="doneOffline"
-          :class="{ 'greyed-out': doneOffline }"
-          />
+        <textarea type="text" name="site_notes" v-model="freetextContent" rows="5" class="general-input"
+          placeholder="Write your thoughts here..." :disabled="doneOffline" :class="{ 'greyed-out': doneOffline }" />
         <div class="toggle-container">
           <span class="text-label">done offline</span>
           <div>
-            <input
-              type="checkbox"
-              id="doneOffline"
-              v-model="doneOffline"
-              class="checkbox"
-            />
+            <input type="checkbox" id="doneOffline" v-model="doneOffline" class="checkbox" />
             <label for="doneOffline" class="label"></label>
           </div>
         </div>
@@ -76,19 +53,19 @@ const { showToast, toastMessage, toastType } = useToast(toastRef);
 
 const saveFreetextEntry = async () => {
   const res = await fetchWithAuth(`${API_URL}/users/${userId.value}/freetext_entries`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        freetext_entry: {
-          user_id: userId.value,
-          content: freetextContent.value,
-          date: new Date().toISOString().split("T")[0],
-          done_offline: doneOffline.value
-        }
-      }),
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
     },
+    body: JSON.stringify({
+      freetext_entry: {
+        user_id: userId.value,
+        content: freetextContent.value,
+        date: new Date().toISOString().split("T")[0],
+        done_offline: doneOffline.value
+      }
+    }),
+  },
     true
   );
 
@@ -98,7 +75,7 @@ const saveFreetextEntry = async () => {
 
     showToast("Freetext entry saved", "success");
     setTimeout(() => {
-        location.reload();
+      location.reload();
     }, 500);
   } else {
     showToast("Error saving entry!", "error");
@@ -108,6 +85,5 @@ const saveFreetextEntry = async () => {
 </script>
 
 <style scoped>
-@media (max-width: 600px) {
-}
+@media (max-width: 600px) {}
 </style>

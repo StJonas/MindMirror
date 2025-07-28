@@ -14,12 +14,8 @@
     <div class="header-row">
       <h3 class="section-title">{{ day.date }}</h3>
     </div>
-    <div
-      v-for="habit in day.habits"
-      :key="habit.name"
-      class="general-input"
-      style="display: flex; align-items: center; gap: 12px"
-    >
+    <div v-for="habit in day.habits" :key="habit.name" class="general-input"
+      style="display: flex; align-items: center; gap: 12px">
       <span>{{ habit.name }}</span>
     </div>
   </div>

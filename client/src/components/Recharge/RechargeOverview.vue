@@ -10,23 +10,14 @@
         <h2 class="header-row-title">Recharge</h2>
       </div>
 
-      <router-link
-        v-if="userId"
-        to="/RechargeLog"
-        style="pointer-events: auto"
-      >
+      <router-link v-if="userId" to="/RechargeLog" style="pointer-events: auto">
         <button type="button" :disabled="isEditMode">
-          <img
-            src="/log.svg"
-            alt="Log"
-            class="icon"
-            style="width: 24px; height: 24px"
-          />
+          <img src="/log.svg" alt="Log" class="icon" style="width: 24px; height: 24px" />
         </button>
       </router-link>
     </div>
 
-    <div v-if="userId  && showPrompts" class="section-box">
+    <div v-if="userId && showPrompts" class="section-box">
       <h1 class="section-title">Daily recharge exercise</h1>
       <div class="general-input">
         <div class="content-row">
@@ -37,23 +28,17 @@
         </div>
 
         <hr class="content-divider" />
-        
+
         <p v-if="currentExercise">{{ currentExercise.description }}</p>
-        <textarea
-          type="text"
-          v-model="exerciseNote"
-          name="exercise_note"
-          rows="5"
-          class="general-input"
-          placeholder="Reflect on the exercise..."
-        />
+        <textarea type="text" v-model="exerciseNote" name="exercise_note" rows="5" class="general-input"
+          placeholder="Reflect on the exercise..." />
         <button class="save-button" @click="saveRechargeEntry()">
           Done
         </button>
       </div>
     </div>
 
-    </div>
+  </div>
 </template>
 
 <script setup>
@@ -104,18 +89,18 @@ async function saveRechargeEntry() {
       exercise: currentExercise.value.title,
       completed: true,
       note: exerciseNote.value
-      }),
-    },
+    }),
+  },
     true
   );
 
   if (res.ok) {
     showRandomExercise();
-    exerciseNote.value = ""; 
+    exerciseNote.value = "";
 
     showToast("Entry saved", "success");
     setTimeout(() => {
-        location.reload();
+      location.reload();
     }, 500);
   } else {
     showToast("Error saving entry!", "error");
@@ -132,7 +117,5 @@ onMounted(() => {
 </script>
 
 <style scoped>
-
-@media (max-width: 600px) {
-}
+@media (max-width: 600px) {}
 </style>

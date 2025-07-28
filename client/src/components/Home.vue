@@ -10,42 +10,19 @@
       <button class="edit-btn-top" @click="toggleEditMode">
         {{ isEditMode ? 'Done' : 'Edit' }}
       </button>
-      <router-link
-        v-if="userId"
-        to="/Statistics"
-        style="pointer-events: auto"
-        class="chart-btn-top"
-      >
+      <router-link v-if="userId" to="/Statistics" style="pointer-events: auto" class="chart-btn-top">
         <button type="button" :disabled="isEditMode">
-          <img
-            src="/chart.svg"
-            alt="Log"
-            class="icon"
-            style="width: 24px; height: 24px"
-          />
+          <img src="/chart.svg" alt="Log" class="icon" style="width: 24px; height: 24px" />
         </button>
       </router-link>
       <template v-for="topic in topics" :key="topic.name">
-        <button
-          v-if="isEditMode"
-          class="home-btn"
-          type="button"
-          @click="toggleTopic(topic.name)"
-        >
+        <button v-if="isEditMode" class="home-btn" type="button" @click="toggleTopic(topic.name)">
           <img :src="topic.icon" alt="icon" class="home-icon" />
           {{ topic.name }}
-          <img
-            :src="selectedTopics.includes(topic.name) ? '/eye1.svg' : '/eye2.svg'"
-            alt="eye"
-            class="eye-icon"
-            style="margin-top: 8px;"
-          />
+          <img :src="selectedTopics.includes(topic.name) ? '/eye1.svg' : '/eye2.svg'" alt="eye" class="eye-icon"
+            style="margin-top: 8px;" />
         </button>
-        <router-link
-          v-else-if="selectedTopics.includes(topic.name)"
-          :to="topic.route"
-          class="home-btn"
-        >
+        <router-link v-else-if="selectedTopics.includes(topic.name)" :to="topic.route" class="home-btn">
           <img :src="topic.icon" alt="icon" class="home-icon" />
           {{ topic.name }}
         </router-link>
@@ -144,7 +121,7 @@ onMounted(async () => {
   margin: 0 auto;
   background: #95b3db;
   border-radius: 18px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
 }
 
 .home-btn {
@@ -167,9 +144,11 @@ onMounted(async () => {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   margin: 0;
 }
+
 .home-btn:hover {
   background: #8aa6ca;
 }
+
 .home-icon {
   width: 32px;
   height: 32px;
@@ -195,12 +174,14 @@ onMounted(async () => {
   border-radius: 8px;
   font-size: 1rem;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   z-index: 10;
 }
+
 .edit-btn-top:hover {
   background: #ff9c5a;
 }
+
 .chart-btn-top {
   position: absolute;
   top: 8px;
@@ -208,6 +189,7 @@ onMounted(async () => {
   margin: 0;
   z-index: 10;
 }
+
 @media (max-width: 600px) {
   .home-container {
     width: 80vw;
@@ -218,6 +200,7 @@ onMounted(async () => {
     grid-template-columns: 1fr 1fr;
     margin-top: 20px;
   }
+
   .home-btn {
     font-size: 1.2rem;
     padding: 24px 0;

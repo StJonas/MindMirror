@@ -7,27 +7,12 @@
       </router-link>
       <h2>Edit Habit: {{ oldName }}</h2>
       <button @click="deleteHabit(habit_id)" class="delete-button">
-        <img
-          src="/delete.svg"
-          alt="Delete"
-          class="white-icon"
-          style="width: 24px; height: 24px"
-        />
+        <img src="/delete.svg" alt="Delete" class="white-icon" style="width: 24px; height: 24px" />
       </button>
     </div>
-    <div class="section-box"> 
-      <input
-        type="text"
-        v-model="name"
-        placeholder="name"
-        class="general-input"
-      />
-      <input
-        rows="4"
-        v-model="description"
-        placeholder="description"
-        class="general-input"
-      />
+    <div class="section-box">
+      <input type="text" v-model="name" placeholder="name" class="general-input" />
+      <input rows="4" v-model="description" placeholder="description" class="general-input" />
 
       <button @click="updateHabit(habit_id)" class="save-button">
         <img src="/save.svg" alt="Save" class="white-icon" />
@@ -74,7 +59,7 @@ onMounted(async () => {
 
 const updateHabit = async () => {
   try {
-    const res = await fetchWithAuth(`${API_URL}/habits/${habit_id.value}`, 
+    const res = await fetchWithAuth(`${API_URL}/habits/${habit_id.value}`,
       {
         method: "PUT",
         headers: {
@@ -117,8 +102,8 @@ const deleteHabit = async (id) => {
       const habitRes = await fetchWithAuth(`${API_URL}/habits/${id}`, {
         method: "DELETE",
       },
-      true
-    );
+        true
+      );
 
       if (habitRes.ok) {
         habits.value = habits.value.filter((habit) => habit.id !== id);

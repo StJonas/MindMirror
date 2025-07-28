@@ -11,12 +11,11 @@
     <LoadingBar :visible="isLoading" />
     <div v-for="(dayEntries, date) in groupedEntries" :key="date">
       <h2>{{ date }}</h2>
-      <div v-for="entry in dayEntries" :key="entry.id" 
-        class="general-input"
+      <div v-for="entry in dayEntries" :key="entry.id" class="general-input"
         :style="{ backgroundColor: getEmotionColor(entry.emotion_id) }">
-      <h3>{{ getEmotionName(entry.emotion_id) }}</h3>
-      <p><em>{{ entry.note }}</em></p>
-    </div>
+        <h3>{{ getEmotionName(entry.emotion_id) }}</h3>
+        <p><em>{{ entry.note }}</em></p>
+      </div>
     </div>
   </div>
 </template>
@@ -75,6 +74,4 @@ onMounted(async () => {
 });
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

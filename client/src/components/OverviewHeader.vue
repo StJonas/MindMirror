@@ -7,41 +7,20 @@
       </button>
     </router-link>
     <div class="auth-buttons">
-      <router-link
-        to="/login"
-        v-if="!userId && route.path !== '/login' && route.path !== '/signup'"
-      >
+      <router-link to="/login" v-if="!userId && route.path !== '/login' && route.path !== '/signup'">
         <button>
-          <img
-            src="/login.svg"
-            alt="Login"
-            class="button"
-            style="width: 24px; height: 24px"
-          />
+          <img src="/login.svg" alt="Login" class="button" style="width: 24px; height: 24px" />
         </button>
       </router-link>
-      <router-link
-        to="/signup"
-        v-if="!userId && route.path !== '/login' && route.path !== '/signup'"
-      >
+      <router-link to="/signup" v-if="!userId && route.path !== '/login' && route.path !== '/signup'">
         <button>
-          <img
-            src="/signup.svg"
-            alt="Login"
-            class="button"
-            style="width: 24px; height: 24px"
-          />
+          <img src="/signup.svg" alt="Login" class="button" style="width: 24px; height: 24px" />
         </button>
       </router-link>
     </div>
     <div v-if="userId" class="auth-logout">
       <button @click="logout" style="background: #ff6f6f">
-        <img
-          src="/logout.svg"
-          alt="Logout"
-          class="button"
-          style="width: 24px; height: 24px"
-        />
+        <img src="/logout.svg" alt="Logout" class="button" style="width: 24px; height: 24px" />
       </button>
     </div>
   </div>
@@ -114,16 +93,19 @@ const logout = () => {
   .circle-btn {
     margin-left: 4rem;
   }
+
   .circle-icon {
     width: 2rem;
     height: 2rem;
   }
+
   .home-text {
     font-size: 2rem;
     color: white;
     font-weight: 500;
     margin-bottom: 0.25rem;
   }
+
   .auth-buttons {
     position: fixed;
     top: 50%;
@@ -134,6 +116,7 @@ const logout = () => {
     z-index: 100;
     background: none;
   }
+
   .auth-logout {
     position: absolute;
     top: 20px;

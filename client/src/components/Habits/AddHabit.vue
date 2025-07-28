@@ -9,20 +9,9 @@
     </div>
     <div class="section-box">
       <!-- Create or Habit -->
-      <input
-        type="text"
-        v-model="name"
-        placeholder="Habit title"
-        class="general-input"
-      />
+      <input type="text" v-model="name" placeholder="Habit title" class="general-input" />
 
-      <input
-        type="text"
-        v-model="description"
-        placeholder="Description"
-        class="general-input"
-        v-if="!is_timed"
-      />
+      <input type="text" v-model="description" placeholder="Description" class="general-input" v-if="!is_timed" />
 
       <button v-if="isEditing" @click="updateHabit">Update</button>
       <button v-if="isEditing" @click="cancelEdit">Cancel</button>
@@ -61,20 +50,20 @@ const createHabit = async () => {
   }
   console.log("is_timed.value", is_timed.value);
   const res = await fetchWithAuth(`${API_URL}/habits`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: name.value,
-          frequency: 0,
-          user_id: userId.value,
-          is_timed: is_timed.value,
-          description: description.value
-        }),
-      },
-      true
-    );
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      name: name.value,
+      frequency: 0,
+      user_id: userId.value,
+      is_timed: is_timed.value,
+      description: description.value
+    }),
+  },
+    true
+  );
 
   if (res.ok) {
     showToast("Habit created successfully!", "success");

@@ -12,12 +12,10 @@
     <LoadingBar :visible="isLoading" />
     <div v-for="(dayEntries, date) in groupedEntries" :key="date">
       <h2>Complete on {{ date }}</h2>
-      <div v-for="entry in dayEntries" :key="entry.id" 
-        class="general-input"
-        >
-      <h3 class="entry-title">{{ entry.exercise }}</h3>
-      <p class="user-note"><em>{{ entry.note }}</em></p>
-    </div>
+      <div v-for="entry in dayEntries" :key="entry.id" class="general-input">
+        <h3 class="entry-title">{{ entry.exercise }}</h3>
+        <p class="user-note"><em>{{ entry.note }}</em></p>
+      </div>
     </div>
   </div>
 </template>
@@ -76,6 +74,7 @@ onMounted(async () => {
   border-radius: 4px;
   text-align: center;
 }
+
 .user-note {
   font-style: italic;
   color: #ccc;

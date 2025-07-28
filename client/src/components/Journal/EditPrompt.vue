@@ -2,28 +2,13 @@
   <div class="">
     <Toast ref="toastRef" :message="toastMessage" :type="toastType" />
     <h2>Edit: {{ prompt.title }}</h2>
-    <input
-      type="text"
-      v-model="promptTitle"
-      placeholder="Prompt Title"
-      class="general-input"
-    />
+    <input type="text" v-model="promptTitle" placeholder="Prompt Title" class="general-input" />
     <div class="button-wrapper">
       <button @click="savePrompt" class="save-button">
-        <img
-          src="/save.svg"
-          alt="Save"
-          class="white-icon"
-          style="width: 24px; height: 24px"
-        />
+        <img src="/save.svg" alt="Save" class="white-icon" style="width: 24px; height: 24px" />
       </button>
       <button @click="deletePrompt" class="delete-button">
-        <img
-          src="/delete.svg"
-          alt="Delete"
-          class="white-icon"
-          style="width: 24px; height: 24px"
-        />
+        <img src="/delete.svg" alt="Delete" class="white-icon" style="width: 24px; height: 24px" />
       </button>
     </div>
   </div>
@@ -45,7 +30,7 @@ const toastRef = ref(null);
 const { showToast, toastMessage, toastType } = useToast(toastRef);
 
 const savePrompt = async () => {
-  const res = await fetchWithAuth(`${API_URL}/prompts/${props.prompt.id}`, 
+  const res = await fetchWithAuth(`${API_URL}/prompts/${props.prompt.id}`,
     {
       method: "PUT",
       headers: {
@@ -61,7 +46,7 @@ const savePrompt = async () => {
   if (res.ok) {
     showToast("Prompt saved", "success");
     setTimeout(() => {
-        location.reload();
+      location.reload();
     }, 500);
   } else {
     showToast("Error saving prompt!", "error");
@@ -70,7 +55,7 @@ const savePrompt = async () => {
 
 const deletePrompt = async () => {
   if (confirm("Are you sure you want to delete this prompt?")) {
-    const res = await fetchWithAuth(`${API_URL}/prompts/${props.prompt.id}`, 
+    const res = await fetchWithAuth(`${API_URL}/prompts/${props.prompt.id}`,
       {
         method: "DELETE",
       },
@@ -80,7 +65,7 @@ const deletePrompt = async () => {
     if (res.ok) {
       showToast("Prompt deleted", "success");
       setTimeout(() => {
-          location.reload();
+        location.reload();
       }, 500);
     } else {
       showToast("Error deleting prompt!", "error");
@@ -97,6 +82,7 @@ const deletePrompt = async () => {
   justify-content: space-between;
   gap: 8px;
 }
+
 @media (max-width: 600px) {
   .button-wrapper {
     display: flex;

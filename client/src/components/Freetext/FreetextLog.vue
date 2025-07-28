@@ -8,7 +8,7 @@
 
       <h2>Freetext History</h2>
     </div>
-    
+
     <h3 class="section-title">Nr. of entries: {{ sumEntries }}</h3>
     <LoadingBar :visible="isLoading" />
     <div v-for="entry in entries" :key="entry.id" class="general-input">
@@ -42,12 +42,12 @@ const fetchFreetextEntries = async () => {
   try {
     const data = await fetchSortedEntries(`${API_URL}/users/${userId.value}/freetext_entries`);
 
-    if(!data) {
+    if (!data) {
       showToast("No entries found!", "info");
       entries.value = [];
       return;
     }
-    
+
     entries.value = data
   } catch (error) {
     showToast("Error loading log entries!", "error");
@@ -62,5 +62,4 @@ onMounted(async () => {
 });
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

@@ -3,13 +3,8 @@
     <Toast ref="toastRef" :message="toastMessage" :type="toastType" />
     <h2 class="section-title">{{ prompt.title }}</h2>
     <hr class="content-divider" />
-    <textarea type="text" 
-          name="journal_input" 
-          v-model="prompt.content"
-          rows="5" 
-          class="general-input" 
-          placeholder="Your answer..."
-          />
+    <textarea type="text" name="journal_input" v-model="prompt.content" rows="5" class="general-input"
+      placeholder="Your answer..." />
     <!-- <input
       type="text"
       v-model="prompt.content"
@@ -18,12 +13,7 @@
       class="general-input"
     /> -->
     <div class="button-wrapper">
-      <button
-        v-if="userId"
-        type="button"
-        @click="saveJournalEntry(prompt.content)"
-        class="save-button"
-      >
+      <button v-if="userId" type="button" @click="saveJournalEntry(prompt.content)" class="save-button">
         <img src="/save.svg" alt="Save" class="white-icon" />
       </button>
     </div>
@@ -101,18 +91,18 @@ const saveJournalEntry = async (content) => {
     }
   } else {
     const createRes = await fetchWithAuth(`${API_URL}/journal_entries`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          content: content,
-          entry_date: entryDate,
-          user_id: userId.value,
-          prompt_id: props.prompt.id,
-          prompt_title: props.prompt.title,
-        }),
-        },
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        content: content,
+        entry_date: entryDate,
+        user_id: userId.value,
+        prompt_id: props.prompt.id,
+        prompt_title: props.prompt.title,
+      }),
+    },
       true
     );
 
@@ -129,7 +119,5 @@ const saveJournalEntry = async (content) => {
 </script>
 
 <style scoped>
-
-@media (max-width: 600px) {
-}
+@media (max-width: 600px) {}
 </style>

@@ -8,46 +8,28 @@
         </router-link>
         <img src="/heart.svg" alt="Shuffle" class="icon" style="width: 36px; height: 36px" />
         <h2 class="header-row-title">Gratitude</h2>
-      
-        <router-link
-          v-if="userId"
-          to="/GratitudeLog"
-          style="pointer-events: auto"
-        >
+
+        <router-link v-if="userId" to="/GratitudeLog" style="pointer-events: auto">
           <button type="button" class="log-button">
-            <img
-              src="/log.svg"
-              alt="Log"
-              class="icon"
-              style="width: 24px; height: 24px"
-            />
+            <img src="/log.svg" alt="Log" class="icon" style="width: 24px; height: 24px" />
           </button>
         </router-link>
       </div>
     </div>
-    
-    <transition-group name="card-move" tag="div"> 
+
+    <transition-group name="card-move" tag="div">
       <div class="section-box" v-if="userId && showPrompts">
         <h2 class="section-title">Daily Gratitude Question</h2>
-          <div v-if="prompts && prompts.length === 0" :key="'no-prompts'" class="general-input">
-            <h2>No prompts yet</h2>
-            <input
-              v-model="newPromptTitle"
-              placeholder="Create your first gratitude prompt"
-              class="general-input"
-            />
-            <button @click="addPrompt" class="save-button">
-              <img src="/save.svg" alt="Save" class="white-icon" />
-            </button>
-          </div>
-          
-            <GratitudeInput
-              v-for="prompt in prompts"
-              :key="prompt.id"
-              :prompt="prompt"
-              class="general-input"
-            />
-          
+        <div v-if="prompts && prompts.length === 0" :key="'no-prompts'" class="general-input">
+          <h2>No prompts yet</h2>
+          <input v-model="newPromptTitle" placeholder="Create your first gratitude prompt" class="general-input" />
+          <button @click="addPrompt" class="save-button">
+            <img src="/save.svg" alt="Save" class="white-icon" />
+          </button>
+        </div>
+
+        <GratitudeInput v-for="prompt in prompts" :key="prompt.id" :prompt="prompt" class="general-input" />
+
       </div>
     </transition-group>
 
@@ -76,19 +58,19 @@ const addPrompt = async () => {
     return;
   }
   const res = await fetchWithAuth(`${API_URL}/gratitude_prompts`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        title: newPromptTitle.value,
-        user_id: userId.value,
-        weekly: false,
-        predefined: false,
-      }),
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
     },
+    body: JSON.stringify({
+      title: newPromptTitle.value,
+      user_id: userId.value,
+      weekly: false,
+      predefined: false,
+    }),
+  },
     true
-  ); 
+  );
 
   if (res.ok) {
     showToast("Question added", "success");
@@ -109,25 +91,30 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.card-move-enter-active, .card-move-leave-active {
-  transition: all 0.5s cubic-bezier(.55,0,.1,1);
+.card-move-enter-active,
+.card-move-leave-active {
+  transition: all 0.5s cubic-bezier(.55, 0, .1, 1);
 }
+
 .card-move-enter-from {
   opacity: 0;
   transform: translateY(40px) scale(0.95);
 }
+
 .card-move-enter-to {
   opacity: 1;
   transform: translateY(0) scale(1);
 }
+
 .card-move-leave-from {
   opacity: 1;
   transform: translateY(0) scale(1);
 }
+
 .card-move-leave-to {
   opacity: 0;
   transform: translateY(40px) scale(0.95);
 }
-@media (max-width: 600px) {
-}
+
+@media (max-width: 600px) {}
 </style>

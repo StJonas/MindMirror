@@ -3,45 +3,24 @@
     <Toast ref="toastRef" :message="toastMessage" :type="toastType" />
     <div class="content-row">
       <h2>{{ prompt.title }}</h2>
-      <button
-        v-if="userId"
-        type="button"
-        @click="toggleEditMode"
-        :class="['edit-button', { 'enabled-button': isEditMode }]"
-      >
-        <img
-          src="/edit.svg"
-          alt="Edit"
-          class="icon"
-          style="width: 24px; height: 24px"
-        />
+      <button v-if="userId" type="button" @click="toggleEditMode"
+        :class="['edit-button', { 'enabled-button': isEditMode }]">
+        <img src="/edit.svg" alt="Edit" class="icon" style="width: 24px; height: 24px" />
       </button>
       <button @click="deletePrompt" v-if="isEditMode" class="delete-button">
-        <img
-          src="/delete.svg"
-          alt="Delete"
-          class="white-icon"
-          style="width: 24px; height: 24px"
-        />
+        <img src="/delete.svg" alt="Delete" class="white-icon" style="width: 24px; height: 24px" />
       </button>
     </div>
     <hr class="content-divider" />
     <div v-if="isEditMode && !new_question">
       <select v-model="selectedPromptId" class="general-input">
-        <option
-          v-for="prompt in predefinedGratitudePrompts"
-          :key="prompt.id"
-          :value="prompt.id"
-        >
+        <option v-for="prompt in predefinedGratitudePrompts" :key="prompt.id" :value="prompt.id">
           {{ prompt.title }}
         </option>
       </select>
-      <button
-        v-if="selectedPromptId"
+      <button v-if="selectedPromptId"
         @click="updatePrompt(props.prompt.id, predefinedGratitudePrompts.find(p => p.id === selectedPromptId)?.title)"
-        class="save-button"
-        style="margin-top: 8px;"
-      >
+        class="save-button" style="margin-top: 8px;">
         <img src="/save.svg" alt="Save" class="white-icon" />
       </button>
     </div>
@@ -50,42 +29,27 @@
         <span class="text-label">update current question</span>
         <!-- Textual label -->
         <div class="" @mousedown.prevent="">
-          <input
-            type="checkbox"
-            id="isWeekly"
-            v-model="new_question"
-            @change="updatepredefinedGratitudePrompts"
-            class="checkbox"
-          />
+          <input type="checkbox" id="isWeekly" v-model="new_question" @change="updatepredefinedGratitudePrompts"
+            class="checkbox" />
 
           <label for="isWeekly" class="label"></label>
         </div>
       </div>
     </div>
     <div v-if="!isEditMode">
-      <textarea type="text" 
-          v-model="prompt.content"
-          rows="5" 
-          class="general-input" 
-          placeholder="Your answer..."
-          />
+      <textarea type="text" v-model="prompt.content" rows="5" class="general-input" placeholder="Your answer..." />
 
       <div v-if="!isEditMode">
-        <button
-          v-if="userId"
-          type="button"
-          @click="saveGratitudeEntry(prompt.content)"
-          class="save-button"
-        >
+        <button v-if="userId" type="button" @click="saveGratitudeEntry(prompt.content)" class="save-button">
           <img src="/save.svg" alt="Save" class="white-icon" />
         </button>
       </div>
     </div>
     <div v-if="new_question && isEditMode" class="add-prompt-row">
       <input v-model="editablePromptTitle" class="general-input" />
-        <button @click="updatePrompt(props.prompt.id, editablePromptTitle)" class="save-button">
-          <img src="/save.svg" alt="Save" class="white-icon" style="width: 24px; height: 24px" />
-        </button>
+      <button @click="updatePrompt(props.prompt.id, editablePromptTitle)" class="save-button">
+        <img src="/save.svg" alt="Save" class="white-icon" style="width: 24px; height: 24px" />
+      </button>
     </div>
   </div>
 </template>
@@ -121,17 +85,17 @@ function toggleEditMode() {
 
 const updatePrompt = async (promptId, newTitle) => {
   const res = await fetchWithAuth(`${API_URL}/gratitude_prompts/${promptId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        title: newTitle,
-        user_id: userId.value,
-        weekly: false,
-        predefined: false,
-      }),
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
     },
+    body: JSON.stringify({
+      title: newTitle,
+      user_id: userId.value,
+      weekly: false,
+      predefined: false,
+    }),
+  },
     true
   );
 
@@ -148,8 +112,8 @@ const updatePrompt = async (promptId, newTitle) => {
 const deletePrompt = async () => {
   if (confirm("Are you sure you want to delete this question?")) {
     const res = await fetchWithAuth(`${API_URL}/gratitude_prompts/${props.prompt.id}`, {
-        method: "DELETE",
-      },
+      method: "DELETE",
+    },
       true
     );
 
@@ -218,18 +182,18 @@ const saveGratitudeEntry = async (content) => {
     }
   } else {
     const createRes = await fetchWithAuth(`${API_URL}/gratitude_entries`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          content: content,
-          entry_date: entryDate,
-          user_id: userId.value,
-          gratitude_prompt_id: props.prompt.id,
-          prompt_title: props.prompt.title,
-        }),
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
       },
+      body: JSON.stringify({
+        content: content,
+        entry_date: entryDate,
+        user_id: userId.value,
+        gratitude_prompt_id: props.prompt.id,
+        prompt_title: props.prompt.title,
+      }),
+    },
       true
     );
 
@@ -282,6 +246,5 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-@media (max-width: 600px) {
-}
+@media (max-width: 600px) {}
 </style>
