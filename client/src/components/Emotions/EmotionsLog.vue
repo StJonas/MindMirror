@@ -5,9 +5,9 @@
       <router-link to="/EmotionsOverview">
         <button type="button">&lt;</button>
       </router-link>
-
       <h2>Emotion History</h2>
     </div>
+    <h3 class="section-title">Nr. of entries: {{ sumEntries }}</h3>
     <LoadingBar :visible="isLoading" />
     <div v-for="(dayEntries, date) in groupedEntries" :key="date">
       <h2>{{ date }}</h2>
@@ -35,6 +35,7 @@ const API_URL = inject("API_URL");
 const isLoading = ref(false);
 const toastRef = ref(null);
 const { showToast, toastMessage, toastType } = useToast(toastRef);
+const sumEntries = computed(() => entries.value.length);
 
 const fetchEmotionEntries = async () => {
   try {

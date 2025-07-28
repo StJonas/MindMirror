@@ -7,11 +7,7 @@
       </router-link>
       <h2>Habit History</h2>
     </div>
-    <div class="section-box">
-      <div class="header-row">
-        <h3 class="section-title">Total habits checked: {{ sumHabits }}</h3>
-      </div>
-    </div>
+    <h3 class="section-title">Total habits checked: {{ sumHabits }}</h3>
   </div>
   <LoadingBar :visible="isLoading" />
   <div v-for="day in habits" :key="day.date" class="section-box" style="">

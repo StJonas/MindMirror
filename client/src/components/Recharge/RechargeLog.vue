@@ -8,13 +8,14 @@
 
       <h2>Recharge History</h2>
     </div>
+    <h3 class="section-title">Number of entries: {{ sumEntries }}</h3>
     <LoadingBar :visible="isLoading" />
     <div v-for="(dayEntries, date) in groupedEntries" :key="date">
       <h2>Complete on {{ date }}</h2>
       <div v-for="entry in dayEntries" :key="entry.id" 
         class="general-input"
         >
-      <h3 class="section-title">{{ entry.exercise }}</h3>
+      <h3 class="entry-title">{{ entry.exercise }}</h3>
       <p class="user-note"><em>{{ entry.note }}</em></p>
     </div>
     </div>
@@ -34,6 +35,7 @@ const API_URL = inject("API_URL");
 const isLoading = ref(false);
 const toastRef = ref(null);
 const { showToast, toastMessage, toastType } = useToast(toastRef);
+const sumEntries = computed(() => entries.value.length);
 
 const fetchRechargeEntries = async () => {
   try {
@@ -68,7 +70,7 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.section-title {
+.entry-title {
   background-color: green;
   color: white;
   border-radius: 4px;

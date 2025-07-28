@@ -8,6 +8,8 @@
 
       <h2>Freetext History</h2>
     </div>
+    
+    <h3 class="section-title">Nr. of entries: {{ sumEntries }}</h3>
     <LoadingBar :visible="isLoading" />
     <div v-for="entry in entries" :key="entry.id" class="general-input">
       <h2>{{ entry.date }}</h2>
@@ -22,7 +24,7 @@
 </template>
 
 <script setup>
-import { inject, ref, onMounted } from "vue";
+import { inject, ref, onMounted, computed } from "vue";
 import LoadingBar from "../LoadingBar.vue";
 import Toast from "../Toast.vue";
 import { useToast } from "../../utils/useToast.js";
@@ -34,6 +36,7 @@ const API_URL = inject("API_URL");
 const isLoading = ref(false);
 const toastRef = ref(null);
 const { showToast, toastMessage, toastType } = useToast(toastRef);
+const sumEntries = computed(() => entries.value.length);
 
 const fetchFreetextEntries = async () => {
   try {
