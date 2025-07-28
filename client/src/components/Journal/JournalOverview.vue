@@ -28,26 +28,31 @@
 
       <transition-group name="card-move" tag="div">
         <div class="section-box" v-if="userId && showPrompts" :key="prompts.length ? 'has-prompts' : 'no-prompts'">
-          <div class="header-row">
-            <h2 class="section-title">Daily Journaling Questions</h2>
-            <button v-if="userId" type="button" @click="toggleEditMode"
-              :class="['edit-button', { 'enabled-button': isEditMode }]">
-              <img src="/edit.svg" alt="Edit" class="icon" style="width: 24px; height: 24px" />
-            </button>
+          <div v-if="prompts.length === 0" class="general-input" style="text-align:center;">
+            <h2>No questions yet</h2>
+            <p>Create your first question by clicking the <img src="/add.svg" alt="Add"
+                style="width: 20px; vertical-align: middle;" /> button above.</p>
           </div>
 
-          <div class="">
+          <div v-else>
+            <div class="header-row">
+              <h2 class="section-title">Journaling Questions</h2>
+              <button v-if="userId" type="button" @click="toggleEditMode"
+                :class="['edit-button', { 'enabled-button': isEditMode }]">
+                <img src="/edit.svg" alt="Edit" class="icon" style="width: 24px; height: 24px" />
+              </button>
+            </div>
+            <div class="">
+              <template v-if="!isEditMode">
+                <JournalInput v-for="prompt in prompts.filter((p) => !p.weekly)" :key="prompt.id" :prompt="prompt"
+                  class="general-input" />
+              </template>
 
-            <template v-if="!isEditMode">
-              <JournalInput v-for="prompt in prompts.filter((p) => !p.weekly)" :key="prompt.id" :prompt="prompt"
-                class="general-input" />
-            </template>
-
-            <template v-else>
-              <EditPrompt v-for="prompt in prompts.filter((p) => !p.weekly)" :key="prompt.id" :prompt="prompt"
-                class="general-input" />
-            </template>
-
+              <template v-else>
+                <EditPrompt v-for="prompt in prompts.filter((p) => !p.weekly)" :key="prompt.id" :prompt="prompt"
+                  class="general-input" />
+              </template>
+            </div>
           </div>
         </div>
       </transition-group>

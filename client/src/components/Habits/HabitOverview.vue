@@ -25,6 +25,12 @@
     </div>
     <LoadingBar :visible="isLoading" />
     <!-- List of Habits -->
+    <div v-if="!isLoading && habits.length === 0" :key="'no-habits'" class="general-input"
+      style="text-align:center; margin: 2rem 0;">
+      <h2>No habits yet</h2>
+      <p>Create your first habit by clicking the <img src="/add.svg" alt="Add"
+          style="width: 20px; vertical-align: middle;" /> button above.</p>
+    </div>
     <transition-group name="card-move" tag="div">
       <div v-for="habit in sortedHabits" :key="habit.id"
         :class="['section-box', { 'checked-border': savedHabits.has(habit.id) }]">
