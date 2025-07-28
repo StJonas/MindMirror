@@ -21,8 +21,15 @@
       <div class="section-box" v-if="userId && showPrompts">
         <h2 class="section-title">Daily Gratitude Question</h2>
         <div v-if="prompts && prompts.length === 0" :key="'no-prompts'" class="general-input">
-          <h2>No prompts yet</h2>
-          <input v-model="newPromptTitle" placeholder="Create your first gratitude prompt" class="general-input" />
+          <h2>No question yet</h2>
+          <span class="text-label">select predefined question:</span>
+          <select v-model="selectedPromptId" class="general-input">
+            <option v-for="prompt in predefinedGratitudePrompts" :key="prompt.id" :value="prompt.id">
+              {{ prompt.title }}
+            </option>
+          </select>
+          <span class="text-label">create own question:</span>
+          <input v-model="newPromptTitle" placeholder="Create gratitude question" class="general-input" />
           <button @click="addPrompt" class="save-button">
             <img src="/save.svg" alt="Save" class="white-icon" />
           </button>
@@ -37,7 +44,7 @@
 </template>
 
 <script setup>
-import { inject, ref, onMounted } from "vue";
+import { inject, ref, onMounted, watch } from "vue";
 import GratitudeInput from "./GratitudeInput.vue";
 import Toast from "../Toast.vue";
 import { useToast } from "../../utils/useToast.js";
@@ -46,11 +53,12 @@ import { fetchWithAuth } from '../../utils/apiHelpers';
 const API_URL = inject("API_URL");
 const userId = inject("userId");
 const prompts = inject("gratitude_prompts", ref([]));
-const newPromptTitle = ref("");;
+const predefinedGratitudePrompts = inject("predefined_gratitude_prompts");
+const newPromptTitle = ref("");
 const showPrompts = ref(false);
 const toastRef = ref(null);
 const { showToast, toastMessage, toastType } = useToast(toastRef);
-
+const selectedPromptId = ref(null);
 
 const addPrompt = async () => {
   if (!newPromptTitle.value.trim()) {
@@ -88,6 +96,12 @@ onMounted(() => {
   }, 400);
 });
 
+watch(selectedPromptId, (id) => {
+  const selected = predefinedGratitudePrompts.value.find(p => p.id === id);
+  if (selected) {
+    newPromptTitle.value = selected.title;
+  }
+});
 </script>
 
 <style scoped>

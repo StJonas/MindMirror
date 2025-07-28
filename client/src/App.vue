@@ -22,6 +22,7 @@ const username = ref("");
 const sessionToken = ref("");
 const gratitude_entries = ref([]);
 const gratitude_prompts = ref([]);
+const predefined_gratitude_prompts = ref([]);
 const emotions = ref([]);
 
 provide("userId", userId);
@@ -29,6 +30,7 @@ provide("username", username);
 provide("entries", entries);
 provide("API_URL", API_URL);
 provide("gratitude_prompts", gratitude_prompts);
+provide("predefined_gratitude_prompts", predefined_gratitude_prompts);
 provide("gratitude_entries", gratitude_entries);
 provide("emotions", emotions);
 
@@ -44,6 +46,7 @@ const fetchUserData = async () => {
       fetchGratitudeEntries();
       fetchEmotions();
       fetchGratitudePrompts();
+      fetchPredefinedPrompts();
     } else {
       console.error("Failed to fetch user data");
     }
@@ -81,6 +84,20 @@ const fetchEmotions = async () => {
   emotions.value = Array.isArray(data) ? data : [];
 };
 
+const fetchPredefinedPrompts = async () => {
+  try {
+    const data = await fetchWithAuth(`${API_URL}/gratitude_prompts?predefined=true`);
+    if (!data) {
+      showToast("Failed to fetch predefined prompts", "error");
+      return [];
+    }
+    predefined_gratitude_prompts.value = data;
+  } catch (error) {
+    showToast("Error fetching prompts", "error");
+    return [];
+  }
+};
+
 const logout = () => {
   userId.value = "";
   username.value = "";
@@ -104,7 +121,7 @@ onMounted(() => {
     logout();
     return;
   }
-  if(userId.value) fetchUserData();
+  if (userId.value) fetchUserData();
 });
 </script>
 
@@ -115,9 +132,11 @@ onMounted(() => {
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.vue:hover {
   filter: drop-shadow(0 0 2em #42b883aa);
 }

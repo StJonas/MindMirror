@@ -12,7 +12,20 @@
       </button>
     </div>
     <hr class="content-divider" />
-    <div v-if="isEditMode && !new_question">
+    <div class="" v-if="isEditMode">
+      <div class="toggle-container">
+        <span class="text-label">select predefined question</span>
+        <!-- Textual label -->
+        <div class="" @mousedown.prevent="">
+          <input type="checkbox" id="isWeekly" v-model="new_question" @change="updatepredefinedGratitudePrompts"
+            class="checkbox" />
+
+          <label for="isWeekly" class="label"></label>
+        </div>
+      </div>
+    </div>
+    <div v-if="isEditMode && new_question">
+      <span class="text-label">select predefined question:</span>
       <select v-model="selectedPromptId" class="general-input">
         <option v-for="prompt in predefinedGratitudePrompts" :key="prompt.id" :value="prompt.id">
           {{ prompt.title }}
@@ -24,18 +37,6 @@
         <img src="/save.svg" alt="Save" class="white-icon" />
       </button>
     </div>
-    <div class="" v-if="isEditMode">
-      <div class="toggle-container">
-        <span class="text-label">update current question</span>
-        <!-- Textual label -->
-        <div class="" @mousedown.prevent="">
-          <input type="checkbox" id="isWeekly" v-model="new_question" @change="updatepredefinedGratitudePrompts"
-            class="checkbox" />
-
-          <label for="isWeekly" class="label"></label>
-        </div>
-      </div>
-    </div>
     <div v-if="!isEditMode">
       <textarea type="text" v-model="prompt.content" rows="5" class="general-input" placeholder="Your answer..." />
 
@@ -45,7 +46,7 @@
         </button>
       </div>
     </div>
-    <div v-if="new_question && isEditMode" class="add-prompt-row">
+    <div v-if="!new_question && isEditMode" class="add-prompt-row">
       <input v-model="editablePromptTitle" class="general-input" />
       <button @click="updatePrompt(props.prompt.id, editablePromptTitle)" class="save-button">
         <img src="/save.svg" alt="Save" class="white-icon" style="width: 24px; height: 24px" />
@@ -55,7 +56,7 @@
 </template>
 
 <script setup>
-import { inject, ref, onMounted, watch } from "vue";
+import { inject, ref, watch } from "vue";
 import Toast from "../Toast.vue";
 import { useToast } from "../../utils/useToast.js";
 import { fetchWithAuth } from '../../utils/apiHelpers';
@@ -67,16 +68,16 @@ const props = defineProps({
 const API_URL = inject("API_URL");
 const prompts = inject("gratitude_prompts");
 const userId = inject("userId");
+const predefinedGratitudePrompts = inject("predefined_gratitude_prompts");
+console.log("predefinedGratitudePrompts", predefinedGratitudePrompts);
 const isEditMode = ref(false);
 const selectedPromptId = ref(prompts.value[0]?.id || null);
 const showAddPrompt = ref(false);
-const new_question = ref(false);
+const new_question = ref(true);
 const entries = inject("gratitude_entries");
 const editablePromptTitle = ref(props.prompt.title);
 const toastRef = ref(null);
 const { showToast, toastMessage, toastType } = useToast(toastRef);
-
-const predefinedGratitudePrompts = ref([]);
 
 function toggleEditMode() {
   isEditMode.value = !isEditMode.value;
@@ -210,39 +211,12 @@ const saveGratitudeEntry = async (content) => {
   }
 };
 
-const fetchUnusedPredefinedPrompts = async () => {
-  try {
-    const data = await fetchWithAuth(`${API_URL}/gratitude_prompts?predefined=true`);
-    if (!data) {
-      showToast("Failed to fetch predefined prompts", "error");
-      return [];
-    }
-    const allPredefined = await data;
-
-    const userPrompts = await fetchWithAuth(`${API_URL}/users/${userId.value}/gratitude_prompts`);
-    if (!userPrompts) {
-      showToast("Failed to fetch user prompts", "error");
-      return [];
-    }
-    const userPromptTitles = userPrompts.map(p => p.title);
-
-    return allPredefined.filter(p => !userPromptTitles.includes(p.title));
-  } catch (error) {
-    showToast("Error fetching prompts", "error");
-    return [];
-  }
-};
-
 watch(
   () => props.prompt.title,
   (newTitle) => {
     editablePromptTitle.value = newTitle;
   }
 );
-
-onMounted(async () => {
-  predefinedGratitudePrompts.value = await fetchUnusedPredefinedPrompts();
-});
 </script>
 
 <style scoped>
