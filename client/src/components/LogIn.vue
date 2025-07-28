@@ -72,7 +72,7 @@ const login = async () => {
       });
     }, 500);    
   } else {
-    showToast("Error saving entry!", "error");
+    showToast("Username and password do not match!", "error");
   }
 
   username.value = "";

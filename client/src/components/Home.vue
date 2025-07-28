@@ -3,13 +3,28 @@
     <Toast ref="toastRef" :message="toastMessage" :type="toastType" />
     <div class="header-row">
       <h2 v-if="!userId">Please sign up or login</h2>
-      <h2 v-if="userId">Hello {{ username }}</h2>
-      <h2 v-if="userId">{{ currentDate }}</h2>
+      <h2 v-if="userId" class="header-row-title">Hello {{ username }}</h2>
+      <h2 v-if="userId" class="header-row-title">{{ currentDate }}</h2>
     </div>
-    <button class="edit-btn" @click="toggleEditMode">
-      {{ isEditMode ? 'Done' : 'Edit' }}
-    </button>
     <div class="home-container" v-if="userId">
+      <button class="edit-btn-top" @click="toggleEditMode">
+        {{ isEditMode ? 'Done' : 'Edit' }}
+      </button>
+      <router-link
+        v-if="userId"
+        to="/Statistics"
+        style="pointer-events: auto"
+        class="chart-btn-top"
+      >
+        <button type="button" :disabled="isEditMode">
+          <img
+            src="/chart.svg"
+            alt="Log"
+            class="icon"
+            style="width: 24px; height: 24px"
+          />
+        </button>
+      </router-link>
       <template v-for="topic in topics" :key="topic.name">
         <button
           v-if="isEditMode"
@@ -56,12 +71,16 @@ const currentDate = new Date().toLocaleDateString("de-DE", {
   month: "long",
   year: "numeric",
 });
-
+const initialTopics = ref([]);
 const isEditMode = ref(false);
 
 async function toggleEditMode() {
   isEditMode.value = !isEditMode.value;
   if (!isEditMode.value) {
+    if (JSON.stringify(selectedTopics.value) === JSON.stringify(initialTopics.value)) {
+      showToast("No changes made to topics.", "info");
+      return;
+    }
     try {
       await fetchWithAuth(`${API_URL}/users/${userId.value}/user_topic_preferences`, {
         method: "POST",
@@ -73,6 +92,7 @@ async function toggleEditMode() {
           topics: selectedTopics.value,
         }),
       });
+      initialTopics.value = [...selectedTopics.value];
       showToast("Preferences saved!", "success");
     } catch (error) {
       console.error("Failed to save topic preferences:", error);
@@ -96,8 +116,10 @@ onMounted(async () => {
     const res = await fetchWithAuth(`${API_URL}/users/${userId.value}/user_topic_preferences`);
     if (res && Array.isArray(res.topics) && res.topics.length > 0) {
       selectedTopics.value = res.topics;
+      initialTopics.value = [...res.topics];
     } else {
       selectedTopics.value = topics.map(t => t.name);
+      initialTopics.value = topics.map(t => t.name);
     }
   } catch (error) {
     console.error("Failed to load topic preferences:", error);
@@ -111,11 +133,13 @@ onMounted(async () => {
 <style scoped>
 .home-container {
   display: grid;
+  position: relative;
   grid-template-columns: 1fr 1fr;
   gap: 18px;
   justify-items: center;
   align-items: center;
   padding: 24px 0;
+  padding-top: 64px;
   width: 420px;
   margin: 0 auto;
   background: #95b3db;
@@ -158,11 +182,38 @@ onMounted(async () => {
   display: block;
   margin: 0 auto;
 }
+
+.edit-btn-top {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  margin-bottom: 5vw;
+  padding: 4px 16px;
+  background: #fca479;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  z-index: 10;
+}
+.edit-btn-top:hover {
+  background: #ff9c5a;
+}
+.chart-btn-top {
+  position: absolute;
+  top: 8px;
+  left: 12px;
+  margin: 0;
+  z-index: 10;
+}
 @media (max-width: 600px) {
   .home-container {
     width: 80vw;
     max-width: 400px;
     padding: 12px 0;
+    padding-top: 56px;
     gap: 12px;
     grid-template-columns: 1fr 1fr;
     margin-top: 20px;
@@ -171,6 +222,9 @@ onMounted(async () => {
     font-size: 1.2rem;
     padding: 24px 0;
     width: 96%;
+    height: 140px;
+    max-height: 140px;
+    padding: 0;
   }
 }
 </style>

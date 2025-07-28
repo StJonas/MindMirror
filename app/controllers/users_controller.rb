@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  skip_before_action :authorize_request, only: [:create]
 
   before_action :set_user, only: %i[ show update destroy ]
 
@@ -9,9 +10,19 @@ class UsersController < ApplicationController
     render json: @users
   end
 
+  def update_stats_visibility
+    user = User.find(params[:id])
+    if params[:stats_visibility].present?
+      user.update(stats_visibility: params[:stats_visibility])
+      render json: { success: true }
+    else
+      render json: { error: "Missing stats_visibility" }, status: :unprocessable_entity
+    end
+  end
+
   # GET /users/1
   def show
-    render json: @user
+    render json: @user.as_json(only: [:id, :username, :stats_visibility])
   end
 
   # POST /users
@@ -47,6 +58,6 @@ class UsersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def user_params
-      params.require(:user).permit(:username, :password)
+      params.require(:user).permit(:username, :password, :stats_visibility)
     end
 end

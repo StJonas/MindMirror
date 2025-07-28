@@ -100,6 +100,11 @@ const router = createRouter({
       path: "/RechargeLog",
       name: "RechargeLog",
       component: () => import("../components/Recharge/RechargeLog.vue"),
+    },
+    {
+      path: "/Statistics",
+      name: "Statistics",
+      component: () => import("../components/Statistics.vue"),
     }
   ],
 });

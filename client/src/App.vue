@@ -11,7 +11,7 @@
 
 <script setup>
 import OverviewHeader from "./components/OverviewHeader.vue";
-
+import router from "./router";
 import { ref, onMounted, provide } from "vue";
 import { fetchWithAuth, fetchSortedEntries } from './utils/apiHelpers';
 
@@ -88,13 +88,23 @@ const logout = () => {
 
   // Clear user-related data from localStorage
   localStorage.removeItem("userId");
-  localStorage.removeItem("sessionToken");
-  location.reload();
+  localStorage.removeItem("jwt");
+  router.push("/");
 };
+
+function isTokenExpired() {
+  if (!localStorage.getItem("jwt")) return true;
+  const payload = JSON.parse(atob(localStorage.getItem("jwt").split('.')[1]));
+  return Date.now() >= payload.exp * 1000;
+}
 
 onMounted(() => {
   userId.value = localStorage.getItem("userId");
-  fetchUserData();
+  if (isTokenExpired()) {
+    logout();
+    return;
+  }
+  if(userId.value) fetchUserData();
 });
 </script>
 

@@ -10,11 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_07_26_140423) do
+ActiveRecord::Schema[7.1].define(version: 2025_07_27_132131) do
   create_table "emotion_log_entries", force: :cascade do |t|
     t.integer "emotion_log_id", null: false
     t.integer "emotion_id", null: false
-    t.text "note"
+    t.text "content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["emotion_id"], name: "index_emotion_log_entries_on_emotion_id"
@@ -170,6 +170,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_07_26_140423) do
     t.string "password_digest"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.json "stats_visibility"
   end
 
   add_foreign_key "emotion_log_entries", "emotion_logs"

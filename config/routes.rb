@@ -22,6 +22,7 @@ Rails.application.routes.draw do
     end
     get 'habit_histories', to: 'habit_histories#user_histories'
   end
+  resources :users, only: [:create]
   resources :habits do
     member do
       post 'update_duration'
@@ -52,6 +53,11 @@ Rails.application.routes.draw do
   end
   resources :users do
     resources :user_topic_preferences, only: [:index, :create]
+  end
+  resources :users do
+    member do
+      patch :update_stats_visibility
+    end
   end
 
   get "up" => "rails/health#show", as: :rails_health_check

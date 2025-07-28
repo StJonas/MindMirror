@@ -80,6 +80,14 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
+  config.action_dispatch.default_headers = {
+    'X-Frame-Options' => 'DENY',
+    'X-XSS-Protection' => '1; mode=block',
+    'X-Content-Type-Options' => 'nosniff',
+    'Strict-Transport-Security' => 'max-age=31536000; includeSubDomains'
+  }
+
+
   # Enable DNS rebinding protection and other `Host` header attacks.
   # config.hosts = [
   #   "example.com",     # Allow requests from example.com
