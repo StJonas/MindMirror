@@ -3,8 +3,11 @@ class GratitudeEntriesController < ApplicationController
 
   # GET /gratitude_entries
   def index
-    @gratitude_entries = GratitudeEntry.all
-
+    if params[:user_id]
+      @gratitude_entries = GratitudeEntry.where(user_id: params[:user_id])
+    else
+      @gratitude_entries = GratitudeEntry.none
+    end
     render json: @gratitude_entries
   end
 

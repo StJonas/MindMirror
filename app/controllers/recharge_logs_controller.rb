@@ -3,8 +3,11 @@ class RechargeLogsController < ApplicationController
 
   # GET /recharge_logs
   def index
-    @recharge_logs = RechargeLog.all
-
+    if params[:user_id]
+      @recharge_logs = RechargeLog.where(user_id: params[:user_id])
+    else
+      @recharge_logs = RechargeLog.none
+    end
     render json: @recharge_logs
   end
 

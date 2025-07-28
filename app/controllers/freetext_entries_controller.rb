@@ -3,8 +3,11 @@ class FreetextEntriesController < ApplicationController
 
   # GET /freetext_entries
   def index
-    @freetext_entries = FreetextEntry.all
-
+    if params[:user_id]
+      @freetext_entries = FreetextEntry.where(user_id: params[:user_id])
+    else
+      @freetext_entries = FreetextEntry.none
+    end
     render json: @freetext_entries
   end
 
