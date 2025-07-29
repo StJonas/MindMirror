@@ -2,18 +2,35 @@
   <div class="page-styling">
     <Toast ref="toastRef" :message="toastMessage" :type="toastType" />
     <div class="header-row">
-      <div class="side-by-side" style="gap: 10px;">
+      <div class="side-by-side">
         <router-link to="/">
           <button type="button" class="back-btn">&lt;</button>
         </router-link>
         <img src="/heart.svg" alt="Shuffle" class="icon" style="width: 36px; height: 36px" />
         <h2 class="header-row-title">Gratitude</h2>
+        <button class="help-btn" @click="showTutorial = true" title="Show help">?</button>
+      </div>
+      <router-link v-if="userId" to="/GratitudeLog" style="pointer-events: auto">
+        <button type="button">
+          <img src="/log.svg" alt="Log" class="icon" style="width: 24px; height: 24px" />
+        </button>
+      </router-link>
+    </div>
 
-        <router-link v-if="userId" to="/GratitudeLog" style="pointer-events: auto">
-          <button type="button" class="log-button">
-            <img src="/log.svg" alt="Log" class="icon" style="width: 24px; height: 24px" />
-          </button>
-        </router-link>
+    <div v-if="showTutorial" class="tutorial-modal">
+      <div class="tutorial-content">
+        <h3>How to use Gratitude</h3>
+        <ul>
+          <li>Answer the daily gratitude question or select a predefined one.</li>
+          <li>You can create your own question by typing it in the input field and clicking
+            <img src="/save.svg" alt="Save" class="icon" style="width: 20px; vertical-align: middle;" />
+            <b>Save</b>.
+          </li>
+          <li>View your gratitude log by clicking the
+            <img src="/log.svg" alt="Log" class="icon" style="width: 20px; vertical-align: middle;" />.
+          </li>
+        </ul>
+        <button @click="showTutorial = false" class="close-btn">Close</button>
       </div>
     </div>
 
@@ -59,6 +76,7 @@ const showPrompts = ref(false);
 const toastRef = ref(null);
 const { showToast, toastMessage, toastType } = useToast(toastRef);
 const selectedPromptId = ref(null);
+const showTutorial = ref(false);
 
 const addPrompt = async () => {
   if (!newPromptTitle.value.trim()) {
@@ -105,30 +123,5 @@ watch(selectedPromptId, (id) => {
 </script>
 
 <style scoped>
-.card-move-enter-active,
-.card-move-leave-active {
-  transition: all 0.5s cubic-bezier(.55, 0, .1, 1);
-}
-
-.card-move-enter-from {
-  opacity: 0;
-  transform: translateY(40px) scale(0.95);
-}
-
-.card-move-enter-to {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-}
-
-.card-move-leave-from {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-}
-
-.card-move-leave-to {
-  opacity: 0;
-  transform: translateY(40px) scale(0.95);
-}
-
 @media (max-width: 600px) {}
 </style>

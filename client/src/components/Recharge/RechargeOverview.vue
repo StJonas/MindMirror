@@ -8,6 +8,7 @@
         </router-link>
         <img src="/battery.svg" alt="Shuffle" class="icon" style="width: 36px; height: 36px" />
         <h2 class="header-row-title">Recharge</h2>
+        <button class="help-btn" @click="showTutorial = true" title="Show help">?</button>
       </div>
 
       <router-link v-if="userId" to="/RechargeLog" style="pointer-events: auto">
@@ -17,8 +18,35 @@
       </router-link>
     </div>
 
+    <div v-if="showTutorial" class="tutorial-modal">
+      <div class="tutorial-content">
+        <h3>How to use the Recharge-Page</h3>
+        <ul>
+          <li>Read the daily recharge exercise and reflect on it.</li>
+          <li>Click the
+            <img src="/shuffle.svg" alt="Shuffle" class="icon" style="width: 20px; vertical-align: middle;" />
+            button to get a new random exercise.
+          </li>
+          <li>Optionally write your thoughts or notes in the text field below the exercise.</li>
+          <li>
+            Click the
+            <img src="/save.svg" alt="Save" class="icon" style="width: 20px; vertical-align: middle;" />
+            <b>Save</b> button to save your entry.
+          </li>
+          <li>
+            You can find your previous entries in the log
+            <img src="/log.svg" alt="Log" class="icon" style="width: 20px; vertical-align: middle;" />
+            (book icon at the top right).
+          </li>
+        </ul>
+        <button @click="showTutorial = false" class="close-btn">Close</button>
+      </div>
+    </div>
+
     <div v-if="userId && showPrompts" class="section-box">
-      <h1 class="section-title">Daily recharge exercise</h1>
+      <div class="side-by-side">
+        <h1 class="section-title">Daily recharge exercise</h1>
+      </div>
       <div class="general-input">
         <div class="content-row">
           <h3 v-if="currentExercise">{{ currentExercise.title }}</h3>
@@ -33,7 +61,7 @@
         <textarea type="text" v-model="exerciseNote" name="exercise_note" rows="5" class="general-input"
           placeholder="Reflect on the exercise..." />
         <button class="save-button" @click="saveRechargeEntry()">
-          Done
+          <img src="/save.svg" alt="Save" class="white-icon" style="width: 24px; height: 24px" />
         </button>
       </div>
     </div>
@@ -56,6 +84,7 @@ const exerciseNote = ref(null);
 const showPrompts = ref(false);
 const toastRef = ref(null);
 const { showToast, toastMessage, toastType } = useToast(toastRef);
+const showTutorial = ref(false);
 
 const fetchExercises = async () => {
   const data = await fetchWithAuth(`${API_URL}/recharge_exercises`);

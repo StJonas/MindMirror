@@ -8,12 +8,35 @@
         </router-link>
         <img src="/brain.svg" alt="Shuffle" class="icon" style="width: 36px; height: 36px" />
         <h2 class="header-row-title">Emotions</h2>
+        <button class="help-btn" @click="showTutorial = true" title="Show help">?</button>
       </div>
       <router-link v-if="userId" to="/EmotionsLog" style="pointer-events: auto">
         <button type="button" :disabled="isEditMode">
           <img src="/log.svg" alt="Log" class="icon" style="width: 24px; height: 24px" />
         </button>
       </router-link>
+    </div>
+
+    <div v-if="showTutorial" class="tutorial-modal">
+      <div class="tutorial-content">
+        <h3>How to use Emotions</h3>
+        <ul>
+          <li>Select a <b>pleasant</b> or <b>unpleasant</b> emotion by clicking on it.</li>
+          <li>You can expand or collapse the emotion groups using the <b>+</b> or <b>−</b> button.</li>
+          <li>Optionally, write your thoughts in the text field below.</li>
+          <li>
+            Click the
+            <img src="/save.svg" alt="Save" class="icon" style="width: 20px; vertical-align: middle;" />
+            <b>Save</b> button to save your entry.
+          </li>
+          <li>
+            You can view your previous entries in the log
+            <img src="/log.svg" alt="Log" class="icon" style="width: 20px; vertical-align: middle;" />
+            .
+          </li>
+        </ul>
+        <button @click="showTutorial = false" class="close-btn">Close</button>
+      </div>
     </div>
 
     <div v-if="userId" class="section-box">
@@ -54,7 +77,7 @@
         <textarea type="text" v-model="emotionNote" name="site_notes" rows="5" class="general-input"
           placeholder="Write your thoughts here..." />
         <button @click="saveEmotionEntry" class="save-button">
-          Save
+          <img src="/save.svg" alt="Save" class="white-icon" style="width: 24px; height: 24px" />
         </button>
       </div>
     </div>
@@ -78,6 +101,7 @@ const toastRef = ref(null);
 const { showToast, toastMessage, toastType } = useToast(toastRef);
 const selectedEmotion = ref(null);
 const emotionNote = ref("");
+const showTutorial = ref(false);
 
 const pleasantEmotions = computed(() =>
   emotions.value.filter(e => e.category === 'pleasant')

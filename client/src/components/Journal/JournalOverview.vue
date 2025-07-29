@@ -9,6 +9,7 @@
           </router-link>
           <img src="/book.svg" alt="Shuffle" class="icon" style="width: 36px; height: 36px" />
           <h2 class="header-row-title">Journal</h2>
+          <button class="help-btn" @click="showTutorial = true" title="Show help">?</button>
         </div>
         <div class="side-by-side">
           <router-link v-if="userId" to="/addPrompt" :class="{ 'disabled-button': isEditMode }"
@@ -23,6 +24,32 @@
               <img src="/log.svg" alt="Log" class="icon" style="width: 24px; height: 24px" />
             </button>
           </router-link>
+        </div>
+      </div>
+
+      <div v-if="showTutorial" class="tutorial-modal">
+        <div class="tutorial-content">
+          <h3>How to use the Journal</h3>
+          <ul>
+            <li>Answer the journaling questions shown below - one or more questions can be created</li>
+            <li>You can add a new question by clicking the
+              <img src="/add.svg" alt="Add" class="icon" style="width: 20px; vertical-align: middle;" />
+              button.
+            </li>
+            <li>Type your answer into the textfield and save it by clicking the
+              <img src="/save.svg" alt="Save" class="icon" style="width: 20px; vertical-align: middle;" />
+              <b>Save</b> button.
+            </li>
+            <li>Edit your questions by clicking the
+              <img src="/edit.svg" alt="Edit" class="icon" style="width: 20px; vertical-align: middle;" />
+              button.
+            </li>
+            <li>View your journal log by clicking the
+              <img src="/log.svg" alt="Log" class="icon" style="width: 20px; vertical-align: middle;" />
+              .
+            </li>
+          </ul>
+          <button @click="showTutorial = false" class="close-btn">Close</button>
         </div>
       </div>
 
@@ -77,6 +104,7 @@ const emit = defineEmits(["navigateToJournalLog", "navigateToAddPrompt"]);
 const showPrompts = ref(false);
 const toastRef = ref(null);
 const { showToast, toastMessage, toastType } = useToast(toastRef);
+const showTutorial = ref(false);
 
 const matchEntriesWithPrompts = () => {
   const today = new Date();

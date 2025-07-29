@@ -8,6 +8,7 @@
         </router-link>
         <img src="/calender.svg" alt="Shuffle" class="icon" style="width: 36px; height: 36px" />
         <h2 class="header-row-title">Habits</h2>
+        <button class="help-btn" @click="showTutorial = true" title="Show help">?</button>
       </div>
       <div class="side-by-side">
         <router-link to="/AddHabit" style="pointer-events: auto">
@@ -20,6 +21,28 @@
             <img src="/log.svg" alt="Log" class="icon" style="width: 24px; height: 24px" />
           </button>
         </router-link>
+      </div>
+
+      <div v-if="showTutorial" class="tutorial-modal">
+        <div class="tutorial-content">
+          <h3>How to use Habits</h3>
+          <ul>
+            <li>Add a new habit by clicking the
+              <img src="/add.svg" alt="Add" class="icon" style="width: 20px; vertical-align: middle;" />
+              button.
+            </li>
+            <li>Mark a habit as completed for today by clicking the
+              <img src="/save.svg" alt="Save" class="icon" style="width: 20px; vertical-align: middle;" />
+              <b>Save</b> button.
+            </li>
+            <li>
+              You can view your habit log by clicking the
+              <img src="/log.svg" alt="Log" class="icon" style="width: 20px; vertical-align: middle;" />
+              (book icon).
+            </li>
+          </ul>
+          <button @click="showTutorial = false" class="close-btn">Close</button>
+        </div>
       </div>
 
     </div>
@@ -68,6 +91,7 @@ const toastRef = ref(null);
 const { showToast, toastMessage, toastType } = useToast(toastRef);
 const savedHabits = ref(new Set());
 const isLoading = ref(false);
+const showTutorial = ref(false);
 
 async function fetchHabitHistories(date) {
   const data = await fetchWithAuth(`${API_URL}/users/${userId.value}/habit_histories?date=${date}`);
