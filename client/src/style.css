@@ -430,6 +430,12 @@ select.general-input {
     margin-top: 90px;
   }
 
+  input,
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+
   .header {
     display: flex;
     align-items: center;

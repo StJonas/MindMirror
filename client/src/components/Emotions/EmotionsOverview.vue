@@ -53,8 +53,10 @@
             <button v-for="emotion in pleasantEmotions" :key="emotion.id" class="emotion-btn"
               :class="{ active: selectedEmotion === emotion.id }" :style="{ backgroundColor: emotion.color }"
               @click="selectEmotion(emotion)">
-              <i :class="emotion.icon" style=""></i>
-              {{ emotion.name }}
+              <i :class="emotion.icon" style="font-size: 2rem;"></i>
+              <span style="margin-left: 8px; font-size: 1rem;">
+                {{ emotion.name }}
+              </span>
             </button>
           </div>
         </div>
@@ -69,11 +71,14 @@
             <button v-for="emotion in unpleasantEmotions" :key="emotion.id" class="emotion-btn"
               :class="{ active: selectedEmotion === emotion.id }" :style="{ backgroundColor: emotion.color }"
               @click="selectEmotion(emotion)">
-              <i :class="emotion.icon" style=""></i>
-              {{ emotion.name }}
+              <i :class="emotion.icon" style="font-size: 2rem;"></i>
+              <span style="margin-left: 8px; font-size: 1rem;">
+                {{ emotion.name }}
+              </span>
             </button>
           </div>
         </div>
+
         <textarea type="text" v-model="emotionNote" name="site_notes" rows="5" class="general-input"
           placeholder="Write your thoughts here..." />
         <button @click="saveEmotionEntry" class="save-button">
@@ -175,11 +180,12 @@ async function saveEmotionEntry() {
   border-radius: 8px;
   padding: 16px;
   box-sizing: border-box;
+  justify-content: flex-start;
 }
 
 .emotion-btn {
   color: #fff;
-  width: 80px;
+  min-width: 80px;
   border: none;
   border-radius: 8px;
   font-size: 1.1rem;
@@ -190,6 +196,10 @@ async function saveEmotionEntry() {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   transition: filter 0.2s;
   text-align: center;
+  padding: 8px 16px;
+  width: auto;
+  max-width: 100%;
+  white-space: nowrap;
 }
 
 .emotion-btn:hover {

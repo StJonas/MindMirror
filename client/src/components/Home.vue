@@ -89,20 +89,22 @@ function toggleTopic(name) {
 }
 
 onMounted(async () => {
-  try {
-    const res = await fetchWithAuth(`${API_URL}/users/${userId.value}/user_topic_preferences`);
-    if (res && Array.isArray(res.topics) && res.topics.length > 0) {
-      selectedTopics.value = res.topics;
-      initialTopics.value = [...res.topics];
-    } else {
+  if (userId.value) {
+    try {
+      const res = await fetchWithAuth(`${API_URL}/users/${userId.value}/user_topic_preferences`);
+      if (res && Array.isArray(res.topics) && res.topics.length > 0) {
+        selectedTopics.value = res.topics;
+        initialTopics.value = [...res.topics];
+      } else {
+        selectedTopics.value = topics.map(t => t.name);
+        initialTopics.value = topics.map(t => t.name);
+      }
+    } catch (error) {
+      console.error("Failed to load topic preferences:", error);
+      showToast("Failed to load topic preferences!", "error");
+      // Fallback: enable all topics
       selectedTopics.value = topics.map(t => t.name);
-      initialTopics.value = topics.map(t => t.name);
     }
-  } catch (error) {
-    console.error("Failed to load topic preferences:", error);
-    showToast("Failed to load topic preferences!", "error");
-    // Fallback: enable all topics
-    selectedTopics.value = topics.map(t => t.name);
   }
 });
 </script>

@@ -43,20 +43,20 @@ puts "Existing emotions cleared."
 
 Emotion.create([
   # Pleasant
-  { name: 'happy', color: '#FFF9B2', icon: 'fa-solid fa-face-smile', category: 'pleasant' },      # softer yellow
-  { name: 'calm', color: '#B2F1F0', icon: 'fa-solid fa-leaf', category: 'pleasant' },             # softer teal
-  { name: 'excited', color: '#FFD1A6', icon: 'fa-solid fa-bolt', category: 'pleasant' },          # softer orange
-  { name: 'content', color: '#D6F5D6', icon: 'fa-solid fa-face-grin-beam', category: 'pleasant' },# softer green
-  { name: 'hopeful', color: '#C6E6FA', icon: 'fa-solid fa-star', category: 'pleasant' },          # softer blue
-  { name: 'proud', color: '#FFD6E6', icon: 'fa-solid fa-trophy', category: 'pleasant' },          # softer pink
+  { name: 'happy', color: '#FFED01', icon: 'fa-solid fa-face-smile', category: 'pleasant' },      # softer yellow
+  { name: 'calm', color: '#4CA5C4', icon: 'fa-solid fa-leaf', category: 'pleasant' },             # softer teal
+  { name: 'loved', color: '#FF78BE', icon: 'fa-solid fa-heart', category: 'pleasant' },          # softer pink
+  { name: 'excited', color: '#FF9E52', icon: 'fa-solid fa-bolt', category: 'pleasant' },          # softer orange
+  { name: 'content', color: '#58F400', icon: 'fa-solid fa-face-grin-beam', category: 'pleasant' },# softer green
+  { name: 'hopeful', color: '#66BAFA', icon: 'fa-solid fa-star', category: 'pleasant' },          # softer blue
 
   # Unpleasant
-  { name: 'sad', color: '#B3D1FF', icon: 'fa-solid fa-face-frown', category: 'unpleasant' },      # softer blue
+  { name: 'sad', color: '#59B7FF', icon: 'fa-solid fa-face-frown', category: 'unpleasant' },      # softer blue
   { name: 'tired', color: '#D3D3D3', icon: 'fa-solid fa-bed', category: 'unpleasant' },           # lighter gray
-  { name: 'angry', color: '#FFB3A6', icon: 'fa-solid fa-face-angry', category: 'unpleasant' },    # softer red
-  { name: 'anxious', color: '#E6B3B3', icon: 'fa-solid fa-face-meh', category: 'unpleasant' },    # softer dark red
-  { name: 'frustrated', color: '#CFA6A6', icon: 'fa-solid fa-face-grimace', category: 'unpleasant' }, # softer dark red
-  { name: 'lonely', color: '#B3C6E6', icon: 'fa-solid fa-user-slash', category: 'unpleasant' }    # softer blue
+  { name: 'angry', color: '#FF7663', icon: 'fa-solid fa-face-angry', category: 'unpleasant' },    # softer red
+  { name: 'anxious', color: '#E67370', icon: 'fa-solid fa-face-meh', category: 'unpleasant' },    # softer dark red
+  { name: 'frustrated', color: '#D16A66', icon: 'fa-solid fa-face-tired', category: 'unpleasant' }, # softer dark red
+  { name: 'stressed', color: '#7976E6', icon: 'fa-solid fa-face-rolling-eyes', category: 'unpleasant' }    # softer blue
 ])
 
 puts "Emotions added."

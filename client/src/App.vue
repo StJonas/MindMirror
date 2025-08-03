@@ -1,7 +1,6 @@
 <template>
   <div class="">
     <OverviewHeader @logout="logout" />
-    <!-- <OverviewNavigationButtons v-if="!hideNavigation" /> -->
 
     <div class="content">
       <router-view />
