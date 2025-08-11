@@ -46,33 +46,35 @@ const toastRef = ref(null);
 const { showToast, toastMessage, toastType } = useToast(toastRef);
 
 const login = async () => {
-  const res = await fetch(`${API_URL}/login`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      username: username.value,
-      password: password.value,
-    }),
-  });
+  try {
+    const res = await fetch(`${API_URL}/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: username.value,
+        password: password.value,
+      }),
+    });
 
-  if (res.ok) {
-    const data = await res.json();
-    user.data = data.id;
-    console.log("userId", data.user.id);
+    if (res.ok) {
+      const data = await res.json();
+      user.data = data.id;
+      console.log("userId", data.user.id);
 
-    localStorage.setItem("jwt", data.token);
-    localStorage.setItem("userId", data.user.id);
+      localStorage.setItem("jwt", data.token);
+      localStorage.setItem("userId", data.user.id);
 
-    showToast("Login successful!", "success");
-    setTimeout(() => {
-      router.push("/").then(() => {
-        window.location.reload();
-      });
-    }, 500);    
-  } else {
-    showToast("Username and password do not match!", "error");
+      showToast("Login successful!", "success");
+      setTimeout(() => {
+        router.push("/").then(() => {
+          window.location.reload();
+        });
+      }, 500);
+    }
+  } catch (error) {
+    showToast("Network or server error!", "error");
   }
 
   username.value = "";
