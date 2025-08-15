@@ -15,7 +15,8 @@ import { ref, onMounted, provide } from "vue";
 import { fetchWithAuth, fetchSortedEntries } from './utils/apiHelpers';
 
 const entries = ref([]);
-const API_URL = "http://localhost:3000/";
+const API_URL = "http://192.168.0.12/api/";
+//const API_URL = "http://localhost:3000/";
 const userId = ref("");
 const username = ref("");
 const sessionToken = ref("");

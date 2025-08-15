@@ -2,7 +2,8 @@ import { createRouter, createWebHistory } from "vue-router";
 import { selectedTopics } from '../utils/topics.js';
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory('/mindmirror/'),
+  //history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: "/",

@@ -87,7 +87,8 @@ Rails.application.configure do
     'Strict-Transport-Security' => 'max-age=31536000; includeSubDomains'
   }
 
-
+  config.hosts << "raspberrypi.local"
+  config.hosts << /raspberrypi\.local/
   # Enable DNS rebinding protection and other `Host` header attacks.
   # config.hosts = [
   #   "example.com",     # Allow requests from example.com

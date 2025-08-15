@@ -105,6 +105,8 @@ GEM
     irb (1.12.0)
       rdoc
       reline (>= 0.4.2)
+    jwt (3.1.2)
+      base64
     loofah (2.22.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
@@ -222,6 +224,7 @@ DEPENDENCIES
   debug
   devise (~> 4.9, >= 4.9.3)
   error_highlight (>= 0.4.0)
+  jwt
   pg (>= 1.2.3)
   puma (>= 5.0)
   rack-cors
@@ -231,7 +234,7 @@ DEPENDENCIES
   tzinfo-data
 
 RUBY VERSION
-   ruby 3.1.0p0
+   ruby 3.1.2p20
 
 BUNDLED WITH
    2.3.3

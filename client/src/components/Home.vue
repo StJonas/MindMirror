@@ -8,19 +8,19 @@
     </div>
     <div class="home-container" v-if="userId">
       <button class="edit-btn-top" @click="toggleEditMode">
-        <img v-if="!isEditMode" src="/edit.svg" alt="Edit" class="icon" style="width: 24px; height: 24px" />
-        <img v-else src="/save.svg" alt="Save" class="icon" style="width: 24px; height: 24px" />
+        <img v-if="!isEditMode" src="/mindmirror/edit.svg" alt="Edit" class="icon" style="width: 24px; height: 24px" />
+        <img v-else src="/mindmirror/save.svg" alt="Save" class="icon" style="width: 24px; height: 24px" />
       </button>
       <router-link v-if="userId" to="/Statistics" style="pointer-events: auto" class="chart-btn-top">
         <button type="button" :disabled="isEditMode">
-          <img src="/chart.svg" alt="Log" class="icon" style="width: 24px; height: 24px" />
+          <img src="/mindmirror/chart.svg" alt="Log" class="icon" style="width: 24px; height: 24px" />
         </button>
       </router-link>
       <template v-for="topic in topics" :key="topic.name">
         <button v-if="isEditMode" class="home-btn" type="button" @click="toggleTopic(topic.name)">
           <img :src="topic.icon" alt="icon" class="home-icon" />
           {{ topic.name }}
-          <img :src="selectedTopics.includes(topic.name) ? '/eye1.svg' : '/eye2.svg'" alt="eye" class="eye-icon"
+          <img :src="selectedTopics.includes(topic.name) ? '/mindmirror/eye1.svg' : '/mindmirror/eye2.svg'" alt="eye" class="eye-icon"
             style="margin-top: 8px;" />
         </button>
         <router-link v-else-if="selectedTopics.includes(topic.name)" :to="topic.route" class="home-btn">
