@@ -420,6 +420,30 @@ select.general-input {
   cursor: pointer;
 }
 
+.edit-btn-top {
+  padding: 4px 16px;
+  background: #fca479;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  z-index: 10;
+}
+
+.edit-btn-top:hover {
+  background: #ff9c5a;
+}
+
+.button-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: space-between;
+  justify-content: space-between;
+  gap: 8px;
+}
+
 @media (max-width: 600px) {
   #app {
     width: 100%;
@@ -475,5 +499,13 @@ select.general-input {
   textarea.general-input {
     background-color: white;
     width: 70vw;
+  }
+
+  .button-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: space-between;
+    justify-content: space-between;
+    margin: 0px;
   }
 }

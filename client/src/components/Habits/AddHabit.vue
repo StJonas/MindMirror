@@ -29,26 +29,22 @@ import router from "../../router";
 import Toast from "../Toast.vue";
 import { useToast } from "../../utils/useToast.js";
 import { fetchWithAuth } from '../../utils/apiHelpers';
+import { postLog } from '../../utils/loggerHelper';
 
 const name = ref("");
 const frequency = ref("");
 const description = ref("");
 const isEditing = ref(false);
 const is_timed = ref(false);
-const userId = ref("");
+const userId = inject("userId");
 const API_URL = inject("API_URL");
 const toastRef = ref(null);
 const { showToast, toastMessage, toastType } = useToast(toastRef);
-
-onMounted(async () => {
-  userId.value = localStorage.getItem("userId");
-});
 
 const createHabit = async () => {
   if (is_timed.value) {
     frequency.value = 0;
   }
-  console.log("is_timed.value", is_timed.value);
   const res = await fetchWithAuth(`${API_URL}/habits`, {
     method: "POST",
     headers: {
@@ -67,6 +63,8 @@ const createHabit = async () => {
 
   if (res.ok) {
     showToast("Habit created successfully!", "success");
+    postLog({ event: "habit_created", userId: userId.value, page: "AddHabit", data: { habitName: name.value } });
+
     setTimeout(() => {
       name.value = "";
       frequency.value = "";
@@ -81,6 +79,12 @@ const createHabit = async () => {
     console.error("Error creating habit:", errorData);
   }
 };
+
+onMounted(async () => {
+  if (userId.value) {
+    postLog({ userId: userId.value, page: "AddHabit" });
+  }
+});
 </script>
 
 <style scoped></style>

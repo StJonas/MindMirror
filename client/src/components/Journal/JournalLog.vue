@@ -19,14 +19,17 @@
 </template>
 
 <script setup>
-import { inject, computed } from "vue";
+import { inject, computed, onMounted } from "vue";
+import { postLog } from '../../utils/loggerHelper';
 
 const entries = inject("entries");
-const emit = defineEmits(["navigateBackToJournal"]);
+const userId = inject("userId");
+
+onMounted(() => {
+  postLog({ userId: userId.value, page: "JournalLog" });
+});
 
 const sumEntries = computed(() => Array.isArray(entries) ? entries.length : (entries?.value?.length || 0));
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

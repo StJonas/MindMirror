@@ -29,6 +29,7 @@ import LoadingBar from "../LoadingBar.vue";
 import Toast from "../Toast.vue";
 import { useToast } from "../../utils/useToast.js";
 import { fetchSortedEntries } from '../../utils/apiHelpers.js';
+import { postLog } from '../../utils/loggerHelper';
 
 const entries = ref([]);
 const userId = inject("userId");
@@ -59,6 +60,7 @@ onMounted(async () => {
   isLoading.value = true;
   await fetchFreetextEntries();
   isLoading.value = false;
+  postLog({ userId: userId.value, page: "FreetextLog" });
 });
 </script>
 

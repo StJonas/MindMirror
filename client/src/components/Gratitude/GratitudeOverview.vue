@@ -66,6 +66,7 @@ import GratitudeInput from "./GratitudeInput.vue";
 import Toast from "../Toast.vue";
 import { useToast } from "../../utils/useToast.js";
 import { fetchWithAuth } from '../../utils/apiHelpers';
+import { postLog } from '../../utils/loggerHelper';
 
 const API_URL = inject("API_URL");
 const userId = inject("userId");
@@ -100,6 +101,8 @@ const addPrompt = async () => {
 
   if (res.ok) {
     showToast("Question added", "success");
+    postLog({ event: "gratitude_prompt_added", userId: userId.value, page: "GratitudeOverview", data: { promptTitle: newPromptTitle.value } });
+
     setTimeout(() => {
       location.reload();
     }, 500);
@@ -112,6 +115,7 @@ onMounted(() => {
   setTimeout(() => {
     showPrompts.value = true;
   }, 400);
+  postLog({ userId: userId.value, page: "GratitudeOverview" });
 });
 
 watch(selectedPromptId, (id) => {

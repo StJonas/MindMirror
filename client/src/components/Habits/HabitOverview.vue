@@ -83,6 +83,7 @@ import { useToast } from "../../utils/useToast.js";
 import LoadingBar from "../LoadingBar.vue";
 import { inject, ref, onMounted, computed } from "vue";
 import { fetchWithAuth } from '../../utils/apiHelpers';
+import { postLog } from '../../utils/loggerHelper';
 
 const habits = ref([]);
 const API_URL = inject("API_URL");
@@ -133,6 +134,9 @@ async function saveHabit(habitId) {
     }
 
     showToast("Save successful", "success");
+    const habit = habits.value.find(h => h.id === habitId);
+    postLog({ event: "habit_saved", userId: userId.value, page: "HabitOverivew", data: { habitName: habit ? habit.name : "" } });
+
     setTimeout(() => {
       location.reload();
     }, 500);
@@ -174,6 +178,7 @@ onMounted(async () => {
   await fetchHabitHistories(new Date());
   await fetchHabits();
   isLoading.value = false;
+  postLog({ userId: userId.value, page: "HabitOverview" });
 });
 </script>
 

@@ -2,19 +2,17 @@
   <div class="section-box">
     <Toast ref="toastRef" :message="toastMessage" :type="toastType" />
     <div class="content-row">
-      <h2>{{ prompt.title }}</h2>
-      <button v-if="userId" type="button" @click="toggleEditMode"
-        :class="['edit-button', { 'enabled-button': isEditMode }]">
-        <img src="/edit.svg" alt="Edit" class="icon" style="width: 24px; height: 24px" />
-      </button>
-      <button @click="deletePrompt" v-if="isEditMode" class="delete-button">
-        <img src="/delete.svg" alt="Delete" class="white-icon" style="width: 24px; height: 24px" />
+      <h2 v-if="!isEditMode">{{ prompt.title }}</h2>
+      <h2 v-if="isEditMode">Edit Question:</h2>
+      <button v-if="userId" type="button" @click="toggleEditMode" class="edit-btn-top">
+        <img v-if="!isEditMode" src="/edit.svg" alt="Edit" class="icon" style="width: 24px; height: 24px" />
+        <img v-else src="/cancel.svg" alt="Save" class="icon" style="width: 24px; height: 24px" />
       </button>
     </div>
-    <hr class="content-divider" />
+    <hr class="content-divider" v-if="!isEditMode" />
     <div class="" v-if="isEditMode">
       <div class="toggle-container">
-        <span class="text-label">select predefined question</span>
+        <span class="text-label">Select predefined question</span>
         <!-- Textual label -->
         <div class="" @mousedown.prevent="">
           <input type="checkbox" id="isWeekly" v-model="new_question" @change="updatepredefinedGratitudePrompts"
@@ -25,17 +23,22 @@
       </div>
     </div>
     <div v-if="isEditMode && new_question">
-      <span class="text-label">select predefined question:</span>
+      <span class="text-label">Select predefined question:</span>
       <select v-model="selectedPromptId" class="general-input">
         <option v-for="prompt in predefinedGratitudePrompts" :key="prompt.id" :value="prompt.id">
           {{ prompt.title }}
         </option>
       </select>
-      <button v-if="selectedPromptId"
-        @click="updatePrompt(props.prompt.id, predefinedGratitudePrompts.find(p => p.id === selectedPromptId)?.title)"
-        class="save-button" style="margin-top: 8px;">
-        <img src="/save.svg" alt="Save" class="white-icon" />
-      </button>
+      <div class="header-row">
+        <button v-if="selectedPromptId"
+          @click="updatePrompt(props.prompt.id, predefinedGratitudePrompts.find(p => p.id === selectedPromptId)?.title)"
+          class="save-button" style="margin-top: 8px;">
+          <img src="/save.svg" alt="Save" class="white-icon" />
+        </button>
+        <button @click="deletePrompt" v-if="isEditMode" class="delete-button">
+          <img src="/delete.svg" alt="Delete" class="white-icon" style="width: 24px; height: 24px" />
+        </button>
+      </div>
     </div>
     <div v-if="!isEditMode">
       <textarea type="text" v-model="prompt.content" rows="5" class="general-input" placeholder="Your answer..." />
@@ -47,10 +50,16 @@
       </div>
     </div>
     <div v-if="!new_question && isEditMode" class="add-prompt-row">
+      <span class="text-label">Update current question:</span>
       <input v-model="editablePromptTitle" class="general-input" />
-      <button @click="updatePrompt(props.prompt.id, editablePromptTitle)" class="save-button">
-        <img src="/save.svg" alt="Save" class="white-icon" style="width: 24px; height: 24px" />
-      </button>
+      <div class="button-wrapper">
+        <button @click="updatePrompt(props.prompt.id, editablePromptTitle)" class="save-button">
+          <img src="/save.svg" alt="Save" class="white-icon" style="width: 24px; height: 24px" />
+        </button>
+        <button @click="deletePrompt" v-if="isEditMode" class="delete-button">
+          <img src="/delete.svg" alt="Delete" class="white-icon" style="width: 24px; height: 24px" />
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -60,6 +69,7 @@ import { inject, ref, watch } from "vue";
 import Toast from "../Toast.vue";
 import { useToast } from "../../utils/useToast.js";
 import { fetchWithAuth } from '../../utils/apiHelpers';
+import { postLog } from '../../utils/loggerHelper';
 
 const props = defineProps({
   prompt: Object,
@@ -102,6 +112,8 @@ const updatePrompt = async (promptId, newTitle) => {
 
   if (res.ok) {
     showToast("Question updated", "success");
+    postLog({ event: "gratitude_prompt_updated", userId: userId.value, page: "GratitudeInput", data: { promptTitle: newTitle } });
+
     setTimeout(() => {
       location.reload();
     }, 500);
@@ -120,6 +132,8 @@ const deletePrompt = async () => {
 
     if (res.ok) {
       showToast("Quetion deleted successfully", "success");
+      postLog({ event: "gratitude_prompt_deleted", userId: userId.value, page: "GratitudeInput", data: { promptTitle: props.prompt.title } });
+
       setTimeout(() => {
         location.reload();
       }, 500);
@@ -173,6 +187,8 @@ const saveGratitudeEntry = async (content) => {
 
     if (updateRes.ok) {
       showToast("Gratitude entry updated", "success");
+      postLog({ event: "gratitude_entry_saved", userId: userId.value, page: "GratitudeInput", data: { promptTitle: props.prompt.title, content: content } });
+
       setTimeout(() => {
         window.location.reload();
       }, 500);
@@ -200,6 +216,8 @@ const saveGratitudeEntry = async (content) => {
 
     if (createRes.ok) {
       showToast("Gratitude entry saved", "success");
+      postLog({ event: "gratitude_entry_saved", userId: userId.value, page: "GratitudeInput", data: { promptTitle: props.prompt.title, content: content } });
+
       setTimeout(() => {
         window.location.reload();
       }, 500);

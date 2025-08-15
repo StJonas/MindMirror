@@ -14,7 +14,7 @@
       <h2>Complete on {{ date }}</h2>
       <div v-for="entry in dayEntries" :key="entry.id" class="general-input">
         <h3 class="entry-title">{{ entry.exercise }}</h3>
-        <p class="user-note"><em>{{ entry.note }}</em></p>
+        <p class=""><em>{{ entry.note && entry.note.trim() !== "" ? entry.note : "---" }}</em></p>
       </div>
     </div>
   </div>
@@ -26,6 +26,7 @@ import LoadingBar from "../LoadingBar.vue";
 import Toast from "../Toast.vue";
 import { useToast } from "../../utils/useToast.js";
 import { fetchSortedEntries } from '../../utils/apiHelpers';
+import { postLog } from '../../utils/loggerHelper';
 
 const entries = ref([]);
 const userId = inject("userId");
@@ -63,6 +64,7 @@ const groupedEntries = computed(() => {
 onMounted(async () => {
   isLoading.value = true;
   await fetchRechargeEntries();
+  postLog({ userId: userId.value, page: "RechargeLog" });
   isLoading.value = false;
 });
 </script>

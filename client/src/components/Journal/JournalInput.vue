@@ -25,6 +25,7 @@ import { inject, ref } from "vue";
 import Toast from "../Toast.vue";
 import { useToast } from "../../utils/useToast.js";
 import { fetchWithAuth } from '../../utils/apiHelpers';
+import { postLog } from '../../utils/loggerHelper.js';
 
 const props = defineProps({
   prompt: Object,
@@ -80,6 +81,7 @@ const saveJournalEntry = async (content) => {
 
     if (updateRes.ok) {
       showToast("Entry saved", "success");
+      postLog({ event: "journal_entry_saved", userId: userId.value, page: "JournalInput", data: { content: content } });
 
       setTimeout(() => {
         window.location.reload();
@@ -107,6 +109,7 @@ const saveJournalEntry = async (content) => {
     );
 
     if (createRes.ok) {
+      postLog({ event: "journal_entry_saved", userId: userId.value, page: "JournalInput", data: { promptTitle: props.prompt.title, content: content } });
       showToast("Entry saved", "success");
       window.location.reload();
     } else {

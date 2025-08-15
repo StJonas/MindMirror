@@ -64,9 +64,9 @@
           <div v-else>
             <div class="header-row">
               <h2 class="section-title">Journaling Questions</h2>
-              <button v-if="userId" type="button" @click="toggleEditMode"
-                :class="['edit-button', { 'enabled-button': isEditMode }]">
-                <img src="/edit.svg" alt="Edit" class="icon" style="width: 24px; height: 24px" />
+              <button v-if="userId" class="edit-btn-top" @click="toggleEditMode">
+                <img v-if="!isEditMode" src="/edit.svg" alt="Edit" class="icon" style="width: 24px; height: 24px" />
+                <img v-else src="/cancel.svg" alt="Save" class="icon" style="width: 24px; height: 24px" />
               </button>
             </div>
             <div class="">
@@ -94,6 +94,7 @@ import EditPrompt from "./EditPrompt.vue";
 import Toast from "../Toast.vue";
 import { useToast } from "../../utils/useToast.js";
 import { fetchWithAuth } from '../../utils/apiHelpers';
+import { postLog } from '../../utils/loggerHelper';
 
 const userId = inject("userId");
 const API_URL = inject("API_URL");
@@ -155,6 +156,7 @@ const fetchPrompts = async () => {
 onMounted(() => {
   if (userId.value) {
     fetchPrompts();
+    postLog({ userId: userId.value, page: "JournalOverview" });
   }
   setTimeout(() => {
     showPrompts.value = true;

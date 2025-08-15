@@ -90,10 +90,11 @@
 </template>
 
 <script setup>
-import { inject, ref, computed } from "vue";
+import { inject, ref, computed, onMounted } from "vue";
 import Toast from "../Toast.vue";
 import { useToast } from "../../utils/useToast.js";
 import { fetchWithAuth } from '../../utils/apiHelpers';
+import { postLog } from '../../utils/loggerHelper';
 
 const userId = inject("userId");
 const API_URL = inject("API_URL");
@@ -144,7 +145,7 @@ async function saveEmotionEntry() {
           user_id: userId.value,
           date: new Date().toISOString().split("T")[0],
           emotion_id: selectedEmotion.value,
-          note: emotionNote.value,
+          content: emotionNote.value,
         },
       }),
     },
@@ -152,10 +153,12 @@ async function saveEmotionEntry() {
   );
 
   if (res.ok) {
+    showToast("Entry saved", "success");
+    postLog({ event: "emotions_entry_saved", userId: userId.value, page: "EmotionsOverview", data: { emotionId: selectedEmotion.value, note: emotionNote.value } });
+
     selectedEmotion.value = null;
     emotionNote.value = "";
 
-    showToast("Entry saved", "success");
     setTimeout(() => {
       location.reload();
     }, 500);
@@ -163,6 +166,10 @@ async function saveEmotionEntry() {
     showToast("Error saving entry!", "error");
   }
 }
+
+onMounted(() => {
+  postLog({ userId: userId.value, page: "EmotionsOverview" });
+});
 </script>
 
 <style scoped>

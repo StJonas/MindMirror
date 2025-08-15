@@ -34,6 +34,7 @@ const userId = inject("userId");
 const isLoading = ref(false);
 const toastRef = ref(null);
 const { showToast, toastMessage, toastType } = useToast(toastRef);
+import { postLog } from '../../utils/loggerHelper';
 
 const fetchHabitLog = async (currentDay) => {
   if (userId.value) {
@@ -56,6 +57,7 @@ onMounted(async () => {
   isLoading.value = true;
   await fetchHabitLog(new Date());
   isLoading.value = false;
+  postLog({ userId: userId.value, page: "HabitLog" });
 });
 
 const sumHabits = computed(() =>

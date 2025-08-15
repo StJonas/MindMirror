@@ -25,9 +25,11 @@
 <script setup>
 import { inject, ref, onMounted, computed } from "vue";
 import LoadingBar from "../LoadingBar.vue";
+import { postLog } from '../../utils/loggerHelper';
 
 const isLoading = ref(false);
 const entries = inject("gratitude_entries");
+const userId = inject("userId");
 
 const sumEntries = computed(() =>
   Array.isArray(entries?.value) ? entries.value.length : 0
@@ -38,6 +40,7 @@ onMounted(() => {
   if (entries.value) {
     isLoading.value = false;
   }
+  postLog({ userId: userId.value, page: "GratitudeLog" });
 });
 </script>
 

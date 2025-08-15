@@ -8,7 +8,8 @@
     </div>
     <div class="home-container" v-if="userId">
       <button class="edit-btn-top" @click="toggleEditMode">
-        {{ isEditMode ? 'Done' : 'Edit' }}
+        <img v-if="!isEditMode" src="/edit.svg" alt="Edit" class="icon" style="width: 24px; height: 24px" />
+        <img v-else src="/save.svg" alt="Save" class="icon" style="width: 24px; height: 24px" />
       </button>
       <router-link v-if="userId" to="/Statistics" style="pointer-events: auto" class="chart-btn-top">
         <button type="button" :disabled="isEditMode">
@@ -37,6 +38,7 @@ import { fetchWithAuth } from '../utils/apiHelpers';
 import { selectedTopics, topics } from '../utils/topics.js';
 import Toast from "./Toast.vue";
 import { useToast } from "../utils/useToast.js";
+import { postLog } from "../utils/loggerHelper.js";
 
 const toastRef = ref(null);
 const { showToast, toastMessage, toastType } = useToast(toastRef);
@@ -70,6 +72,13 @@ async function toggleEditMode() {
         }),
       });
       initialTopics.value = [...selectedTopics.value];
+
+      postLog({
+        event: "topic_preferences_updated",
+        userId: userId.value,
+        page: "Homepage",
+        data: { topics: selectedTopics.value },
+      });
       showToast("Preferences saved!", "success");
     } catch (error) {
       console.error("Failed to save topic preferences:", error);
@@ -164,31 +173,18 @@ onMounted(async () => {
   margin: 0 auto;
 }
 
-.edit-btn-top {
-  position: absolute;
-  top: 8px;
-  right: 12px;
-  margin-bottom: 5vw;
-  padding: 4px 16px;
-  background: #fca479;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  z-index: 10;
-}
-
-.edit-btn-top:hover {
-  background: #ff9c5a;
-}
-
 .chart-btn-top {
   position: absolute;
   top: 8px;
   left: 12px;
   margin: 0;
+  z-index: 10;
+}
+
+.edit-btn-top {
+  position: absolute;
+  top: 8px;
+  right: 12px;
   z-index: 10;
 }
 

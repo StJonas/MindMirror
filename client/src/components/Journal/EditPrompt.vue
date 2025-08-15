@@ -19,6 +19,7 @@ import { ref, inject } from "vue";
 import Toast from "../Toast.vue";
 import { useToast } from "../../utils/useToast.js";
 import { fetchWithAuth } from '../../utils/apiHelpers';
+import { postLog } from '../../utils/loggerHelper';
 
 const props = defineProps({
   prompt: Object,
@@ -26,6 +27,7 @@ const props = defineProps({
 
 const promptTitle = ref(props.prompt.title);
 const API_URL = inject("API_URL");
+const userId = inject("userId");
 const toastRef = ref(null);
 const { showToast, toastMessage, toastType } = useToast(toastRef);
 
@@ -44,12 +46,14 @@ const savePrompt = async () => {
   );
 
   if (res.ok) {
-    showToast("Prompt saved", "success");
+    showToast("Prompt updated", "success");
+    postLog({ event: "prompt_updated", userId: userId.value, page: "EditPrompt", data: { promptTitle: promptTitle.value } });
+
     setTimeout(() => {
       location.reload();
     }, 500);
   } else {
-    showToast("Error saving prompt!", "error");
+    showToast("Error updating prompt!", "error");
   }
 };
 
@@ -64,6 +68,8 @@ const deletePrompt = async () => {
 
     if (res.ok) {
       showToast("Prompt deleted", "success");
+      postLog({ event: "prompt_deleted", userId: userId.value, page: "EditPrompt", data: { promptTitle: promptTitle.value } });
+
       setTimeout(() => {
         location.reload();
       }, 500);
@@ -74,22 +80,4 @@ const deletePrompt = async () => {
 };
 </script>
 
-<style scoped>
-.button-wrapper {
-  display: flex;
-  flex-direction: row;
-  align-items: space-between;
-  justify-content: space-between;
-  gap: 8px;
-}
-
-@media (max-width: 600px) {
-  .button-wrapper {
-    display: flex;
-    flex-direction: row;
-    align-items: space-between;
-    justify-content: space-between;
-    margin: 0px;
-  }
-}
-</style>
+<style scoped></style>

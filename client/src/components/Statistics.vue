@@ -9,9 +9,9 @@
         <img src="/chart.svg" alt="Shuffle" class="icon" style="width: 36px; height: 36px" />
         <h2 class="header-row-title">Statistics</h2>
       </div>
-      <button v-if="userId" type="button" @click="toggleEditMode"
-        :class="['edit-button', { 'enabled-button': isEditMode }]">
-        <img src="/edit.svg" alt="Edit" class="icon" style="width: 24px; height: 24px" />
+      <button v-if="userId" @click="toggleEditMode" class="edit-btn-top">
+        <img v-if="!isEditMode" src="/edit.svg" alt="Edit" class="icon" style="width: 24px; height: 24px" />
+        <img v-else src="/save.svg" alt="Save" class="icon" style="width: 24px; height: 24px" />
       </button>
     </div>
     <div v-if="!isLoaded" class="loading-spinner">
@@ -93,6 +93,7 @@ import LoadingBar from "./LoadingBar.vue";
 import Toast from "./Toast.vue";
 import { fetchWithAuth } from '../utils/apiHelpers';
 import { useToast } from "../utils/useToast.js";
+import { postLog } from "../utils/loggerHelper.js";
 import { getTopicEntryChartData, getWordCount } from "../utils/chart-data.js";
 import {
   Chart,
@@ -147,6 +148,12 @@ async function toggleEditMode() {
         }),
       });
       showToast("Preferences saved!", "success");
+      postLog({
+        event: "stats_updated",
+        userId: userId.value,
+        page: "Statistics",
+        data: visibleStats.value,
+      });
 
       setTimeout(() => {
         window.location.reload();
@@ -175,6 +182,8 @@ const mostActiveTopic = computed(() => {
 });
 
 onMounted(async () => {
+  postLog({ userId: userId.value, page: "Statistics" });
+
   const res = await fetchWithAuth(`${API_URL}/users/${userId.value}`);
   if (res && res.stats_visibility) {
     visibleStats.value = { ...visibleStats.value, ...res.stats_visibility };

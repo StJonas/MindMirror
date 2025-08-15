@@ -25,7 +25,7 @@ class EmotionLogEntriesController < ApplicationController
     # Build the entry associated with the log
     @emotion_log_entry = log.emotion_log_entries.build(
       emotion_id: params[:emotion_log_entry][:emotion_id],
-      note: params[:emotion_log_entry][:note]
+      content: params[:emotion_log_entry][:content]
     )
 
     if @emotion_log_entry.save
@@ -57,6 +57,6 @@ class EmotionLogEntriesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def emotion_log_entry_params
-      params.require(:emotion_log_entry).permit(:user_id, :date, :emotion_id, :note)
+      params.require(:emotion_log_entry).permit(:user_id, :date, :emotion_id, :content)
     end
 end

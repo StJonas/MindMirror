@@ -14,7 +14,7 @@
       <div v-for="entry in dayEntries" :key="entry.id" class="general-input"
         :style="{ backgroundColor: getEmotionColor(entry.emotion_id) }">
         <h3>{{ getEmotionName(entry.emotion_id) }}</h3>
-        <p><em>{{ entry.note }}</em></p>
+        <p><em>{{ entry.content }}</em></p>
       </div>
     </div>
   </div>
@@ -26,6 +26,7 @@ import LoadingBar from "../LoadingBar.vue";
 import Toast from "../Toast.vue";
 import { useToast } from "../../utils/useToast.js";
 import { fetchSortedEntries } from '../../utils/apiHelpers';
+import { postLog } from '../../utils/loggerHelper';
 
 const entries = ref([]);
 const userId = inject("userId");
@@ -71,6 +72,7 @@ onMounted(async () => {
   isLoading.value = true;
   await fetchEmotionEntries();
   isLoading.value = false;
+  postLog({ userId: userId.value, page: "EmotionsLog" });
 });
 </script>
 

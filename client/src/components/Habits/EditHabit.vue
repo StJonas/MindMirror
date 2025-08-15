@@ -27,8 +27,10 @@ import { fetchWithAuth } from '../../utils/apiHelpers';
 import router from "../../router";
 import Toast from "../Toast.vue";
 import { useToast } from "../../utils/useToast.js";
+import { postLog } from '../../utils/loggerHelper';
 
 const habits = ref([]);
+const userId = inject("userId");
 const name = ref("");
 const oldName = ref("");
 const frequency = ref("");
@@ -55,6 +57,7 @@ onMounted(async () => {
       description.value = fetchedHabit.description;
     }
   }
+  postLog({ userId: userId.value, page: "EditHabit" });
 });
 
 const updateHabit = async () => {
@@ -79,7 +82,10 @@ const updateHabit = async () => {
       const data = await res.json();
       const index = habits.value.findIndex((habit) => habit.id === data.id);
       habits.value[index] = data;
+
       showToast("Habit updated successfully!", "success");
+      postLog({ event: "habit_updated", userId: userId.value, page: "EditHabit", data: { habitName: name.value } });
+
       setTimeout(() => {
         router.push("/HabitOverview").then(() => {
           window.location.reload();
@@ -108,6 +114,8 @@ const deleteHabit = async (id) => {
       if (habitRes.ok) {
         habits.value = habits.value.filter((habit) => habit.id !== id);
         showToast("Habit deleted successfully!", "success");
+        postLog({ event: "habit_deleted", userId: userId.value, page: "EditHabit", data: { habitName: name.value } });
+
         setTimeout(() => {
           router.push("/HabitOverview").then(() => {
             window.location.reload();

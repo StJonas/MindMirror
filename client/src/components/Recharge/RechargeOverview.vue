@@ -74,6 +74,7 @@ import { inject, ref, onMounted } from "vue";
 import Toast from "../Toast.vue";
 import { useToast } from "../../utils/useToast.js";
 import { fetchWithAuth } from '../../utils/apiHelpers';
+import { postLog } from "../../utils/loggerHelper.js";
 
 const userId = inject("userId");
 const API_URL = inject("API_URL");
@@ -124,10 +125,12 @@ async function saveRechargeEntry() {
   );
 
   if (res.ok) {
+    showToast("Entry saved", "success");
+    postLog({ event: "recharge_entry_saved", userId: userId.value, page: "RechargeOverview", data: { exercise: currentExercise.value.title, note: exerciseNote.value } });
+
     showRandomExercise();
     exerciseNote.value = "";
 
-    showToast("Entry saved", "success");
     setTimeout(() => {
       location.reload();
     }, 500);
@@ -138,6 +141,7 @@ async function saveRechargeEntry() {
 
 onMounted(() => {
   fetchExercises();
+  postLog({ userId: userId.value, page: "RechargeOverview" });
 
   setTimeout(() => {
     showPrompts.value = true;

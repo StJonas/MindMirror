@@ -29,6 +29,7 @@ import router from "../../router";
 import Toast from "../Toast.vue";
 import { useToast } from "../../utils/useToast.js";
 import { fetchWithAuth } from '../../utils/apiHelpers';
+import { postLog } from "../../utils/loggerHelper.js";
 
 const is_weekly = ref(false);
 const userId = inject("userId");
@@ -78,7 +79,9 @@ const createPrompt = async () => {
   if (res.ok) {
     prompt.value = "";
 
-    showToast("Entry saved", "success");
+    showToast("Prompt saved", "success");
+    postLog({ event: "prompt_saved", userId: userId.value, page: "AddPrompt", data: { promptTitle: prompt.value } });
+
     setTimeout(() => {
       router.push("/JournalOverview").then(() => {
         window.location.reload();
@@ -90,6 +93,7 @@ const createPrompt = async () => {
 };
 
 onMounted(() => {
+  postLog({ userId: userId.value, page: "AddPrompt" });
   fetchPredefinedPrompts();
 });
 </script>

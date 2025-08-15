@@ -63,6 +63,7 @@ import { inject, ref, onMounted } from "vue";
 import Toast from "../Toast.vue";
 import { useToast } from "../../utils/useToast.js";
 import { fetchWithAuth } from '../../utils/apiHelpers';
+import { postLog } from '../../utils/loggerHelper';
 
 const userId = inject("userId");
 const isEditMode = ref(false);
@@ -93,10 +94,12 @@ const saveFreetextEntry = async () => {
   );
 
   if (res.ok) {
+    showToast("Freetext entry saved", "success");
+    postLog({ event: "freetext_entry_saved", userId: userId.value, page: "FreetextOverview", data: { content: freetextContent.value, done_offline: doneOffline.value } });
+
     freetextContent.value = "";
     doneOffline.value = false;
 
-    showToast("Freetext entry saved", "success");
     setTimeout(() => {
       location.reload();
     }, 500);
@@ -110,6 +113,7 @@ onMounted(() => {
     showTutorial.value = true;
     localStorage.setItem("freetext_tutorial_seen", "1");
   }
+  postLog({ userId: userId.value, page: "FreetextOverview" });
 });
 
 </script>
