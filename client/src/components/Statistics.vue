@@ -9,14 +9,40 @@
         <img src="/chart.svg" alt="Shuffle" class="icon" style="width: 36px; height: 36px" />
         <h2 class="header-row-title">Statistics</h2>
       </div>
+      <button class="help-btn" @click="showTutorial = true" title="Show help">?</button>
       <button v-if="userId" @click="toggleEditMode" class="edit-btn-top">
         <img v-if="!isEditMode" src="/edit.svg" alt="Edit" class="icon" style="width: 24px; height: 24px" />
         <img v-else src="/save.svg" alt="Save" class="icon" style="width: 24px; height: 24px" />
       </button>
     </div>
+    <div v-if="showTutorial" class="tutorial-modal">
+      <div class="tutorial-content">
+        <h3>How to use Statistics</h3>
+        <ul>
+          <li>
+            View your overall progress and activity across all topics.
+          </li>
+          <li>
+            Use the <img src="/edit.svg" alt="Edit" class="icon" style="width: 20px; vertical-align: middle;" />
+            <b>Edit</b> button to customize which statistics are visible.
+          </li>
+          <li>
+            Click the <img src="/eye1.svg" alt="Show" class="icon" style="width: 20px; vertical-align: middle;" /> or
+            <img src="/eye2.svg" alt="Hide" class="icon" style="width: 20px; vertical-align: middle;" /> icons to show
+            or hide individual stats.
+          </li>
+          <li>
+            Save your preferences with the <img src="/save.svg" alt="Save" class="icon"
+              style="width: 20px; vertical-align: middle;" /> button.
+          </li>
+        </ul>
+        <button @click="showTutorial = false" class="close-btn">Close</button>
+      </div>
+    </div>
     <div v-if="!isLoaded" class="loading-spinner">
       <LoadingBar :visible="!isLoaded" />
     </div>
+
     <div v-else>
       <!-- Top Cards -->
       <div class="stats-cards">
@@ -121,6 +147,7 @@ const topics = ref([
   { name: "Freetext" },
 ]);
 const topicStats = ref({});
+const showTutorial = ref(false);
 
 const visibleStats = ref({
   totalEntries: true,
@@ -129,6 +156,7 @@ const visibleStats = ref({
   barChart: true,
   statsTable: true,
 });
+const originalVisibleStats = ref();
 
 function toggleStat(stat) {
   visibleStats.value[stat] = !visibleStats.value[stat];
@@ -137,6 +165,14 @@ function toggleStat(stat) {
 async function toggleEditMode() {
   isEditMode.value = !isEditMode.value;
   if (!isEditMode.value) {
+    const changed = Object.keys(visibleStats.value).some(
+      key => visibleStats.value[key] !== originalVisibleStats.value[key]
+    );
+    if (!changed) {
+      showToast("No changes made", "info");
+      return;
+    }
+
     try {
       await fetchWithAuth(`${API_URL}/users/${userId.value}/update_stats_visibility`, {
         method: "PATCH",
@@ -147,6 +183,8 @@ async function toggleEditMode() {
           stats_visibility: visibleStats.value,
         }),
       });
+
+      originalVisibleStats.value = { ...visibleStats.value };
       showToast("Preferences saved!", "success");
       postLog({
         event: "stats_updated",
@@ -187,6 +225,7 @@ onMounted(async () => {
   const res = await fetchWithAuth(`${API_URL}/users/${userId.value}`);
   if (res && res.stats_visibility) {
     visibleStats.value = { ...visibleStats.value, ...res.stats_visibility };
+    originalVisibleStats.value = { ...visibleStats.value };
   }
 
   const wordCounts = await getWordCount(userId.value);

@@ -60,3 +60,6 @@ journal example.png
 
 #rails stuff
 test/
+
+#log
+logger/logs.txt

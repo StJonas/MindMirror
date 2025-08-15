@@ -316,6 +316,10 @@ button:focus-visible {
   margin-left: 0px;
 }
 
+.topic-log h2 {
+  font-size: 1.5rem;
+}
+
 .card-move-move {
   transition: transform 0.4s cubic-bezier(0.55, 0, 0.1, 1);
 }
