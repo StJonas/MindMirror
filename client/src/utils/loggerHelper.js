@@ -4,7 +4,8 @@ export async function postLog({
   page, 
   data = {} 
 } = {}) {
-    fetch('http://localhost:4000/log', {
+    try {
+    await fetch('http://localhost:4000/log', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -14,5 +15,8 @@ export async function postLog({
         data: data || {}
       })
     });
+  } catch (error) {
+    console.warn("Logger server not available:", error);
+  }
 }
 //start with node logger.js

@@ -15,7 +15,7 @@ import { ref, onMounted, provide } from "vue";
 import { fetchWithAuth, fetchSortedEntries } from './utils/apiHelpers';
 
 const entries = ref([]);
-const API_URL = "http://localhost:3000/";
+const API_URL = import.meta.env.VITE_API_URL;
 const userId = ref("");
 const username = ref("");
 const sessionToken = ref("");

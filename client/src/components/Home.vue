@@ -3,14 +3,47 @@
     <Toast ref="toastRef" :message="toastMessage" :type="toastType" />
     <div class="header-row">
       <h2 v-if="!userId">Please sign up or login</h2>
-      <h2 v-if="userId" class="header-row-title">Hello {{ username }}</h2>
-      <h2 v-if="userId" class="header-row-title">{{ currentDate }}</h2>
+      <div v-if="userId" class="header-row-flex">
+        <span class="header-username" :title="username">Hello {{ username }}</span>
+        <span class="header-date">{{ currentDate }}</span>
+      </div>
     </div>
+
+    <div v-if="showTutorial" class="tutorial-modal">
+      <div class="tutorial-content">
+        <h3>How to use the Home Page</h3>
+        <ul>
+          <li>
+            <b>Edit your visible topics</b> by clicking the
+            <img src="/edit.svg" alt="Edit" class="icon" style="width: 20px; vertical-align: middle;" />
+            <b>Edit</b> button in the top right.
+          </li>
+          <li>
+            <b>Show or hide topics</b> by clicking the
+            <img src="/eye1.svg" alt="Show" class="icon" style="width: 20px; vertical-align: middle;" />
+            or
+            <img src="/eye2.svg" alt="Hide" class="icon" style="width: 20px; vertical-align: middle;" />
+            icons while in edit mode.
+          </li>
+          <li>
+            <b>Go to a topic</b> by clicking its card.
+          </li>
+          <li>
+            <b>View your statistics</b> by clicking the
+            <img src="/chart.svg" alt="Statistics" class="icon" style="width: 20px; vertical-align: middle;" />
+            button in the top left.
+          </li>
+        </ul>
+        <button @click="showTutorial = false" class="close-btn">Close</button>
+      </div>
+    </div>
+
     <div class="home-container" v-if="userId">
       <button class="edit-btn-top" @click="toggleEditMode">
         <img v-if="!isEditMode" src="/edit.svg" alt="Edit" class="icon" style="width: 24px; height: 24px" />
         <img v-else src="/save.svg" alt="Save" class="icon" style="width: 24px; height: 24px" />
       </button>
+      <button class="help-btn" @click="showTutorial = true" title="Show help">?</button>
       <router-link v-if="userId" to="/Statistics" style="pointer-events: auto" class="chart-btn-top">
         <button type="button" :disabled="isEditMode">
           <img src="/chart.svg" alt="Log" class="icon" style="width: 24px; height: 24px" />
@@ -41,6 +74,7 @@ import { useToast } from "../utils/useToast.js";
 import { postLog } from "../utils/loggerHelper.js";
 
 const toastRef = ref(null);
+const showTutorial = ref(false);
 const { showToast, toastMessage, toastType } = useToast(toastRef);
 const API_URL = inject("API_URL");
 const userId = inject("userId");
@@ -188,6 +222,38 @@ onMounted(async () => {
   z-index: 10;
 }
 
+.help-btn {
+  position: absolute;
+  top: 8px;
+  left: 185px;
+  margin: 0;
+  z-index: 10;
+}
+
+.header-row-flex {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.header-username {
+  font-size: 1.5rem;
+  font-weight: 600;
+  max-width: 240px;
+  overflow: hidden;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.header-date {
+  font-size: 1.1rem;
+  color: #333;
+  font-weight: 400;
+}
+
 @media (max-width: 600px) {
   .home-container {
     width: 80vw;
@@ -206,6 +272,20 @@ onMounted(async () => {
     height: 140px;
     max-height: 140px;
     padding: 0;
+  }
+
+  .header-row-title {
+    font-size: 1rem;
+    max-width: 80vw;
+    text-align: center;
+  }
+
+  .header-username {
+    max-width: 180px;
+  }
+
+  .help-btn {
+    left: 150px;
   }
 }
 </style>
