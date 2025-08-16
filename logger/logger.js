@@ -56,4 +56,6 @@ app.get('/logs', async (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`Logger running on port ${PORT}`);
+}).on('error', (error) => {
+  console.error('Server startup error:', error);
 });
