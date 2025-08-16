@@ -63,3 +63,4 @@ test/
 
 #log
 logger/logs.txt
+logger/.env
