@@ -1,7 +1,8 @@
 import { fetchWithAuth } from './apiHelpers';
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 export async function getTopicEntryChartData(userId) {
-  const API_URL = "http://localhost:3000";
   // Define your topics and their endpoints
   const topics = [
     { name: "Habits", endpoint: `/users/${userId}/habit_histories` },
@@ -54,7 +55,6 @@ export async function getTopicEntryChartData(userId) {
 }
 
 export async function getWordCount(userId) {
-  const API_URL = "http://localhost:3000";
   const topics = [
     { name: "Journal", endpoint: `/users/${userId}/journal_entries` },
     { name: "Gratitude", endpoint: `/users/${userId}/gratitude_entries` },

@@ -4,8 +4,9 @@ export async function postLog({
   page, 
   data = {} 
 } = {}) {
-    try {
-    await fetch('http://localhost:4000/log', {
+  const LOGGER_URL = import.meta.env.VITE_LOGGER_URL;
+  try {
+    await fetch(`${LOGGER_URL}log`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
