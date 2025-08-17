@@ -10,24 +10,16 @@
 
     <form @submit.prevent="signUp">
       <label for="name">Username:</label>
-      <input id="name" v-model="name" type="text" required class="name-input" />
+      <input id="name" v-model="name" type="text" required class="name-input" placeholder="username" />
 
       <label for="password">Password:</label>
-      <input
-        id="password"
-        v-model="password"
-        type="password"
-        required
-        class="name-input"
-      />
+      <input id="password" v-model="password" type="password" required class="name-input" placeholder="password" />
+      <small style="color: #888; display: block; margin-bottom: 8px;">
+        Password must be at least 8 characters long and contain at least one number and one special character.
+      </small>
       <label for="password">Password Confimation:</label>
-      <input
-        id="password_confirmation"
-        v-model="password_confirmation"
-        type="password"
-        required
-        class="name-input"
-      />
+      <input id="password_confirmation" v-model="password_confirmation" type="password" required class="name-input"
+        placeholder="repeat password" />
 
       <button type="submit">Sign Up</button>
     </form>
@@ -52,6 +44,17 @@ const signUp = async () => {
     password.value = "";
     password_confirmation.value = "";
     showToast("Passwords do not match!", "error");
+    return;
+  }
+
+  if (password.value.length < 8) {
+    showToast("Password must be at least 8 characters long!", "error");
+    return;
+  }
+
+  const strongPassword = /^(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).+$/;
+  if (!strongPassword.test(password.value)) {
+    showToast("Password must contain at least one number and one special character!", "error");
     return;
   }
 
