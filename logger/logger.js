@@ -4,7 +4,9 @@ const cors = require('cors');
 const { Pool } = require('pg');
 
 const app = express();
-app.use(cors({ origin: 'http://localhost:5173' }));
+
+const allowedOrigin = process.env.FRONTEND_ORIGIN || 'http://localhost:5173';
+app.use(cors({ origin: allowedOrigin }));
 const PORT = process.env.PORT || 4000;
 
 const pool = new Pool({
