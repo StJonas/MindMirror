@@ -22,29 +22,33 @@
           </button>
         </router-link>
       </div>
-
-      <div v-if="showTutorial" class="tutorial-modal">
-        <div class="tutorial-content">
-          <h3>How to use Habits</h3>
-          <ul>
-            <li>Add a new habit by clicking the
-              <img src="/add.svg" alt="Add" class="icon" style="width: 20px; vertical-align: middle;" />
-              button.
-            </li>
-            <li>Mark a habit as completed for today by clicking the
-              <img src="/save.svg" alt="Save" class="icon" style="width: 20px; vertical-align: middle;" />
-              <b>Save</b> button.
-            </li>
-            <li>
-              You can view your habit log by clicking the
-              <img src="/log.svg" alt="Log" class="icon" style="width: 20px; vertical-align: middle;" />
-              (book icon).
-            </li>
-          </ul>
-          <button @click="showTutorial = false" class="close-btn">Close</button>
-        </div>
+    </div>
+    <div v-if="showTutorial" class="tutorial-modal">
+      <div class="tutorial-content">
+        <h3>How to use Habits</h3>
+        <ul>
+          <li>On this page you can create and check off daily habits.</li>
+          <li>Add a new habit by clicking the
+            <img src="/add.svg" alt="Add" class="icon" style="width: 20px; vertical-align: middle;" />
+            button.
+          </li>
+          <li>Mark a habit as completed for today by clicking the
+            <img src="/save.svg" alt="Save" class="icon" style="width: 20px; vertical-align: middle;" />
+            <b>Save</b> button.
+          </li>
+          <li>
+            You can edit or delete a habit by clicking the
+            <img src="/edit.svg" alt="Log" class="icon" style="width: 20px; vertical-align: middle;" />
+            button next to the habit name.
+          </li>
+          <li>
+            You can view your habit history by clicking
+            <img src="/log.svg" alt="Log" class="icon" style="width: 20px; vertical-align: middle;" />
+            .
+          </li>
+        </ul>
+        <button @click="showTutorial = false" class="close-btn">Close</button>
       </div>
-
     </div>
     <LoadingBar :visible="isLoading" />
     <!-- List of Habits -->

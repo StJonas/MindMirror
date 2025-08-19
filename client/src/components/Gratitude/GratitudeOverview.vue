@@ -21,12 +21,13 @@
       <div class="tutorial-content">
         <h3>How to use Gratitude</h3>
         <ul>
-          <li>Answer the daily gratitude question or select a predefined one.</li>
+          <li>On this page you can do daily gratitude journaling. You can create your own gratitude question or select a
+            predefined one.</li>
           <li>You can create your own question by typing it in the input field and clicking
             <img src="/save.svg" alt="Save" class="icon" style="width: 20px; vertical-align: middle;" />
             <b>Save</b>.
           </li>
-          <li>View your gratitude log by clicking the
+          <li>View your gratitude journal history by clicking
             <img src="/log.svg" alt="Log" class="icon" style="width: 20px; vertical-align: middle;" />.
           </li>
         </ul>
@@ -39,7 +40,7 @@
         <h2 class="section-title">Daily Gratitude Question</h2>
         <div v-if="prompts && prompts.length === 0" :key="'no-prompts'" class="general-input">
           <h2>No question yet</h2>
-          <span class="text-label">select predefined question:</span>
+          <span class="text-label">select new predefined question:</span>
           <select v-model="selectedPromptId" class="general-input">
             <option v-for="prompt in predefinedGratitudePrompts" :key="prompt.id" :value="prompt.id">
               {{ prompt.title }}

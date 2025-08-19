@@ -1,7 +1,7 @@
 <template>
   <div class="page-styling">
     <Toast ref="toastRef" :message="toastMessage" :type="toastType" />
-    <div class="header-row">
+    <div class="header-row-log">
       <router-link to="/HabitOverview">
         <button type="button">&lt;</button>
       </router-link>

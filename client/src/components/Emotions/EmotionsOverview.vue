@@ -21,6 +21,7 @@
       <div class="tutorial-content">
         <h3>How to use Emotions</h3>
         <ul>
+          <li>On this page you can do emotion journaling.</li>
           <li>Select a <b>pleasant</b> or <b>unpleasant</b> emotion by clicking on it.</li>
           <li>You can expand or collapse the emotion groups using the <b>+</b> or <b>−</b> button.</li>
           <li>Optionally, write your thoughts in the text field below.</li>
@@ -30,7 +31,7 @@
             <b>Save</b> button to save your entry.
           </li>
           <li>
-            You can view your previous entries in the log
+            You can view your previous entries in the emotion history page
             <img src="/log.svg" alt="Log" class="icon" style="width: 20px; vertical-align: middle;" />
             .
           </li>
@@ -219,7 +220,8 @@ onMounted(() => {
 }
 
 .save-button {
-  margin: 0;
+  margin-left: 10px;
+  margin-bottom: 10px;
 }
 
 .emotion-container {

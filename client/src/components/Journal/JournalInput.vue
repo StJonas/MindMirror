@@ -5,13 +5,6 @@
     <hr class="content-divider" />
     <textarea type="text" name="journal_input" v-model="prompt.content" rows="5" class="general-input"
       placeholder="Your answer..." />
-    <!-- <input
-      type="text"
-      v-model="prompt.content"
-      placeholder="Your answer"
-      min="1"
-      class="general-input"
-    /> -->
     <div class="button-wrapper">
       <button v-if="userId" type="button" @click="saveJournalEntry(prompt.content)" class="save-button">
         <img src="/save.svg" alt="Save" class="white-icon" />

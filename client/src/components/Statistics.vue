@@ -9,22 +9,24 @@
         <img src="/chart.svg" alt="Shuffle" class="icon" style="width: 36px; height: 36px" />
         <h2 class="header-row-title">Statistics</h2>
       </div>
-      <button class="help-btn" @click="showTutorial = true" title="Show help">?</button>
-      <button v-if="userId" @click="toggleEditMode" class="edit-btn-top">
-        <img v-if="!isEditMode" src="/edit.svg" alt="Edit" class="icon" style="width: 24px; height: 24px" />
-        <img v-else src="/save.svg" alt="Save" class="icon" style="width: 24px; height: 24px" />
-      </button>
+      <div class="header-actions">
+        <button class="help-btn" @click="showTutorial = true" title="Show help">?</button>
+        <button v-if="userId" @click="toggleEditMode" class="edit-btn-top">
+          <img v-if="!isEditMode" src="/edit.svg" alt="Edit" class="icon" style="width: 24px; height: 24px" />
+          <img v-else src="/save.svg" alt="Save" class="icon" style="width: 24px; height: 24px" />
+        </button>
+      </div>
     </div>
     <div v-if="showTutorial" class="tutorial-modal">
       <div class="tutorial-content">
         <h3>How to use Statistics</h3>
         <ul>
           <li>
-            View your overall progress and activity across all topics.
+            On this page you can view your overall progress and activity across all topics.
           </li>
           <li>
             Use the <img src="/edit.svg" alt="Edit" class="icon" style="width: 20px; vertical-align: middle;" />
-            <b>Edit</b> button to customize which statistics are visible.
+            <b> Edit</b> button to customize which statistics are visible.
           </li>
           <li>
             Click the <img src="/eye1.svg" alt="Show" class="icon" style="width: 20px; vertical-align: middle;" /> or
@@ -33,7 +35,7 @@
           </li>
           <li>
             Save your preferences with the <img src="/save.svg" alt="Save" class="icon"
-              style="width: 20px; vertical-align: middle;" /> button.
+              style="width: 20px; vertical-align: middle;" /> <b> Save</b> button.
           </li>
         </ul>
         <button @click="showTutorial = false" class="close-btn">Close</button>
@@ -315,6 +317,12 @@ onMounted(async () => {
 .eye-btn img {
   width: 24px;
   height: 24px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 @media (max-width: 600px) {

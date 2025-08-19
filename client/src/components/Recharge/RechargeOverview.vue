@@ -20,9 +20,9 @@
 
     <div v-if="showTutorial" class="tutorial-modal">
       <div class="tutorial-content">
-        <h3>How to use the Recharge-Page</h3>
+        <h3>How to use Recharge</h3>
         <ul>
-          <li>Read the daily recharge exercise and reflect on it.</li>
+          <li>This pages offers you different recharge exercises.</li>
           <li>Click the
             <img src="/shuffle.svg" alt="Shuffle" class="icon" style="width: 20px; vertical-align: middle;" />
             button to get a new random exercise.
@@ -34,9 +34,9 @@
             <b>Save</b> button to save your entry.
           </li>
           <li>
-            You can find your previous entries in the log
+            You can find your previous entries in the recharge history page
             <img src="/log.svg" alt="Log" class="icon" style="width: 20px; vertical-align: middle;" />
-            (book icon at the top right).
+            .
           </li>
         </ul>
         <button @click="showTutorial = false" class="close-btn">Close</button>

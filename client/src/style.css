@@ -148,7 +148,6 @@ button:focus-visible {
   border: none;
   cursor: pointer;
   color: white;
-  margin-left: 10px;
   margin-top: 0px;
 }
 
@@ -312,6 +311,10 @@ button:focus-visible {
   resize: vertical;
 }
 
+input.general-input{
+  background: #ffffff;
+}
+
 .topic-log {
   margin-left: 0px;
 }
@@ -372,6 +375,7 @@ select.general-input {
 .header-row-title {
   font-size: 1.5rem;
   font-weight: bold;
+  white-space: nowrap;
 }
 
 .back-btn {
@@ -455,7 +459,7 @@ select.general-input {
   }
 
   .content {
-    margin-top: 90px;
+    margin-top: 60px;
   }
 
   input,
@@ -474,6 +478,7 @@ select.general-input {
   .header-row {
     display: flex;
     align-items: center;
+    flex-wrap: nowrap;
   }
 
   .section-box {

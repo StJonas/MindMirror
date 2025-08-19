@@ -19,18 +19,19 @@
     </div>
     <div v-if="showTutorial" class="tutorial-modal">
       <div class="tutorial-content">
-        <h3>How to use the Freetext-Page</h3>
+        <h3>How to use Freetext</h3>
         <ul>
-          <li>Write your thoughts or notes in the text field</li>
-          <li>Check the "done offline" box if you made the entry offline</li>
+          <li>On this page you can do free text journaling.</li>
+          <li>Check the "done offline" toggle if you journaled offline.</li>
           <li>
             Click the
             <img src="/save.svg" alt="Save" class="icon" style="width: 20px; vertical-align: middle;" />
-            <b>Save</b> button to save your entry
+            <b>Save</b> button to save your entry.
           </li>
           <li>
             You can find your past entries on the history page
             <img src="/log.svg" alt="Log" class="icon" style="width: 20px; vertical-align: middle;" />
+            .
           </li>
         </ul>
         <button @click="showTutorial = false" class="close-btn">Close</button>
@@ -109,10 +110,6 @@ const saveFreetextEntry = async () => {
 };
 
 onMounted(() => {
-  if (!localStorage.getItem("freetext_tutorial_seen")) {
-    showTutorial.value = true;
-    localStorage.setItem("freetext_tutorial_seen", "1");
-  }
   postLog({ userId: userId.value, page: "FreetextOverview" });
 });
 

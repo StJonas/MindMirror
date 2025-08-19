@@ -14,9 +14,14 @@
         <h3>How to use the Home Page</h3>
         <ul>
           <li>
+            <b>Return to the homepage from any page </b> by clicking the
+            <img src="/circle.svg" alt="Logo" class="icon" style="width: 20px; vertical-align: middle;" />
+            <b>MindMIrror</b> button on the top left.
+          </li>
+          <li>
             <b>Edit your visible topics</b> by clicking the
             <img src="/edit.svg" alt="Edit" class="icon" style="width: 20px; vertical-align: middle;" />
-            <b>Edit</b> button in the top right.
+            <b>Edit</b> button on the top right.
           </li>
           <li>
             <b>Show or hide topics</b> by clicking the
@@ -31,7 +36,7 @@
           <li>
             <b>View your statistics</b> by clicking the
             <img src="/chart.svg" alt="Statistics" class="icon" style="width: 20px; vertical-align: middle;" />
-            button in the top left.
+            button on the top left.
           </li>
         </ul>
         <button @click="showTutorial = false" class="close-btn">Close</button>
@@ -225,7 +230,8 @@ onMounted(async () => {
 .help-btn {
   position: absolute;
   top: 8px;
-  left: 185px;
+  left: 50%;
+  transform: translateX(-50%);
   margin: 0;
   z-index: 10;
 }
@@ -282,10 +288,6 @@ onMounted(async () => {
 
   .header-username {
     max-width: 180px;
-  }
-
-  .help-btn {
-    left: 150px;
   }
 }
 </style>
