@@ -48,11 +48,32 @@ app.get('/logs', async (req, res) => {
   if (auth !== `Bearer ${process.env.LOGGER_SECRET}`) {
     return res.status(403).send('Forbidden');
   }
+
+  const limit = parseInt(req.query.limit) || 100;
+  const offset = parseInt(req.query.offset) || 0;
+  
   try {
-    const result = await pool.query('SELECT * FROM logs ORDER BY timestamp DESC LIMIT 100');
+    const result = await pool.query(
+      'SELECT * FROM logs ORDER BY timestamp DESC LIMIT $1 OFFSET $2',
+      [limit, offset]
+    );
     res.json(result.rows);
   } catch (err) {
     res.status(500).send('Failed to retrieve logs');
+  }
+});
+
+app.get('/logs/count', async (req, res) => {
+  const auth = req.headers['authorization'];
+  if (auth !== `Bearer ${process.env.LOGGER_SECRET}`) {
+    return res.status(403).send('Forbidden');
+  }
+
+  try {
+    const result = await pool.query('SELECT COUNT(*) FROM logs');
+    res.json({ count: parseInt(result.rows[0].count, 10) });
+  } catch (err) {
+    res.status(500).send('Failed to count logs');
   }
 });
 
