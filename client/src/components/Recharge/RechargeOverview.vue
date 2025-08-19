@@ -59,7 +59,7 @@
 
         <p v-if="currentExercise">{{ currentExercise.description }}</p>
         <textarea type="text" v-model="exerciseNote" name="exercise_note" rows="5" class="general-input"
-          placeholder="Reflect on the exercise..." />
+          placeholder="Optionally reflect on the exercise..." />
         <button class="save-button" @click="saveRechargeEntry()">
           <img src="/save.svg" alt="Save" class="white-icon" style="width: 24px; height: 24px" />
         </button>

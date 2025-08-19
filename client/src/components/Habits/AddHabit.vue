@@ -11,7 +11,8 @@
       <!-- Create or Habit -->
       <input type="text" v-model="name" placeholder="Habit title" class="general-input" />
 
-      <input type="text" v-model="description" placeholder="Description" class="general-input" v-if="!is_timed" />
+      <input type="text" v-model="description" placeholder="Optional description" class="general-input"
+        v-if="!is_timed" />
 
       <button v-if="isEditing" @click="updateHabit">Update</button>
       <button v-if="isEditing" @click="cancelEdit">Cancel</button>

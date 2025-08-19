@@ -31,10 +31,12 @@
         <div class="tutorial-content">
           <h3>How to use the Journal</h3>
           <ul>
-            <li>On this page you can do guided journaling with predefined or your own questions.</li>
+            <li>
+              On this page you can do guided journaling using predefined or your own questions.
+            </li>
             <li>You can add a new question by clicking the
               <img src="/add.svg" alt="Add" class="icon" style="width: 20px; vertical-align: middle;" />
-              button.
+              button. You can create multiple journaling questions.
             </li>
             <li>Type your answer into the textfield and save it by clicking the
               <img src="/save.svg" alt="Save" class="icon" style="width: 20px; vertical-align: middle;" />
@@ -44,7 +46,7 @@
               <img src="/edit.svg" alt="Edit" class="icon" style="width: 20px; vertical-align: middle;" />
               button.
             </li>
-            <li>View your journal history by clicking the
+            <li>View your journal history by clicking
               <img src="/log.svg" alt="Log" class="icon" style="width: 20px; vertical-align: middle;" />
               .
             </li>

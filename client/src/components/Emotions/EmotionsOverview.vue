@@ -81,7 +81,7 @@
         </div>
 
         <textarea type="text" v-model="emotionNote" name="site_notes" rows="5" class="general-input"
-          placeholder="Write your thoughts here..." />
+          placeholder="Optionally write your thoughts here..." />
         <button @click="saveEmotionEntry" class="save-button">
           <img src="/save.svg" alt="Save" class="white-icon" style="width: 24px; height: 24px" />
         </button>

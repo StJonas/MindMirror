@@ -45,7 +45,7 @@ const fetchPredefinedPrompts = async () => {
   const data = await fetchWithAuth(`${API_URL}/prompts?predefined=true`);
   predefinedPrompts.value = await data;
   if (!data) {
-    showToast("Error fetching predefined prompts", "error");
+    showToast("Error fetching predefined questions", "error");
   }
 };
 
@@ -79,7 +79,7 @@ const createPrompt = async () => {
   if (res.ok) {
     prompt.value = "";
 
-    showToast("Prompt saved", "success");
+    showToast("Question saved", "success");
     postLog({ event: "prompt_saved", userId: userId.value, page: "AddPrompt", data: { promptTitle: prompt.value } });
 
     setTimeout(() => {
@@ -88,7 +88,7 @@ const createPrompt = async () => {
       });
     }, 500);
   } else {
-    showToast("Error creating prompt", "error");
+    showToast("Error creating question", "error");
   }
 };
 

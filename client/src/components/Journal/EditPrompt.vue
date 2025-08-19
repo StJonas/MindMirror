@@ -46,7 +46,7 @@ const savePrompt = async () => {
   );
 
   if (res.ok) {
-    showToast("Prompt updated", "success");
+    showToast("Question updated", "success");
     postLog({ event: "prompt_updated", userId: userId.value, page: "EditPrompt", data: { promptTitle: promptTitle.value } });
 
     setTimeout(() => {
@@ -67,7 +67,7 @@ const deletePrompt = async () => {
     );
 
     if (res.ok) {
-      showToast("Prompt deleted", "success");
+      showToast("Question deleted", "success");
       postLog({ event: "prompt_deleted", userId: userId.value, page: "EditPrompt", data: { promptTitle: promptTitle.value } });
 
       setTimeout(() => {

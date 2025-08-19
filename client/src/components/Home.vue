@@ -16,7 +16,7 @@
           <li>
             <b>Return to the homepage from any page </b> by clicking the
             <img src="/circle.svg" alt="Logo" class="icon" style="width: 20px; vertical-align: middle;" />
-            <b>MindMIrror</b> button on the top left.
+            <b>MindMirror</b> button on the top left.
           </li>
           <li>
             <b>Edit your visible topics</b> by clicking the
