@@ -77,10 +77,10 @@ const createPrompt = async () => {
   );
 
   if (res.ok) {
-    prompt.value = "";
-
-    showToast("Question saved", "success");
     postLog({ event: "prompt_saved", userId: userId.value, page: "AddPrompt", data: { promptTitle: prompt.value } });
+    showToast("Question saved", "success");
+
+    prompt.value = "";
 
     setTimeout(() => {
       router.push("/JournalOverview").then(() => {

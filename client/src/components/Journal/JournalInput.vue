@@ -73,8 +73,8 @@ const saveJournalEntry = async (content) => {
     );
 
     if (updateRes.ok) {
+      postLog({ event: "journal_entry_saved", userId: userId.value, page: "JournalInput", data: { promptTitle: props.prompt.title, content: content } });
       showToast("Entry saved", "success");
-      postLog({ event: "journal_entry_saved", userId: userId.value, page: "JournalInput", data: { content: content } });
 
       setTimeout(() => {
         window.location.reload();
